@@ -45,27 +45,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="2016_RevitAPI" Condition="'$(Configuration)' == 'Debug2016'">
-      <HintPath>D:\1. Work\Code Project\2. Reference\Revit 2016 dll\2016_RevitAPI.dll</HintPath>
+      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2016_RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="2016_RevitAPIUI" Condition="'$(Configuration)' == 'Debug2016'">
-      <HintPath>D:\1. Work\Code Project\2. Reference\Revit 2016 dll\2016_RevitAPIUI.dll</HintPath>
+      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2016_RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="2017_RevitAPI" Condition="'$(Configuration)' == 'Debug2017'">
-      <HintPath>D:\1. Work\Code Project\2. Reference\Revit 2017 dll\2017_RevitAPI.dll</HintPath>
+      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2017_RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="2017_RevitAPIUI" Condition="'$(Configuration)' == 'Debug2017'">
-      <HintPath>D:\1. Work\Code Project\2. Reference\Revit 2017 dll\2017_RevitAPIUI.dll</HintPath>
+      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2017_RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="2018_RevitAPI" Condition="'$(Configuration)' == 'Debug2018'">
-      <HintPath>D:\1. Work\Code Project\2. Reference\Revit 2018 dll\2018_RevitAPI.dll</HintPath>
+      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2018_RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="2018_RevitAPIUI" Condition="'$(Configuration)' == 'Debug2018'">
-      <HintPath>D:\1. Work\Code Project\2. Reference\Revit 2018 dll\2018_RevitAPIUI.dll</HintPath>
+      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2018_RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -100,16 +100,19 @@
     <Compile Include="Database\RebarDesignGeneral.cs" />
     <Compile Include="Database\UserAddinConduction.cs" />
     <Compile Include="Database\UserManagement.cs" />
-    <Compile Include="Main\IDesignInfo.cs" />
-    <Compile Include="Main\IElementInfo.cs" />
-    <Compile Include="Main\IPlaneInfo.cs" />
-    <Compile Include="Main\IRebarArrayGeometry.cs" />
-    <Compile Include="Main\IRebarInfo.cs" />
-    <Compile Include="Main\IRebarParameter.cs" />
-    <Compile Include="Main\IRevitInfo.cs" />
-    <Compile Include="Main\IVerticalInfo.cs" />
-    <Compile Include="Main\StirrupDistribution.cs" />
+    <Compile Include="ElementInfo\IDesignInfo.cs" />
+    <Compile Include="ElementInfo\IElementInfo.cs" />
+    <Compile Include="ElementInfo\IPlaneInfo.cs" />
+    <Compile Include="ElementInfo\IRebarArrayGeometry.cs" />
+    <Compile Include="ElementInfo\IRebarInfo.cs" />
+    <Compile Include="ElementInfo\IRebarParameter.cs" />
+    <Compile Include="ElementInfo\IRevitInfo.cs" />
+    <Compile Include="ElementInfo\IVerticalInfo.cs" />
+    <Compile Include="ElementInfo\StirrupDistribution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RebarLogistic\StandardLogistic.cs" />
+    <Compile Include="RebarLogistic\StirrupLogistic.cs" />
+    <Compile Include="RebarLogistic\Variable.cs" />
     <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\CheckGeometry.cs">
       <Link>Library\CheckGeometry.cs</Link>
     </Compile>

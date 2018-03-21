@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoRebaring.Main
+namespace AutoRebaring.ElementInfo
 {
     public class IRebarParameter
     {
