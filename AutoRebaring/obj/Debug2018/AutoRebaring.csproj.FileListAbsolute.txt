@@ -7,3 +7,13 @@ D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaring\
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.xml
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.dll
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.dll.config
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.dll
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.pdb
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.dll
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.dll
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.xml
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.xml
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csprojResolveAssemblyReference.cache
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.dll
+D:\LAP TRINH\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb
