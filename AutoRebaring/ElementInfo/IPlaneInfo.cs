@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using AutoRebaring.Database;
+using AutoRebaring.ElementInfo.Shorten;
 using Geometry;
 using System;
 using System.Collections.Generic;
@@ -37,14 +38,7 @@ namespace AutoRebaring.ElementInfo
                 };
             }
         }
-        public ShortenType ShortenU1 { get; set; }
-        public ShortenType ShortenU2 { get; set; }
-        public ShortenType ShortenV1 { get; set; }
-        public ShortenType ShortenV2 { get; set; }
-        public double DeltaU1 { get; set; }
-        public double DeltaU2 { get; set; }
-        public double DeltaV1 { get; set; }
-        public double DeltaV2 { get; set; }
+        public ShortenType ShortenType { get; set; }
 
         public ColumnPlaneInfo(IRevitInfo revitInfo, ColumnParameter param)
         {
@@ -101,10 +95,5 @@ namespace AutoRebaring.ElementInfo
             PlaneInfos.Add(new ColumnPlaneInfo(VectorU, VectorV, CentralPoint));
             PlaneInfos.Add(new ColumnPlaneInfo(VectorU, VectorV, CentralPoint + VectorU * (0.5 - 0.2 / 2)));
         }
-    }
-
-    public enum ShortenType
-    {
-        None, Small, Big, LockHeadFull
     }
 }

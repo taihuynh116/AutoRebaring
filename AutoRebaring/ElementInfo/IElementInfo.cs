@@ -23,7 +23,7 @@ namespace AutoRebaring.ElementInfo
         public IRevitInfo RevitInfo { get; set; }
         public ColumnInfo(Document doc, Element e, ColumnParameter param)
         {
-            RevitInfo = new IRevitInfo(doc, e);
+            RevitInfo = new RevitInfo(doc, e);
             PlaneInfo = new ColumnPlaneInfo(RevitInfo, param);
         }
     }
@@ -36,7 +36,7 @@ namespace AutoRebaring.ElementInfo
         public IRevitInfo RevitInfo { get; set; }
         public WallInfo(Document doc, Element e, ColumnParameter param)
         {
-            RevitInfo = new IRevitInfo(doc, e);
+            RevitInfo = new RevitInfo(doc, e);
             PlaneInfo = new WallPlaneInfo(RevitInfo, param);
         }
     }
