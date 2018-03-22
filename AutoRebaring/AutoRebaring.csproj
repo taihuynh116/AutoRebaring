@@ -105,13 +105,12 @@
     <Compile Include="ElementInfo\IDesignInfo.cs" />
     <Compile Include="ElementInfo\IElementInfo.cs" />
     <Compile Include="ElementInfo\IPlaneInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IRebarArrayPlane.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardRebarGeneralInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IRebarParameter.cs" />
     <Compile Include="ElementInfo\IRevitInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardRebarInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StirrupInfo\IStirrupRebarGeneralInfo.cs" />
     <Compile Include="ElementInfo\IVerticalInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardGeneralInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardParameter.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardPlaneInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\SingleInfo\IStandardPlaneSingleInfo.cs" />
     <Compile Include="ElementInfo\Shorten\IShortenType.cs" />
     <Compile Include="ElementInfo\StirrupDistribution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -146,6 +145,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ElementInfo\RebarInfo\StirrupInfo\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

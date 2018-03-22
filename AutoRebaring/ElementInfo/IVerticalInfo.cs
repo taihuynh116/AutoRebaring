@@ -38,7 +38,7 @@ namespace AutoRebaring.ElementInfo
     {
         public DevelopmentRebar DevelopmentRebar { get; set; }
         public GeneralParameterInput GeneralParameterInput { get; set; }
-        public List<IStandardRebarInfo> StandardRebarInfos { get; set; }
+        //public List<IStandardRebarInfo> StandardRebarInfos { get; set; }
         public Level StartLevel { get; set; }
         public Level EndLevel { get; set; }
         public double Top { get { return DevelopmentRebar.IsInsideBeam ? TopFloor : TopBeam; } }

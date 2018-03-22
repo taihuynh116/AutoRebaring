@@ -12,9 +12,24 @@ namespace AutoRebaring.ElementInfo
 {
     public interface IPlaneInfo
     {
+        List<double> B1s { get; }
+        List<double> B2s { get; }
+        List<UV> VectorUs { get; }
+        List<UV> VectorVs { get; }
+        List<List<UV>> BoundaryPointLists { get; }
+        List<ShortenType> ShortenTypes { get; }
     }
     public class ColumnPlaneInfo : IPlaneInfo
     {
+        #region IPlaneInfo
+        public List<double> B1s { get { return new List<double> { B1 }; } }
+        public List<double> B2s { get { return new List<double> { B2 }; } }
+        public List<UV> VectorUs { get { return new List<UV> { VectorU }; } }
+        public List<UV> VectorVs { get { return new List<UV> { VectorV }; } }
+        public List<List<UV>> BoundaryPointLists { get { return new List<List<UV>> { BoundaryPoints }; } }
+        public List<ShortenType> ShortenTypes { get { return new List<ShortenType> { ShortenType }; } }
+        #endregion
+
         public double b1;
         public double b2;
         public UV vecU;
@@ -66,6 +81,15 @@ namespace AutoRebaring.ElementInfo
     }
     public class WallPlaneInfo : IPlaneInfo
     {
+        #region IPlaneInfo
+        public List<double> B1s { get; }
+        public List<double> B2s { get; }
+        public List<UV> VectorUs { get; }
+        public List<UV> VectorVs { get; }
+        public List<List<UV>> BoundaryPointLists { get; }
+        public List<ShortenType> ShortenTypes { get; }
+        #endregion
+
         public double B1 { get; set; }
         public double B2 { get; set; }
         public UV VectorU { get; set; }
@@ -74,26 +98,7 @@ namespace AutoRebaring.ElementInfo
         public List<ColumnPlaneInfo> PlaneInfos { get; set; }
         public WallPlaneInfo(IRevitInfo revitInfo, ColumnParameter param)
         {
-            Document doc = revitInfo.Document;
-            Element e = revitInfo.Element;
-
-            B1 = e.LookupParameter("Length").AsDouble();
-            B2 = (e as Wall).WallType.LookupParameter("Width").AsDouble();
-
-            Line l = (e.Location as LocationCurve).Curve as Line;
-            XYZ vecX = l.Direction.Normalize();
-            XYZ vecY = XYZ.BasisZ.CrossProduct(vecX).Normalize();
-            vecX = GeomUtil.IsBigger(vecX, -vecX) ? vecX : -vecX;
-            vecY = GeomUtil.IsBigger(vecY, -vecY) ? vecY : -vecY;
-            XYZ p1 = l.GetEndPoint(0), p2 = l.GetEndPoint(1);
-
-            CentralPoint = new UV((p1.X + p2.X) / 2, (p1.Y + p2.Y) / 2);
-            VectorU = new UV(vecX.X, vecX.Y); VectorV = new UV(vecY.X, vecY.Y);
             
-            PlaneInfos = new List<ColumnPlaneInfo>();
-            PlaneInfos.Add(new ColumnPlaneInfo(VectorU, VectorV, CentralPoint- VectorU*(0.5- 0.2/2)));
-            PlaneInfos.Add(new ColumnPlaneInfo(VectorU, VectorV, CentralPoint));
-            PlaneInfos.Add(new ColumnPlaneInfo(VectorU, VectorV, CentralPoint + VectorU * (0.5 - 0.2 / 2)));
         }
     }
 }
