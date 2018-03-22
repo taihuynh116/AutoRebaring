@@ -49,7 +49,7 @@ namespace AutoRebaring.Command
             List<ColumnPlaneInfo> cpis = new List<ColumnPlaneInfo>();
             for (int i = 0; i < sortElems.Count; i++)
             {
-                IRevitInfo iri = new IRevitInfo(doc, sortElems[i]);
+                IRevitInfo iri = new RevitInfo(doc, sortElems[i]);
                 ColumnParameter cp = new ColumnParameter()
                 {
                     B1_Param = "b",
