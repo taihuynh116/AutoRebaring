@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo
 {
-    public interface IRebarArrayGeometry
+    public interface IRebarArrayPlane
     {
         XYZ Normal { get; set; }
         RebarLayoutRule RebarLayoutRule { get; set; }
@@ -18,8 +18,9 @@ namespace AutoRebaring.ElementInfo
         double Spacing { get; set; }
         double ArrayLength { get; }
         UV TopUV { get; set; }
+        RebarStyle RebarStyle { get; set; }
     }
-    public class RebarArrayGeometry : IRebarArrayGeometry
+    public class NormalRebarArrayPlane : IRebarArrayPlane
     {
         public RebarLayoutRule RebarLayoutRule { get; set; }
         public RebarHookType RebarHookType { get; set; }
@@ -29,7 +30,8 @@ namespace AutoRebaring.ElementInfo
         public double Spacing { get; set; }
         public double ArrayLength { get { return Spacing * (Number - 1); } }
         public UV TopUV { get; set; }
-        public RebarArrayGeometry(RebarLayoutRule layoutRule, RebarHookType hookType, RebarBarType barType, XYZ normal, int number, double spac, UV topUV)
+        public RebarStyle RebarStyle { get; set; }
+        public NormalRebarArrayPlane(RebarLayoutRule layoutRule, RebarHookType hookType, RebarBarType barType, XYZ normal, int number, double spac, UV topUV)
         {
             RebarLayoutRule = layoutRule;
             RebarHookType = hookType;
@@ -40,7 +42,7 @@ namespace AutoRebaring.ElementInfo
             TopUV = topUV;
         }
     }
-    public class LockHeadRebarArrayGeometry : IRebarArrayGeometry
+    public class LockheadRebarArrayPlane : IRebarArrayPlane
     {
         public XYZ Normal { get; set; }
         public RebarLayoutRule RebarLayoutRule { get; set; }
@@ -50,7 +52,8 @@ namespace AutoRebaring.ElementInfo
         public double Spacing { get; set; }
         public double ArrayLength { get { return Spacing * (Number - 1); } }
         public UV TopUV { get; set; }
-        public LockHeadRebarArrayGeometry(RebarLayoutRule layoutRule, RebarHookType hookType, RebarBarType barType, XYZ normal, int number, double spac, UV topUV)
+        public RebarStyle RebarStyle { get; set; }
+        public LockheadRebarArrayPlane(RebarLayoutRule layoutRule, RebarHookType hookType, RebarBarType barType, XYZ normal, int number, double spac, UV topUV)
         {
             RebarLayoutRule = layoutRule;
             RebarHookType = hookType;
@@ -60,5 +63,17 @@ namespace AutoRebaring.ElementInfo
             Spacing = spac;
             TopUV = topUV;
         }
+    }
+    public class ShortenRebarArrayPlane : IRebarArrayPlane
+    {
+        public XYZ Normal { get; set; }
+        public RebarLayoutRule RebarLayoutRule { get; set; }
+        public RebarHookType RebarHookType { get; set; }
+        public RebarBarType RebarType { get; set; }
+        public int Number { get; set; }
+        public double Spacing { get; set; }
+        public double ArrayLength { get { return Spacing * (Number - 1); } }
+        public UV TopUV { get; set; }
+        public RebarStyle RebarStyle { get; set; }
     }
 }

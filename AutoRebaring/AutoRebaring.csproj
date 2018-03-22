@@ -85,6 +85,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Command\Command.cs" />
     <Compile Include="Command\NhuCommand.cs" />
+    <Compile Include="Constant\ConstantValue.cs" />
     <Compile Include="Database\AddinConduction.cs" />
     <Compile Include="Database\AluformSchedule.cs" />
     <Compile Include="Database\AutoRebaringDbContext.cs" />
@@ -104,10 +105,12 @@
     <Compile Include="ElementInfo\IDesignInfo.cs" />
     <Compile Include="ElementInfo\IElementInfo.cs" />
     <Compile Include="ElementInfo\IPlaneInfo.cs" />
-    <Compile Include="ElementInfo\IRebarArrayGeometry.cs" />
-    <Compile Include="ElementInfo\IRebarInfo.cs" />
+    <Compile Include="ElementInfo\IRebarArrayPlane.cs" />
+    <Compile Include="ElementInfo\IStandardRebarGeneralInfo.cs" />
     <Compile Include="ElementInfo\IRebarParameter.cs" />
     <Compile Include="ElementInfo\IRevitInfo.cs" />
+    <Compile Include="ElementInfo\IStandardRebarInfo.cs" />
+    <Compile Include="ElementInfo\IStirrupRebarGeneralInfo.cs" />
     <Compile Include="ElementInfo\IVerticalInfo.cs" />
     <Compile Include="ElementInfo\StirrupDistribution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo
 {
-    public class IRebarParameter
+    public interface IRebarParameter
+    {
+        int PartCount { get; set; }
+        string Mark { get; set; }
+        List<string> Levels { get; set; }
+        List<string> MetaLevels { get; set; }
+        string FirstMetaLevel { get; set; }
+        string LastMetaLevel { get; set; }
+        string Partition { get; set; }
+    }
+    public class RebarParameter : IRebarParameter
     {
         public int PartCount { get; set; }
         public string Mark { get; set; }
@@ -15,7 +25,7 @@ namespace AutoRebaring.ElementInfo
         public string FirstMetaLevel { get; set; }
         public string LastMetaLevel { get; set; }
         public string Partition { get; set; }
-        public IRebarParameter(int partCount, string mark, List<string> levels, List<string> metaLevels, string firstMetaLevel, string lastMetaLevel)
+        public RebarParameter(int partCount, string mark, List<string> levels, List<string> metaLevels, string firstMetaLevel, string lastMetaLevel)
         {
             PartCount = partCount;
             Mark = mark;

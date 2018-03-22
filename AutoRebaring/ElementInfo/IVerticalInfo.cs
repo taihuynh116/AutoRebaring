@@ -9,7 +9,32 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo
 {
-    public class IVerticalInfo
+    public interface IVerticalInfo
+    {
+        Level StartLevel { get; set; }
+        Level EndLevel { get; set; }
+        double Top { get; }
+        double TopBeam { get; set; }
+        double TopFloor { get; set; }
+        double TopOffset { get; }
+        double TopLimit { get; set; }
+        double TopLockHead { get; }
+        double TopSmall { get; }
+        List<double> TopAnchorAfters { get; set; }
+        double TopStirrup1 { get; }
+        double TopStirrup2 { get; }
+        double Bottom { get; set; }
+        double BottomOffset { get;}
+        double BottomStirrup1 { get; }
+        double BottomStirrup2 { get; }
+        double BottomOffsetValue { get;}
+        double TopOffsetValue { get;  }
+        double BottomOffsetValueStirrup { get; }
+        double TopOffsetValueStirrup { get; }
+        List<double> RebarDevelopmentLengths { get; set; }
+        List<StirrupDistribution> StirrupDistributions { get; set; }
+    }
+    public class VerticalInfo:IVerticalInfo
     {
         public DevelopmentRebar DevelopmentRebar { get; set; }
         public GeneralParameterInput GeneralParameterInput { get; set; }
@@ -23,7 +48,7 @@ namespace AutoRebaring.ElementInfo
         public double TopLimit { get; set; }
         public double TopLockHead { get { return Top - GeomUtil.milimeter2Feet(GeneralParameterInput.ConcreteTopCover); } }
         public double TopSmall { get { return Top - GeomUtil.milimeter2Feet(GeneralParameterInput.CoverTopSmall); } }
-        public List<double> TopAnchorAfters { get { return StandardRebarInfos.Select(x => TopLimit - GeneralParameterInput.AnchorMultiply * x.DiameterAfter).ToList(); } }
+        public List<double> TopAnchorAfters { get; set; }
         public double TopStirrup1 { get { return TopStirrup2 - TopOffsetValueStirrup; } }
         public double TopStirrup2 { get { return DevelopmentRebar.IsStirrupInsideBeam ? TopFloor : TopBeam; } }
         public double Bottom { get; set; }
@@ -70,16 +95,16 @@ namespace AutoRebaring.ElementInfo
                 return d;
             }
         }
-        public List<double> RebarDevelopmentLengths { get { return StandardRebarInfos.Select(x => GeneralParameterInput.DevelopmentMultiply * x.DiameterAfter).ToList(); } }
+        public List<double> RebarDevelopmentLengths { get; set; }
         public List<StirrupDistribution> StirrupDistributions { get; set; }
     }
 
-    public class ColumnVerticalInfo : IVerticalInfo
+    public class ColumnVerticalInfo : VerticalInfo
     {
         public double TopAnchorAfter { get {return TopAnchorAfters[0]; } }
         public double RebarDevelopmentLength { get { return RebarDevelopmentLengths[0]; } }
     }
-    public class WallVerticalInfo : IVerticalInfo
+    public class WallVerticalInfo:VerticalInfo
     {
 
     }
