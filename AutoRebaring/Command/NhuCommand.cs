@@ -4,8 +4,10 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using AutoRebaring.Constant;
 using AutoRebaring.Database;
 using AutoRebaring.ElementInfo;
+using AutoRebaring.ElementInfo.Shorten;
 using Geometry;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ namespace AutoRebaring.Command
     public class NhuCommand : IExternalCommand
     {
         const string r = "Revit";
+
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiapp = commandData.Application;
@@ -55,14 +58,16 @@ namespace AutoRebaring.Command
                     B1_Param = "b",
                     B2_Param = "h"
                 };
-                ColumnPlaneInfo cpi = new ColumnPlaneInfo(iri, cp);
-                if (i == 0)
-                { }
-                else
+                GeneralParameterInput gpi = new GeneralParameterInput()
                 {
-                    ColumnPlaneInfo cpiB = cpis[i - 1];
-                }
+                    ShortenLimit = ConstantValue.milimeter2Feet * 100
+                };
+                ColumnPlaneInfo cpi = new ColumnPlaneInfo(iri, cp);
                 cpis.Add(cpi);
+            }
+            for (int i = 0; i < cpis.Count-1; i++)
+            {
+                cpis[i].CPIAfter = cpis[i + 1];
             }
 
             tx.Commit();

@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;Debug2018</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>1</WarningLevel>
     <StartAction>Program</StartAction>
@@ -106,11 +106,11 @@
     <Compile Include="ElementInfo\IElementInfo.cs" />
     <Compile Include="ElementInfo\IPlaneInfo.cs" />
     <Compile Include="ElementInfo\IRevitInfo.cs" />
-    <Compile Include="ElementInfo\IVerticalInfo.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardGeneralInfo.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardParameter.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardPlaneInfo.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\SingleInfo\IStandardPlaneSingleInfo.cs" />
+    <Compile Include="ElementInfo\IVerticalInfo.cs" />
     <Compile Include="ElementInfo\Shorten\IShortenType.cs" />
     <Compile Include="ElementInfo\StirrupDistribution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

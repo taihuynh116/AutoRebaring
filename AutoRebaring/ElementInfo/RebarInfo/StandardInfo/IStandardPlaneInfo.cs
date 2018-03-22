@@ -29,7 +29,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetNormalStandardPlaneInfos()
         {
-            double spacB1 = (PlaneInfo.B1s[0] - GeneralParameterInput.ConcreteCover *2  )
+            //double spacB1 = (PlaneInfo.B1s[0] - GeneralParameterInput.ConcreteCover *2  )
         }
     }
     public class WallStandardPlaneInfo : IStandardPlaneInfo

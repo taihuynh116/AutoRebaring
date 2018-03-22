@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoRebaring.ElementInfo.Shorten;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -55,6 +56,19 @@ namespace AutoRebaring.ElementInfo
         }
         public ShortenType ShortenType { get; set; }
 
+        private ColumnPlaneInfo cpiAfter;
+        public ColumnPlaneInfo CPIAfter
+        {
+            get
+            {
+                return cpiAfter;
+            }
+            set
+            {
+                cpiAfter = value;
+                CheckShotenType();
+            }
+        }
         public ColumnPlaneInfo(IRevitInfo revitInfo, ColumnParameter param)
         {
             IsReversedDimension = false;
@@ -77,6 +91,25 @@ namespace AutoRebaring.ElementInfo
             IsReversedDimension = false;
             this.vecU = vecU; this.vecV = vecV;
             CentralPoint = centralPnt;
+        }
+        public void CheckShotenType()
+        {
+            double d = 0;
+            Shorten.Shorten st = Shorten.Shorten.None;
+
+            st = GetShorten(BoundaryPoints[0].U, CPIAfter.BoundaryPoints[0].U, out d);
+            ShortenType.ShortenU1 = st;
+            ShortenType.DeltaU1 = d;
+
+            st = GetShorten(BoundaryPoints[0].V, CPIAfter.BoundaryPoints[0].V, out d);
+            ShortenType.ShortenV1 = st;
+            ShortenType.DeltaV1 = d;
+        }
+        public Shorten.Shorten GetShorten(double u, double uAfter, out double d)
+        {
+            d = Math.Abs(uAfter - u);
+            if (uAfter < u) return Shorten.Shorten.Big;
+            return Shorten.Shorten.None;
         }
     }
     public class WallPlaneInfo : IPlaneInfo
