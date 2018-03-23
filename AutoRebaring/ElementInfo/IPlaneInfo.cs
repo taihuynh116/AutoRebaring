@@ -100,30 +100,35 @@ namespace AutoRebaring.ElementInfo
         };
         private void CheckShotenType()
         {
-            double d = 0;
-            Shorten.Shorten st;
+            Shorten.Delta d;
 
-            st = GetShorten(BoundaryPoints[0].U, CPIAfter.BoundaryPoints[0].U, out d);
-            ShortenType.ShortenU1 = st;
-            ShortenType.DeltaU1 = d;
+            ShortenType.Shorten1 = GetShorten(BoundaryPoints[0], CPIAfter.BoundaryPoints[0], out d);
+            ShortenType.Delta1 = d;
+            ShortenType.Shorten2 = GetShorten(BoundaryPoints[2], CPIAfter.BoundaryPoints[2], out d);
+            ShortenType.Delta2 = d;
 
         }
 
-        private Shorten.Shorten GetShorten(double u, double uAfter, out double d)
+        private Shorten.Shorten.EnumShorten GetEnumShorten(double sDelta)
         {
-            d = Math.Abs(uAfter - u);
-            if (d == 0)
+            if (sDelta == 0)
             {
-                return Shorten.Shorten.None;
+                return Shorten.Shorten.EnumShorten.None;
             }
-            else if (d >= gpi.ShortenLimit)
+            else if (sDelta >= gpi.ShortenLimit)
             {
-                return Shorten.Shorten.Big;
+                return Shorten.Shorten.EnumShorten.None;
             }
             else
             {
-                return Shorten.Shorten.Small;
+                return Shorten.Shorten.EnumShorten.None;
             }
+        }
+        private Shorten.Shorten GetShorten(UV u, UV uAfter, out Shorten.Delta d)
+        {
+            Shorten.Shorten.EnumShorten ShortenU, ShortenV;
+            d = new Shorten.Delta(Math.Abs(uAfter.U - u.U), Math.Abs(uAfter.V - u.V));
+            return new Shorten.Shorten(GetEnumShorten(d.U), GetEnumShorten(d.V));
         }
     }
     public class WallPlaneInfo : IPlaneInfo
