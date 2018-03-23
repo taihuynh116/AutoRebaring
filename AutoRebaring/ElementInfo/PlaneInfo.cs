@@ -7,34 +7,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AutoRebaring.ElementInfo.Shorten;
 using AutoRebaring.Constant;
 using AutoRebaring.ElementInfo;
-
 namespace AutoRebaring.ElementInfo
 {
-    public interface IPlaneInfo
-    {
-        List<double> B1s { get; }
-        List<double> B2s { get; }
-        UV VectorU { get; }
-        UV VectorV { get; }
-        XYZ VectorX { get; }
-        XYZ VectorY { get; }
-        List<List<UV>> BoundaryPointLists { get; }
-        List<ShortenType> ShortenTypes { get; }
-        List<List<UV>> StandardRebarPointLists { get; }
-        List<List<UV>> StirrupRebarPointLists { get; }
-    }
-    public class ColumnPlaneInfo 
+    public class ColumnPlaneInfo : IPlaneInfo
     {
         #region IPlaneInfo
         public List<double> B1s { get { return new List<double> { B1 }; } }
         public List<double> B2s { get { return new List<double> { B2 }; } }
-        public List<UV> VectorUs { get { return new List<UV> { VectorU }; } }
-        public List<UV> VectorVs { get { return new List<UV> { VectorV }; } }
         public List<List<UV>> BoundaryPointLists { get { return new List<List<UV>> { BoundaryPoints }; } }
         public List<ShortenType> ShortenTypes { get { return new List<ShortenType> { ShortenType }; } }
+        public XYZ VectorX { get; set; }
+        public XYZ VectorY { get; set; }
+        public List<List<UV>> StandardRebarPointLists { get; set; }
+        public List<List<UV>> StirrupRebarPointLists { get; set; }
+        public IPlaneInfo PlaneInfoAfter { get; set; }
         #endregion
 
         public double b1;
@@ -98,41 +86,36 @@ namespace AutoRebaring.ElementInfo
             this.vecU = vecU; this.vecV = vecV;
             CentralPoint = centralPnt;
         }
-        GeneralParameterInput gpi = new GeneralParameterInput()
-        {
-            ShortenLimit = ConstantValue.milimeter2Feet * 100
-        };
+        public GeneralParameterInput GeneralParameterInput { get; set; }
+
         private void CheckShotenType()
         {
-            Shorten.Delta d;
+            double d = 0;
+            List<UV> pnts = BoundaryPoints;
+            List<UV> pntAs = cpiAfter.BoundaryPoints;
 
-            ShortenType.Shorten1 = GetShorten(BoundaryPoints[0], CPIAfter.BoundaryPoints[0], out d);
-            ShortenType.Delta1 = d;
-            ShortenType.Shorten2 = GetShorten(BoundaryPoints[2], CPIAfter.BoundaryPoints[2], out d);
-            ShortenType.Delta2 = d;
+            ShortenType.ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d);
+            ShortenType.DeltaU1 = d;
 
+            ShortenType.ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d);
+            ShortenType.DeltaU2 = d;
+
+            ShortenType.ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d);
+            ShortenType.DeltaV1 = d;
+
+            ShortenType.ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d);
+            ShortenType.DeltaV2 = d;
         }
 
-        private Shorten.Shorten.EnumShorten GetEnumShorten(double sDelta)
+        private ShortenEnum GetShorten(double u, double uAfter, out double d)
         {
-            if (sDelta == 0)
-            {
-                return Shorten.Shorten.EnumShorten.None;
-            }
-            else if (sDelta >= gpi.ShortenLimit)
-            {
-                return Shorten.Shorten.EnumShorten.None;
-            }
-            else
-            {
-                return Shorten.Shorten.EnumShorten.None;
-            }
-        }
-        private Shorten.Shorten GetShorten(UV u, UV uAfter, out Shorten.Delta d)
-        {
-            Shorten.Shorten.EnumShorten ShortenU, ShortenV;
-            d = new Shorten.Delta(Math.Abs(uAfter.U - u.U), Math.Abs(uAfter.V - u.V));
-            return new Shorten.Shorten(GetEnumShorten(d.U), GetEnumShorten(d.V));
+            d = Math.Abs(u - uAfter);
+            double shorten = ConstantValue.milimeter2Feet * GeneralParameterInput.ShortenLimit;
+            if (GeomUtil.IsEqual(shorten, d) || d > shorten)
+                return ShortenEnum.Big;
+            else if (GeomUtil.IsBigger(d, 0))
+                return ShortenEnum.Small;
+            return ShortenEnum.None;
         }
     }
     public class WallPlaneInfo

@@ -11,12 +11,6 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 {
-    public interface IStandardPlaneInfo
-    {
-        List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
-        List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
-        List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
-    }
     public class ColumnStandardPlaneInfo
     {
         public IPlaneInfo PlaneInfo { get; set; }
@@ -136,7 +130,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             ShortenStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
 
         }
-        private void GetShortenV(int index, Shorten.Shorten shorten)
+        private void GetShortenV(int index, ShortenEnum shorten)
         {
             int n1 = DesignInfo.StandardNumbers[0];
             int n2 = DesignInfo.StandardNumbers[1];
@@ -166,7 +160,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             ShortenStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
             switch (shorten)
             {
-                case Shorten.Shorten.Big:
+                case ShortenEnum.Big:
                     {
                         IStandardPlaneSingleInfo stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                         {
@@ -211,7 +205,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
                     break;
-                case Shorten.Shorten.Small:
+                case ShortenEnum.Small:
                     {
                         int numBigU1 = 0, numSmallU1 = 0;
                         for (int i = 0; i < n1; i++)
@@ -261,7 +255,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
                     break;
-                case Shorten.Shorten.None:
+                case ShortenEnum.None:
                     {
 
                     }

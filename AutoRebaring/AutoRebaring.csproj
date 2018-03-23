@@ -102,16 +102,18 @@
     <Compile Include="Database\RebarDesignGeneral.cs" />
     <Compile Include="Database\UserAddinConduction.cs" />
     <Compile Include="Database\UserManagement.cs" />
-    <Compile Include="ElementInfo\IDesignInfo.cs" />
-    <Compile Include="ElementInfo\IElementInfo.cs" />
-    <Compile Include="ElementInfo\IPlaneInfo.cs" />
-    <Compile Include="ElementInfo\IRevitInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardGeneralInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardParameter.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\IStandardPlaneInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\SingleInfo\IStandardPlaneSingleInfo.cs" />
-    <Compile Include="ElementInfo\IVerticalInfo.cs" />
-    <Compile Include="ElementInfo\Shorten\IShortenType.cs" />
+    <Compile Include="ElementInfo\Body.cs" />
+    <Compile Include="ElementInfo\DesignInfo.cs" />
+    <Compile Include="ElementInfo\ElementInfo.cs" />
+    <Compile Include="ElementInfo\PlaneInfo.cs" />
+    <Compile Include="ElementInfo\RevitInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardGeneralInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardParameter.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardPlaneInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\SingleInfo\StandardPlaneSingleInfo.cs" />
+    <Compile Include="ElementInfo\VerticalInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StirrupInfo\StirrupGeneralInfo.cs" />
+    <Compile Include="ElementInfo\Shorten\ShortenType.cs" />
     <Compile Include="ElementInfo\StirrupDistribution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebarLogistic\StandardLogistic.cs" />
@@ -146,9 +148,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ElementInfo\RebarInfo\StirrupInfo\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>REM copy "$(ProjectDir)*.addin" "$(AppData)\Autodesk\REVIT\Addins\2017"

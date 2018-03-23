@@ -7,18 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 {
-    public interface IRebarGeneralInfo
-    {
-        RebarLayoutRule LayoutRule { get; set; }
-        RebarHookType HookType { get; set; }
-        List<double> Diameters { get; set; }
-        List<double> DiameterAfters { get; set; }
-        List<double> DiameterBefores { get; set; }
-        List<RebarBarType> Types { get; set; }
-        List<RebarBarType> TypeAfters { get; set;}
-        List<RebarBarType> TypeBefores { get; set; }
-        RebarStyle Style { get; set; }
-    }
+    
     public class StandardGeneralInfo : IRebarGeneralInfo
     {
         public RebarLayoutRule LayoutRule { get; set; }

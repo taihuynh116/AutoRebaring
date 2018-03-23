@@ -8,13 +8,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo
 {
-    public interface IElementInfo
-    {
-        IPlaneInfo PlaneInfo { get; set; }
-        IVerticalInfo VerticalInfo { get; set; }
-        IDesignInfo DesignInfo { get; set; }
-        IRevitInfo RevitInfo { get; set; }
-    }
+    
     public class ColumnInfo : IElementInfo
     {
         public IPlaneInfo PlaneInfo { get; set; }
@@ -37,7 +31,7 @@ namespace AutoRebaring.ElementInfo
         public WallInfo(Document doc, Element e, ColumnParameter param)
         {
             RevitInfo = new RevitInfo(doc, e);
-            PlaneInfo = new WallPlaneInfo(RevitInfo, param);
+            //PlaneInfo = new WallPlaneInfo(RevitInfo, param);
         }
     }
 }

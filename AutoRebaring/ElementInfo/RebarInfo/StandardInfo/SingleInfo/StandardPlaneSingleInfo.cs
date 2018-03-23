@@ -8,22 +8,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 {
-    public enum RebarLocation
-    {
-        L1, L2
-    }
-    public interface IStandardPlaneSingleInfo
-    {
-        XYZ Normal { get; set; }
-        int Number { get; set; }
-        double Spacing { get; set; }
-        double ArrayLength { get; }
-        UV StartPoint { get; set; }
-        RebarLayoutRule LayoutRule { get; }
-        RebarHookType HookType { get; set; }
-        RebarBarType BarType { get; set; }
-        RebarLocation RebarLocation { get; set; }
-    }
+    
     public class StraightStandardPlaneSingleInfo: IStandardPlaneSingleInfo
     {
         public XYZ Normal { get; set; }

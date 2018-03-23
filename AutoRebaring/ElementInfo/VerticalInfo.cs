@@ -9,31 +9,6 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo
 {
-    public interface IVerticalInfo
-    {
-        Level StartLevel { get; set; }
-        Level EndLevel { get; set; }
-        double Top { get; }
-        double TopBeam { get; set; }
-        double TopFloor { get; set; }
-        double TopOffset { get; }
-        double TopLimit { get; set; }
-        double TopLockHead { get; }
-        double TopSmall { get; }
-        List<double> TopAnchorAfters { get; set; }
-        double TopStirrup1 { get; }
-        double TopStirrup2 { get; }
-        double Bottom { get; set; }
-        double BottomOffset { get;}
-        double BottomStirrup1 { get; }
-        double BottomStirrup2 { get; }
-        double BottomOffsetValue { get;}
-        double TopOffsetValue { get;  }
-        double BottomOffsetValueStirrup { get; }
-        double TopOffsetValueStirrup { get; }
-        List<double> RebarDevelopmentLengths { get; set; }
-        List<StirrupDistribution> StirrupDistributions { get; set; }
-    }
     public class VerticalInfo:IVerticalInfo
     {
         public DevelopmentRebar DevelopmentRebar { get; set; }
