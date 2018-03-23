@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoRebaring.ElementInfo.Shorten;
+using AutoRebaring.Constant;
+using AutoRebaring.ElementInfo;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -92,24 +94,36 @@ namespace AutoRebaring.ElementInfo
             this.vecU = vecU; this.vecV = vecV;
             CentralPoint = centralPnt;
         }
-        public void CheckShotenType()
+        GeneralParameterInput gpi = new GeneralParameterInput()
+        {
+            ShortenLimit = ConstantValue.milimeter2Feet * 100
+        };
+        private void CheckShotenType()
         {
             double d = 0;
-            Shorten.Shorten st = Shorten.Shorten.None;
+            Shorten.Shorten st;
 
             st = GetShorten(BoundaryPoints[0].U, CPIAfter.BoundaryPoints[0].U, out d);
             ShortenType.ShortenU1 = st;
             ShortenType.DeltaU1 = d;
 
-            st = GetShorten(BoundaryPoints[0].V, CPIAfter.BoundaryPoints[0].V, out d);
-            ShortenType.ShortenV1 = st;
-            ShortenType.DeltaV1 = d;
         }
-        public Shorten.Shorten GetShorten(double u, double uAfter, out double d)
+
+        private Shorten.Shorten GetShorten(double u, double uAfter, out double d)
         {
             d = Math.Abs(uAfter - u);
-            if (uAfter < u) return Shorten.Shorten.Big;
-            return Shorten.Shorten.None;
+            if (d == 0)
+            {
+                return Shorten.Shorten.None;
+            }
+            else if (d >= gpi.ShortenLimit)
+            {
+                return Shorten.Shorten.Big;
+            }
+            else
+            {
+                return Shorten.Shorten.Small;
+            }
         }
     }
     public class WallPlaneInfo : IPlaneInfo
@@ -131,7 +145,7 @@ namespace AutoRebaring.ElementInfo
         public List<ColumnPlaneInfo> PlaneInfos { get; set; }
         public WallPlaneInfo(IRevitInfo revitInfo, ColumnParameter param)
         {
-            
+
         }
     }
 }

@@ -58,14 +58,10 @@ namespace AutoRebaring.Command
                     B1_Param = "b",
                     B2_Param = "h"
                 };
-                GeneralParameterInput gpi = new GeneralParameterInput()
-                {
-                    ShortenLimit = ConstantValue.milimeter2Feet * 100
-                };
                 ColumnPlaneInfo cpi = new ColumnPlaneInfo(iri, cp);
                 cpis.Add(cpi);
             }
-            for (int i = 0; i < cpis.Count-1; i++)
+            for (int i = 0; i < cpis.Count - 1; i++)
             {
                 cpis[i].CPIAfter = cpis[i + 1];
             }
