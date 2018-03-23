@@ -15,12 +15,16 @@ namespace AutoRebaring.ElementInfo
     {
         List<double> B1s { get; }
         List<double> B2s { get; }
-        List<UV> VectorUs { get; }
-        List<UV> VectorVs { get; }
+        UV VectorU { get; }
+        UV VectorV { get; }
+        XYZ VectorX { get; }
+        XYZ VectorY { get; }
         List<List<UV>> BoundaryPointLists { get; }
         List<ShortenType> ShortenTypes { get; }
+        List<List<UV>> StandardRebarPointLists { get; }
+        List<List<UV>> StirrupRebarPointLists { get; }
     }
-    public class ColumnPlaneInfo : IPlaneInfo
+    public class ColumnPlaneInfo 
     {
         #region IPlaneInfo
         public List<double> B1s { get { return new List<double> { B1 }; } }
@@ -112,7 +116,7 @@ namespace AutoRebaring.ElementInfo
             return Shorten.Shorten.None;
         }
     }
-    public class WallPlaneInfo : IPlaneInfo
+    public class WallPlaneInfo
     {
         #region IPlaneInfo
         public List<double> B1s { get; }

@@ -13,11 +13,13 @@ namespace AutoRebaring.ElementInfo
         Level Level { get; set; }
         List<RebarBarType> StandardTypes { get; set; }
         List<int> StandardNumbers { get; set; }
+        List<double> StandardSpacings { get; set; }
         List<RebarBarType> StirrupTypes { get; set; }
         List<double> BotTopSpacings { get; set; }
         List<double> MiddleSpacings { get; set; }
+        IDesignInfo DesingInfoAfter { get; set; }
     }
-    public class ColumnDesignInfo : IDesignInfo
+    public class ColumnDesignInfo 
     {
         #region IDesignInput
         public Level Level { get; set; }
@@ -48,7 +50,7 @@ namespace AutoRebaring.ElementInfo
             MiddleSpacings = new List<double> { m1, m2 };
         }
     }
-    public class WallDesignInfo : IDesignInfo
+    public class WallDesignInfo
     {
         #region IDesignInput
         public Level Level { get; set; }
