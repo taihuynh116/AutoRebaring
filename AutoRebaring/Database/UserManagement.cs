@@ -11,7 +11,7 @@ namespace AutoRebaring.Database
     {
         public long ID { get; set; }
 
-        public long ProjectID { get; set; }
+        public int ProjectID { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -22,11 +22,11 @@ namespace AutoRebaring.Database
 
         [Required]
         [StringLength(50)]
-        public string WebUsername { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [StringLength(500)]
-        public string WebPassword { get; set; }
+        public string Password { get; set; }
 
         [Required]
         [StringLength(50)]

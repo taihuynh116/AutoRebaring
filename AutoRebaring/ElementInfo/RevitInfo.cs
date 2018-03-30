@@ -12,10 +12,12 @@ namespace AutoRebaring.ElementInfo
     {
         public Document Document { get; set; }
         public Element Element { get; set; }
+        public double Elevation { get; set; }
         public RevitInfo(Document doc, Element e)
         {
             Document = doc;
             Element = e;
+            Elevation = e.get_BoundingBox(null).Min.Z;
         }
     }
 }

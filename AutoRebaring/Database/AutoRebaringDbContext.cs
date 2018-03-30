@@ -8,23 +8,19 @@ namespace AutoRebaring.Database
     public partial class AutoRebaringDbContext : DbContext
     {
         public AutoRebaringDbContext()
-            : base("data source=118.69.224.199,1444;initial catalog=TAIHT;persist security info=True;user id=taiht;password=Skarner116!;MultipleActiveResultSets=True;App=EntityFramework")
+            : base("name=AutoRebaringDbContext")
         {
         }
 
         public virtual DbSet<AddinConduction> AddinConductions { get; set; }
         public virtual DbSet<AluformSchedule> AluformSchedules { get; set; }
-        public virtual DbSet<ColumnParameter> ColumnParameters { get; set; }
-        public virtual DbSet<DevelopmentRebar> DevelopmentRebars { get; set; }
         public virtual DbSet<GeneralParameterInput> GeneralParameterInputs { get; set; }
         public virtual DbSet<LevelTitle> LevelTitles { get; set; }
-        public virtual DbSet<Mark> Marks { get; set; }
-        public virtual DbSet<OtherParameter> OtherParameters { get; set; }
         public virtual DbSet<ProductSource> ProductSources { get; set; }
         public virtual DbSet<RebarChosen> RebarChosens { get; set; }
-        public virtual DbSet<RebarChosenGeneral> RebarChosenGenerals { get; set; }
         public virtual DbSet<RebarDesign> RebarDesigns { get; set; }
         public virtual DbSet<RebarDesignGeneral> RebarDesignGenerals { get; set; }
+        public virtual DbSet<StirrupFamily> StirrupFamilies { get; set; }
         public virtual DbSet<UserAddinConduction> UserAddinConductions { get; set; }
         public virtual DbSet<UserManagement> UserManagements { get; set; }
 
@@ -34,48 +30,36 @@ namespace AutoRebaring.Database
                 .Property(e => e.AddinName)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<ColumnParameter>()
+            modelBuilder.Entity<GeneralParameterInput>()
+                .Property(e => e.Mark)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<GeneralParameterInput>()
                 .Property(e => e.B1_Param)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<ColumnParameter>()
+            modelBuilder.Entity<GeneralParameterInput>()
                 .Property(e => e.B2_Param)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<GeneralParameterInput>()
+                .Property(e => e.ElementType)
                 .IsUnicode(false);
 
             modelBuilder.Entity<LevelTitle>()
                 .Property(e => e.Title)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Mark>()
-                .Property(e => e.Mark1)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<OtherParameter>()
-                .Property(e => e.View3d)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<OtherParameter>()
-                .Property(e => e.Mark)
-                .IsUnicode(false);
-
             modelBuilder.Entity<RebarChosen>()
                 .Property(e => e.LType)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<RebarChosenGeneral>()
-                .Property(e => e.FamilyStirrup1)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<RebarChosenGeneral>()
-                .Property(e => e.FamilyStirrup2)
-                .IsUnicode(false);
-
             modelBuilder.Entity<RebarDesign>()
                 .Property(e => e.Mark)
                 .IsUnicode(false);
 
             modelBuilder.Entity<RebarDesign>()
-                .Property(e => e.RebarType)
+                .Property(e => e.StandardType)
                 .IsUnicode(false);
 
             modelBuilder.Entity<RebarDesign>()
@@ -88,6 +72,22 @@ namespace AutoRebaring.Database
 
             modelBuilder.Entity<RebarDesignGeneral>()
                 .Property(e => e.Mark)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<RebarDesignGeneral>()
+                .Property(e => e.EndRebarType)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<StirrupFamily>()
+                .Property(e => e.Mark)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<StirrupFamily>()
+                .Property(e => e.FamiyStirrup)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<StirrupFamily>()
+                .Property(e => e.StirrupType)
                 .IsUnicode(false);
 
             modelBuilder.Entity<UserAddinConduction>()
@@ -111,11 +111,11 @@ namespace AutoRebaring.Database
                 .IsUnicode(false);
 
             modelBuilder.Entity<UserManagement>()
-                .Property(e => e.WebUsername)
+                .Property(e => e.Username)
                 .IsUnicode(false);
 
             modelBuilder.Entity<UserManagement>()
-                .Property(e => e.WebPassword)
+                .Property(e => e.Password)
                 .IsUnicode(false);
 
             modelBuilder.Entity<UserManagement>()

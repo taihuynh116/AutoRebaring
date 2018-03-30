@@ -9,15 +9,80 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoRebaring.Constant;
 using AutoRebaring.ElementInfo;
+using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
+
 namespace AutoRebaring.ElementInfo
 {
-    public class ColumnPlaneInfo : IPlaneInfo
+    public class PlaneInfo
+    {
+        public double B1 { get; set; }
+        public double B2 { get; set; }
+        public UV VectorU { get; set; }
+        public UV VectorV { get; set; }
+        public UV CentralPoint { get; set; }
+        public Polygon Polygon { get; set; }
+        public GeneralParameterInput GeneralParameterInput { get; set; }
+
+        public PlaneInfo(IRevitInfo revitInfo, GeneralParameterInput gpi)
+        {
+            Document doc = revitInfo.Document;
+            Element e = revitInfo.Element;
+            GeneralParameterInput = gpi;
+            GetPlaneInfo(doc, e);
+        }   
+        public PlaneInfo(Document doc, Element e, GeneralParameterInput gpi)
+        {
+            GetPlaneInfo(doc, e);
+        }
+        public void GetPlaneInfo(Document doc, Element e)
+        {
+            Element etype = doc.GetElement(e.GetTypeId());
+
+            if (!(e is Wall))
+            {
+                B1 = etype.LookupParameter(ConstantValue.B1Param_Column).AsDouble();
+                B2 = etype.LookupParameter(ConstantValue.B2Param_Column).AsDouble();
+                Transform tf = ((FamilyInstance)e).GetTransform();
+                XYZ vecX = GeomUtil.IsBigger(tf.BasisX, -tf.BasisX) ? tf.BasisX : -tf.BasisX;
+                XYZ vecY = GeomUtil.IsBigger(tf.BasisY, -tf.BasisY) ? tf.BasisY : -tf.BasisY;
+                VectorU = new UV(vecX.X, vecX.Y); VectorV = new UV(vecY.X, vecY.Y);
+
+                XYZ pnt = (e.Location as LocationPoint).Point;
+                CentralPoint = new UV(pnt.X, pnt.Y);
+            }
+            else
+            {
+                B1 = e.LookupParameter(ConstantValue.B1Param_Wall).AsDouble();
+                B2 = etype.LookupParameter(ConstantValue.B2Param_Wall).AsDouble();
+                Line l = (e.Location as LocationCurve).Curve as Line;
+                XYZ vecX = l.Direction.Normalize();
+                XYZ vecY = XYZ.BasisZ.CrossProduct(vecX).Normalize();
+                vecX = GeomUtil.IsBigger(vecX, -vecX) ? vecX : -vecX;
+                vecY = GeomUtil.IsBigger(vecY, -vecY) ? vecY : -vecY;
+                VectorU = new UV(vecX.X, vecX.Y); VectorV = new UV(vecY.X, vecY.Y);
+
+                XYZ pnt1 = l.GetEndPoint(0), pnt2 = l.GetEndPoint(1);
+                CentralPoint = new UV((pnt1.X + pnt2.X) / 2, (pnt1.Y + pnt2.Y) / 2);
+            }
+
+            List<UV> boundPnts = new List<UV>
+            {
+                CentralPoint - VectorU * B1 / 2 - VectorV * B2 / 2,
+                CentralPoint + VectorU * B1 / 2 - VectorV * B2 / 2,
+                CentralPoint + VectorU * B1 / 2 + VectorV * B2 / 2,
+                CentralPoint - VectorU * B1 / 2 + VectorV * B2 / 2
+            };
+
+            Polygon = new Polygon(boundPnts.Select(x => new XYZ(x.U, x.V, 0)).ToList());
+        }
+    }
+    public class ColumnPlaneInfo : PlaneInfo, IPlaneInfo
     {
         #region IPlaneInfo
-        public List<double> B1s { get { return new List<double> { B1 }; } }
-        public List<double> B2s { get { return new List<double> { B2 }; } }
-        public List<List<UV>> BoundaryPointLists { get { return new List<List<UV>> { BoundaryPoints }; } }
-        public List<ShortenType> ShortenTypes { get { return new List<ShortenType> { ShortenType }; } }
+        public List<double> B1s { get; set; }
+        public List<double> B2s { get; set; }
+        public List<List<UV>> BoundaryPointLists { get; set; }
+        public List<ShortenType> ShortenTypes { get; set; }
         public XYZ VectorX { get; set; }
         public XYZ VectorY { get; set; }
         public List<List<UV>> StandardRebarPointLists { get; set; }
@@ -25,86 +90,168 @@ namespace AutoRebaring.ElementInfo
         public IPlaneInfo PlaneInfoAfter { get; set; }
         #endregion
 
-        public double b1;
-        public double b2;
-        public UV vecU;
-        public UV vecV;
-        public double B1 { get { if (!IsReversedDimension) return b1; return b2; } }
-        public double B2 { get { if (!IsReversedDimension) return b2; return b1; } }
-        public UV VectorU { get { if (!IsReversedDimension) return vecU; return vecV; } }
-        public UV VectorV { get { if (!IsReversedDimension) return vecV; return vecU; } }
-        public UV CentralPoint { get; set; }
-        public bool IsReversedDimension { get; set; }
-        public List<UV> BoundaryPoints
-        {
-            get
-            {
-                return new List<UV>
-                {
-                    CentralPoint - VectorU * B1 / 2 - VectorV * B2 / 2,
-                    CentralPoint + VectorU * B1 / 2 - VectorV * B2 / 2,
-                    CentralPoint + VectorU * B1 / 2 + VectorV * B2 / 2,
-                    CentralPoint - VectorU * B1 / 2 + VectorV * B2 / 2
-                };
-            }
-        }
-        public ShortenType ShortenType { get; set; }
-
-        private ColumnPlaneInfo cpiAfter;
-        public ColumnPlaneInfo CPIAfter
-        {
-            get
-            {
-                return cpiAfter;
-            }
-            set
-            {
-                cpiAfter = value;
-                CheckShotenType();
-            }
-        }
-        public ColumnPlaneInfo(IRevitInfo revitInfo, ColumnParameter param)
-        {
-            IsReversedDimension = false;
-            Document doc = revitInfo.Document;
-            Element e = revitInfo.Element;
-            Element etype = revitInfo.Document.GetElement(e.GetTypeId());
-            b1 = etype.LookupParameter(param.B1_Param).AsDouble();
-            b2 = etype.LookupParameter(param.B2_Param).AsDouble();
-
-            Transform tf = ((FamilyInstance)e).GetTransform();
-            XYZ vecX = GeomUtil.IsBigger(tf.BasisX, -tf.BasisX) ? tf.BasisX : -tf.BasisX;
-            XYZ vecY = GeomUtil.IsBigger(tf.BasisY, -tf.BasisY) ? tf.BasisY : -tf.BasisY;
-            vecU = new UV(vecX.X, vecX.Y); vecV = new UV(vecY.X, vecY.Y);
-
-            XYZ pnt = (e.Location as LocationPoint).Point;
-            CentralPoint = new UV(pnt.X, pnt.Y);
-        }
-        public ColumnPlaneInfo(UV vecU, UV vecV, UV centralPnt)
-        {
-            IsReversedDimension = false;
-            this.vecU = vecU; this.vecV = vecV;
-            CentralPoint = centralPnt;
-        }
         public GeneralParameterInput GeneralParameterInput { get; set; }
+        public ColumnPlaneInfo(IRevitInfo revitInfo, GeneralParameterInput gpi) : base(revitInfo, gpi)
+        {
 
-        private void CheckShotenType()
+        }
+        public void GetFullPlaneInfo(GeneralParameterInput gpi)
+        {
+            GeneralParameterInput = gpi;
+
+            List<UV> boundPoints = new List<UV>
+            {
+                CentralPoint - VectorU * B1 / 2 - VectorV * B2 / 2,
+                CentralPoint + VectorU * B1 / 2 - VectorV * B2 / 2,
+                CentralPoint + VectorU * B1 / 2 + VectorV * B2 / 2,
+                CentralPoint - VectorU * B1 / 2 + VectorV * B2 / 2
+            };
+
+            B1s = new List<double> { B1 };
+            B2s = new List<double> { B2 };
+            BoundaryPointLists = new List<List<UV>> { boundPoints };
+        }
+        public void GetShortenType(IPlaneInfo pia)
+        {
+            PlaneInfoAfter = pia;
+            ShortenTypes = new List<ShortenType>
+            {
+                getShotenType()
+            };
+        }
+        private ShortenType getShotenType()
         {
             double d = 0;
-            List<UV> pnts = BoundaryPoints;
-            List<UV> pntAs = cpiAfter.BoundaryPoints;
+            List<UV> pnts = BoundaryPointLists[0];
+            List<UV> pntAs = PlaneInfoAfter.BoundaryPointLists[0];
 
-            ShortenType.ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d);
-            ShortenType.DeltaU1 = d;
+            return new ShortenType()
+            {
+                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d),
+                DeltaU1 = d,
+                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d),
+                DeltaU2 = d,
+                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d),
+                DeltaV1 = d,
+                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d),
+                DeltaV2 = d
+            };
+        }
+        private ShortenEnum GetShorten(double u, double uAfter, out double d)
+        {
+            d = Math.Abs(u - uAfter);
+            double shorten = ConstantValue.milimeter2Feet * GeneralParameterInput.ShortenLimit;
+            if (GeomUtil.IsEqual(shorten, d) || d > shorten)
+                return ShortenEnum.Big;
+            else if (GeomUtil.IsBigger(d, 0))
+                return ShortenEnum.Small;
+            return ShortenEnum.None;
+        }
+        public void GetRebarLocation(IDesignInfo di)
+        {
+            double offset = GeneralParameterInput.ConcreteCover*ConstantValue.milimeter2Feet + di.StandardDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
+            List<UV> boundPnts = BoundaryPointLists[0];
 
-            ShortenType.ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d);
-            ShortenType.DeltaU2 = d;
+            List<UV> standardPnts = new List<UV>()
+            {
+                boundPnts[0] + (VectorU+VectorV)*offset,
+                boundPnts[1] + (-VectorU+VectorV)*offset,
+                boundPnts[2] + (-VectorU-VectorV)*offset,
+                boundPnts[3] + (VectorU-VectorV)*offset,
+            };
 
-            ShortenType.ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d);
-            ShortenType.DeltaV1 = d;
+            StandardRebarPointLists = new List<List<UV>>
+            {
+                standardPnts
+            };
 
-            ShortenType.ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d);
-            ShortenType.DeltaV2 = d;
+            offset = GeneralParameterInput.ConcreteCover*ConstantValue.milimeter2Feet + di.StirrupDiameters[0]/2;
+            List<UV> stirrPnts = new List<UV>()
+            {
+                boundPnts[0] + (VectorU+VectorV)*offset,
+                boundPnts[1] + (-VectorU+VectorV)*offset,
+                boundPnts[2] + (-VectorU-VectorV)*offset,
+                boundPnts[3] + (VectorU-VectorV)*offset,
+            };
+
+            StirrupRebarPointLists = new List<List<UV>>
+            {
+                stirrPnts
+            };
+        }
+    }
+    public class WallPlaneInfo : PlaneInfo, IPlaneInfo
+    {
+        
+        #region IPlaneInfo
+        public List<double> B1s { get; set; }
+        public List<double> B2s { get; set; }
+        public List<List<UV>> BoundaryPointLists { get; set; }
+        public List<ShortenType> ShortenTypes { get; set; }
+        public XYZ VectorX { get; set; }
+        public XYZ VectorY { get; set; }
+        public List<List<UV>> StandardRebarPointLists { get; set; }
+        public List<List<UV>> StirrupRebarPointLists { get; set; }
+        public IPlaneInfo PlaneInfoAfter { get; set; }
+        #endregion
+
+        public GeneralParameterInput GeneralParameterInput { get; set; }
+        public WallPlaneInfo(IRevitInfo revitInfo, GeneralParameterInput param) : base(revitInfo, param)
+        {
+        }
+        public void GetFullPlaneInfo(GeneralParameterInput gpi)
+        {
+            double edge = 0;
+            if (gpi.EdgeDimensionInclude) edge = gpi.EdgeDimension * ConstantValue.milimeter2Feet;
+            if (gpi.EdgeRatioInclude) edge = Math.Max(edge, gpi.EdgeRatio * B1);
+            double middle = B1 - edge * 2;
+
+            B1s = new List<double> { edge, middle, edge };
+            B2s = new List<double> { B2, B2, B2 };
+            BoundaryPointLists = new List<List<UV>>()
+            {
+                getBoundaryPoint(CentralPoint-VectorU*(edge+middle)/2, edge, B2),
+                getBoundaryPoint(CentralPoint, middle, B2),
+                getBoundaryPoint(CentralPoint+VectorU*(edge+middle)/2, edge, B2)
+            };
+        }
+        private List<UV> getBoundaryPoint(UV centralPnt, double b1, double b2)
+        {
+            return new List<UV>
+            {
+                centralPnt - VectorU * b1 / 2 - VectorV * b2 / 2,
+                centralPnt + VectorU * b1 / 2 - VectorV * b2 / 2,
+                centralPnt + VectorU * b1 / 2 + VectorV * b2 / 2,
+                centralPnt - VectorU * b1 / 2 + VectorV * b2 / 2
+            };
+        }
+        public void GetShortenType(IPlaneInfo pia)
+        {
+            PlaneInfoAfter = pia;
+            ShortenTypes = new List<ShortenType>()
+            {
+                getShotenType(0),
+                getShotenType(1),
+                getShotenType(2)
+            };
+        }
+        private ShortenType getShotenType(int index)
+        {
+            double d = 0;
+            List<UV> pnts = BoundaryPointLists[index];
+            List<UV> pntAs = PlaneInfoAfter.BoundaryPointLists[index];
+
+            return new ShortenType()
+            {
+                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d),
+                DeltaU1 = d,
+                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d),
+                DeltaU2 = d,
+                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d),
+                DeltaV1 = d,
+                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d),
+                DeltaV2 = d
+            };
         }
 
         private ShortenEnum GetShorten(double u, double uAfter, out double d)
@@ -117,27 +264,73 @@ namespace AutoRebaring.ElementInfo
                 return ShortenEnum.Small;
             return ShortenEnum.None;
         }
-    }
-    public class WallPlaneInfo
-    {
-        #region IPlaneInfo
-        public List<double> B1s { get; }
-        public List<double> B2s { get; }
-        public List<UV> VectorUs { get; }
-        public List<UV> VectorVs { get; }
-        public List<List<UV>> BoundaryPointLists { get; }
-        public List<ShortenType> ShortenTypes { get; }
-        #endregion
 
-        public double B1 { get; set; }
-        public double B2 { get; set; }
-        public UV VectorU { get; set; }
-        public UV VectorV { get; set; }
-        public UV CentralPoint { get; set; }
-        public List<ColumnPlaneInfo> PlaneInfos { get; set; }
-        public WallPlaneInfo(IRevitInfo revitInfo, ColumnParameter param)
+        public void GetRebarLocation(IDesignInfo di)
         {
+            StandardRebarPointLists = new List<List<UV>>();
+            StirrupRebarPointLists = new List<List<UV>>();
 
+            double offConc = GeneralParameterInput.ConcreteCover * ConstantValue.milimeter2Feet;
+            double offStirr = di.StirrupDiameters[0];
+            double offCntr = di.StirrupDiameters[0]* ( ConstantValue.RebarStandardOffsetControl-1);
+            double offStand= di.StandardDiameters[0];
+
+            #region Standard
+            List<UV> boundPnts = BoundaryPointLists[0];
+            List<UV> pnts = new List<UV>()
+            {
+                boundPnts[0] + (VectorU+VectorV)* (offConc+ offStirr+offCntr+ offStand/2),
+                boundPnts[1] + VectorV*(offConc+ offStirr+offCntr+ offStand/2) - VectorU*(offStirr/2 + offCntr+ offStand/2),
+                boundPnts[2] - VectorV*(offConc+ offStirr+offCntr+ offStand/2) - VectorU*(offStirr/2 + offCntr+ offStand/2),
+                boundPnts[3] + (VectorU-VectorV)* (offConc+ offStirr+offCntr+ offStand/2)
+            };
+            StandardRebarPointLists.Add(pnts);
+
+            double offSpac = di.StandardSpacings[3];
+            offStand = di.StandardDiameters[1];
+            boundPnts = BoundaryPointLists[1];
+            pnts = new List<UV>()
+            {
+                boundPnts[0] + VectorV*(offConc + offStirr + offCntr + offStand/2)+ VectorU*(offSpac-offCntr - offStirr/2- offStand/2),
+                boundPnts[1] + VectorV*(offConc + offStirr + offCntr + offStand/2)- VectorU*(offSpac-offCntr - offStirr/2- offStand/2),
+                boundPnts[2] - VectorV*(offConc + offStirr + offCntr + offStand/2)- VectorU*(offSpac-offCntr - offStirr/2- offStand/2),
+                boundPnts[3] - VectorV*(offConc + offStirr + offCntr + offStand/2)+ VectorU*(offSpac-offCntr - offStirr/2- offStand/2)
+            };
+            StandardRebarPointLists.Add(pnts);
+
+            boundPnts = BoundaryPointLists[2];
+            pnts = new List<UV>()
+            {
+                boundPnts[0] + VectorV*(offConc+ offStirr+offCntr+ offStand/2) + VectorU*(offStirr/2 + offCntr+ offStand/2),
+                boundPnts[1] + (VectorU+VectorV)* (offConc+ offStirr+offCntr+ offStand/2),
+                boundPnts[2] - (VectorU+VectorV)* (offConc+ offStirr+offCntr+ offStand/2),
+                boundPnts[3] - VectorV*(offConc+ offStirr+offCntr+ offStand/2) + VectorU*(offStirr/2 + offCntr+ offStand/2)
+            };
+            StandardRebarPointLists.Add(pnts);
+            #endregion
+
+
+            #region Stirrup
+            boundPnts = BoundaryPointLists[0];
+            pnts = new List<UV>()
+            {
+                boundPnts[0] + (VectorU+VectorV)*(offConc+ offStirr/2),
+                boundPnts[1] + (VectorV)*(offConc+offStirr/2),
+                boundPnts[2] + (-VectorV)*(offConc+offStirr/2),
+                boundPnts[3] + (VectorU-VectorV)*(offConc+ offStirr/2)
+            };
+            StirrupRebarPointLists.Add(pnts);
+
+            boundPnts = BoundaryPointLists[2];
+            pnts = new List<UV>()
+            {
+                boundPnts[0] + (VectorV)*(offConc+offStirr/2),
+                boundPnts[1] + (-VectorU+VectorV)*(offConc+ offStirr/2),
+                boundPnts[2] + (-VectorU-VectorV)*(offConc+ offStirr/2),
+                boundPnts[3] + (-VectorV)*(offConc+offStirr/2)
+            };
+            StirrupRebarPointLists.Add(pnts);
+            #endregion
         }
     }
 }

@@ -89,30 +89,25 @@
     <Compile Include="Database\AddinConduction.cs" />
     <Compile Include="Database\AluformSchedule.cs" />
     <Compile Include="Database\AutoRebaringDbContext.cs" />
-    <Compile Include="Database\ColumnParameter.cs" />
-    <Compile Include="Database\DevelopmentRebar.cs" />
     <Compile Include="Database\GeneralParameterInput.cs" />
     <Compile Include="Database\LevelTitle.cs" />
-    <Compile Include="Database\Mark.cs" />
-    <Compile Include="Database\OtherParameter.cs" />
     <Compile Include="Database\ProductSource.cs" />
     <Compile Include="Database\RebarChosen.cs" />
-    <Compile Include="Database\RebarChosenGeneral.cs" />
     <Compile Include="Database\RebarDesign.cs" />
     <Compile Include="Database\RebarDesignGeneral.cs" />
+    <Compile Include="Database\StirrupFamily.cs" />
     <Compile Include="Database\UserAddinConduction.cs" />
     <Compile Include="Database\UserManagement.cs" />
     <Compile Include="ElementInfo\Body.cs" />
     <Compile Include="ElementInfo\DesignInfo.cs" />
     <Compile Include="ElementInfo\ElementInfo.cs" />
+    <Compile Include="ElementInfo\ElementInfoCollection.cs" />
     <Compile Include="ElementInfo\PlaneInfo.cs" />
     <Compile Include="ElementInfo\RevitInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardGeneralInfo.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardParameter.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardPlaneInfo.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\SingleInfo\StandardPlaneSingleInfo.cs" />
     <Compile Include="ElementInfo\VerticalInfo.cs" />
-    <Compile Include="ElementInfo\RebarInfo\StirrupInfo\StirrupGeneralInfo.cs" />
     <Compile Include="ElementInfo\Shorten\ShortenType.cs" />
     <Compile Include="ElementInfo\StirrupDistribution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -148,7 +143,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ElementInfo\RebarInfo\StirrupInfo\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>REM copy "$(ProjectDir)*.addin" "$(AppData)\Autodesk\REVIT\Addins\2017"

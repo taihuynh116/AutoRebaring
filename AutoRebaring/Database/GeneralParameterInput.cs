@@ -11,9 +11,21 @@ namespace AutoRebaring.Database
     {
         public long ID { get; set; }
 
-        public long ProjectID { get; set; }
+        public int ProjectID { get; set; }
 
-        public double ConcreteCover { get; set; }
+        [Required]
+        [StringLength(15)]
+        public string Mark { get; set; }
+
+        public DateTime CreateDate { get; set; }
+
+        [Required]
+        [StringLength(15)]
+        public string B1_Param { get; set; }
+
+        [Required]
+        [StringLength(15)]
+        public string B2_Param { get; set; }
 
         public double DevelopmentMultiply { get; set; }
 
@@ -37,10 +49,72 @@ namespace AutoRebaring.Database
 
         public double LockheadMultiply { get; set; }
 
-        public double ConcreteTopCover { get; set; }
+        public double LockheadConcreteCover { get; set; }
 
         public double RatioLH { get; set; }
 
-        public double CoverTopSmall { get; set; }
+        public double ConcreteSmallCover { get; set; }
+
+        public double ConcreteCover { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string ElementType { get; set; }
+
+        public double EdgeDimension { get; set; }
+
+        public bool EdgeDimensionInclude { get; set; }
+
+        public double EdgeRatio { get; set; }
+
+        public bool EdgeRatioInclude { get; set; }
+
+        public double BottomOffset { get; set; }
+
+        public double BottomOffsetRatio { get; set; }
+
+        public double TopOffset { get; set; }
+
+        public double TopOffsetRatio { get; set; }
+
+        public bool OffsetInclude { get; set; }
+
+        public bool OffsetRatioInclude { get; set; }
+
+        public double BottomOffsetStirrup { get; set; }
+
+        public double BottomOffsetStirrupRatio { get; set; }
+
+        public double TopOffsetStirrup { get; set; }
+
+        public double TopOffsetStirrupRatio { get; set; }
+
+        public bool StirrupOffsetInclude { get; set; }
+
+        public bool StirrupOffsetRatioInclude { get; set; }
+
+        public bool IsInsideBeam { get; set; }
+
+        public bool IsStirrupInsideBeam { get; set; }
+
+        public double Lmax { get; set; }
+
+        public double Lmin { get; set; }
+
+        public double Step { get; set; }
+
+        public double LImplantMax { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string CheckLevel { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string View3d { get; set; }
+
+        public bool View3dInclude { get; set; }
+
+        public int PartCount { get; set; }
     }
 }

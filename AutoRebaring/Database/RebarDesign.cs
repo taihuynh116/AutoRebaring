@@ -11,7 +11,7 @@ namespace AutoRebaring.Database
     {
         public long ID { get; set; }
 
-        public long ProjectID { get; set; }
+        public int ProjectID { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -29,26 +29,26 @@ namespace AutoRebaring.Database
 
         [Required]
         [StringLength(10)]
-        public string RebarType { get; set; }
+        public string StandardType { get; set; }
 
-        public long RebarB1 { get; set; }
+        public int RebarN1 { get; set; }
 
-        public long RebarB2 { get; set; }
+        public int RebarN2 { get; set; }
 
         [Required]
         [StringLength(10)]
         public string StirrupType1 { get; set; }
 
-        public double StirrupTBSpacing1 { get; set; }
+        public double StirrupTopBottomSpacing1 { get; set; }
 
-        public double StirrupMSpacing1 { get; set; }
+        public double StirrupMiddleSpacing1 { get; set; }
 
         [Required]
         [StringLength(10)]
         public string StirrupType2 { get; set; }
 
-        public double StirrupTBSpacing2 { get; set; }
+        public double StirrupTopBottomSpacing2 { get; set; }
 
-        public double StirrupMSpacing2 { get; set; }
+        public double StirrupMiddleSpacing2 { get; set; }
     }
 }

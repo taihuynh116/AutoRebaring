@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 {
-    
     public class StraightStandardPlaneSingleInfo: IStandardPlaneSingleInfo
     {
         public XYZ Normal { get; set; }
@@ -20,6 +19,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarHookType HookType { get; set; }
         public RebarBarType BarType { get; set; }
         public RebarLocation RebarLocation { get; set; }
+        public StandardLocationRegion LocationRegion { get; set; }
     }
     public class ImplantStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
@@ -32,6 +32,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarHookType HookType { get; set; }
         public RebarBarType BarType { get; set; }
         public RebarLocation RebarLocation { get; set; }
+        public StandardLocationRegion LocationRegion { get; set; }
     }
     public class LockheadStandardPlaneSingleInfo:IStandardPlaneSingleInfo
     {
@@ -45,8 +46,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarBarType BarType { get; set; }
         public RebarLocation RebarLocation { get; set; }
         public XYZ LockheadDirection { get; set; }
+        public StandardLocationRegion LocationRegion { get; set; }
     }
-    public class CrackingStandardPlaneSingleInfo
+    public class CrackingStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
         public XYZ Normal { get; set; }
         public int Number { get; set; }
@@ -57,5 +59,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarHookType HookType { get; set; }
         public RebarBarType BarType { get; set; }
         public RebarLocation RebarLocation { get; set; }
+        public XYZ CrackingDirection { get; set; }
+        public double CrackingLength { get; set; }
+        public StandardLocationRegion LocationRegion { get; set; }
     }
 }

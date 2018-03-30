@@ -11,7 +11,7 @@ namespace AutoRebaring.Database
     {
         public long ID { get; set; }
 
-        public long ProjectID { get; set; }
+        public int ProjectID { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -27,9 +27,9 @@ namespace AutoRebaring.Database
         [StringLength(50)]
         public string EndLevel { get; set; }
 
-        public bool IsLockHead { get; set; }
-
-        public bool IsStartRebar { get; set; }
+        [Required]
+        [StringLength(20)]
+        public string EndRebarType { get; set; }
 
         public double RebarStartZ1 { get; set; }
 

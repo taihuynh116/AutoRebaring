@@ -1,5 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
+using AutoRebaring.Database;
+using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
 using AutoRebaring.ElementInfo.Shorten;
 using System;
 using System.Collections.Generic;
@@ -16,16 +18,24 @@ namespace AutoRebaring.ElementInfo
         IDesignInfo DesignInfo { get; set; }
         IRevitInfo RevitInfo { get; set; }
     }
+
     public interface IDesignInfo
     {
         Level Level { get; set; }
         List<RebarBarType> StandardTypes { get; set; }
+        List<double> StandardDiameters { get; set; }
+        List<RebarHookType> StandardHookTypes { get; set; }
         List<int> StandardNumbers { get; set; }
         List<double> StandardSpacings { get; set; }
         List<RebarBarType> StirrupTypes { get; set; }
+        List<double> StirrupDiameters { get; set; }
         List<double> BotTopSpacings { get; set; }
         List<double> MiddleSpacings { get; set; }
-        IDesignInfo DesingInfoAfter { get; set; }
+        bool IsDoubleN2 { get; set; }
+        IDesignInfo DesignInfoAfter { get; set; }
+        IDesignInfo DesignInfoBefore { get; set; }
+        void GetStandardSpacing(IPlaneInfo pi, GeneralParameterInput gpi);
+        void GetDesignInfo(IDesignInfo diA, IDesignInfo diB);
     }
     public enum ShortenEnum
     {
@@ -56,11 +66,15 @@ namespace AutoRebaring.ElementInfo
         List<List<UV>> StandardRebarPointLists { get; }
         List<List<UV>> StirrupRebarPointLists { get; }
         IPlaneInfo PlaneInfoAfter { get; }
+        void GetFullPlaneInfo(GeneralParameterInput gpi);
+        void GetRebarLocation(IDesignInfo di);
+        void GetShortenType(IPlaneInfo pia);
     }
     public interface IRevitInfo
     {
         Document Document { get; set; }
         Element Element { get; set; }
+        double Elevation { get; set; }
     }
     public interface IVerticalInfo
     {
@@ -80,16 +94,18 @@ namespace AutoRebaring.ElementInfo
         double BottomOffset { get; }
         double BottomStirrup1 { get; }
         double BottomStirrup2 { get; }
-        double BottomOffsetValue { get; }
-        double TopOffsetValue { get; }
-        double BottomOffsetValueStirrup { get; }
-        double TopOffsetValueStirrup { get; }
         List<double> RebarDevelopmentLengths { get; set; }
         List<StirrupDistribution> StirrupDistributions { get; set; }
+        void GetInformation(GeneralParameterInput gpi);
+        void GetRebarInformation(IDesignInfo di);
     }
     public enum RebarLocation
     {
         L1, L2
+    }
+    public enum StandardLocationRegion
+    {
+        Column, Edge, Middle
     }
     public interface IStandardPlaneSingleInfo
     {
@@ -102,18 +118,7 @@ namespace AutoRebaring.ElementInfo
         RebarHookType HookType { get; set; }
         RebarBarType BarType { get; set; }
         RebarLocation RebarLocation { get; set; }
-    }
-    public interface IRebarGeneralInfo
-    {
-        RebarLayoutRule LayoutRule { get; set; }
-        RebarHookType HookType { get; set; }
-        List<double> Diameters { get; set; }
-        List<double> DiameterAfters { get; set; }
-        List<double> DiameterBefores { get; set; }
-        List<RebarBarType> Types { get; set; }
-        List<RebarBarType> TypeAfters { get; set; }
-        List<RebarBarType> TypeBefores { get; set; }
-        RebarStyle Style { get; set; }
+        StandardLocationRegion LocationRegion { get; set; }
     }
     public interface IStandardParameter
     {
