@@ -17,6 +17,15 @@ namespace AutoRebaring.ElementInfo
         IVerticalInfo VerticalInfo { get; set; }
         IDesignInfo DesignInfo { get; set; }
         IRevitInfo RevitInfo { get; set; }
+        void GetPlaneInfo(ElementTypeEnum elemType, GeneralParameterInput gpi);
+        void GetDesignInfo(IInputForm inputForm);
+        void GetVerticalInfo(ElementTypeEnum elemType, GeneralParameterInput gpi);
+        void GetStandardSpacing(GeneralParameterInput gpi);
+        void GetRebarLocation();
+        void GetRebarInformation();
+        void GetStandardPlaneInfo(ElementTypeEnum elemType, GeneralParameterInput gpi);
+        void GetShortenType(IPlaneInfo planeInfo);
+        void GetDesignInfoAB(IDesignInfo diA, IDesignInfo diB);
     }
 
     public interface IDesignInfo
@@ -65,7 +74,7 @@ namespace AutoRebaring.ElementInfo
         List<ShortenType> ShortenTypes { get; }
         List<List<UV>> StandardRebarPointLists { get; }
         List<List<UV>> StirrupRebarPointLists { get; }
-        IPlaneInfo PlaneInfoAfter { get; }
+        IPlaneInfo PlaneInfoAfter { get; set; }
         void GetFullPlaneInfo(GeneralParameterInput gpi);
         void GetRebarLocation(IDesignInfo di);
         void GetShortenType(IPlaneInfo pia);
@@ -75,6 +84,7 @@ namespace AutoRebaring.ElementInfo
         Document Document { get; set; }
         Element Element { get; set; }
         double Elevation { get; set; }
+        Level Level { get; set; }
     }
     public interface IVerticalInfo
     {
@@ -131,5 +141,8 @@ namespace AutoRebaring.ElementInfo
         List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
     }
-
+    public interface IInputForm
+    {
+        List<IDesignInfo> DesignInfos { get; set; }
+    }
 }

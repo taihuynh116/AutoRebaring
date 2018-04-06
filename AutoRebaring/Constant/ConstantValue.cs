@@ -19,5 +19,7 @@ namespace AutoRebaring.Constant
         public const string B2Param_Column = "h_cot";
         public const string B1Param_Wall = "Length";
         public const string B2Param_Wall = "Width";
+
+        
     }
 }

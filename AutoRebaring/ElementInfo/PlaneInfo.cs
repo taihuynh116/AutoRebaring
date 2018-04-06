@@ -93,7 +93,7 @@ namespace AutoRebaring.ElementInfo
         public GeneralParameterInput GeneralParameterInput { get; set; }
         public ColumnPlaneInfo(IRevitInfo revitInfo, GeneralParameterInput gpi) : base(revitInfo, gpi)
         {
-
+            GetFullPlaneInfo(gpi);
         }
         public void GetFullPlaneInfo(GeneralParameterInput gpi)
         {
@@ -196,8 +196,9 @@ namespace AutoRebaring.ElementInfo
         #endregion
 
         public GeneralParameterInput GeneralParameterInput { get; set; }
-        public WallPlaneInfo(IRevitInfo revitInfo, GeneralParameterInput param) : base(revitInfo, param)
+        public WallPlaneInfo(IRevitInfo revitInfo, GeneralParameterInput gpi) : base(revitInfo, gpi)
         {
+            GetFullPlaneInfo(gpi);
         }
         public void GetFullPlaneInfo(GeneralParameterInput gpi)
         {

@@ -23,7 +23,17 @@ namespace AutoRebaring.ElementInfo
             get { return elemInfos[i]; }
             set { elemInfos[i] = value; }
         }
-        public ElementInfoCollection(Document doc, Element e, GeneralParameterInput gpi)
+        public ElementInfoCollection(Document doc, Element e, GeneralParameterInput gpi, IInputForm inputForm)
+        {
+            ElementTypeEnum elemType = (gpi.ElementType == "Column") ? ElementTypeEnum.Column : ElementTypeEnum.Wall;
+
+            // F0
+            GetRelatedElements(doc, e, gpi);
+
+            // F1
+            GetAllParameters(inputForm, gpi, elemType);
+        }
+        public void GetRelatedElements(Document doc, Element e, GeneralParameterInput gpi)
         {
             Polygon pl = new PlaneInfo(doc, e, gpi).Polygon;
             FilteredElementCollector col = new FilteredElementCollector(doc).WhereElementIsNotElementType();
@@ -49,6 +59,49 @@ namespace AutoRebaring.ElementInfo
             }
             elemInfos.Sort(new ElementInfoSorter());
         }
+        public void GetAllParameters(IInputForm inputForm, GeneralParameterInput gpi, ElementTypeEnum elemType)
+        {
+            // F1
+            for (int i = 0; i < elemInfos.Count; i++)
+            {
+                // F1.1
+                elemInfos[i].GetPlaneInfo(elemType, gpi);
+                // F1.2
+                elemInfos[i].GetDesignInfo(inputForm);
+                // F1.3
+                elemInfos[i].GetVerticalInfo(elemType, gpi);
+                // F1.4
+                elemInfos[i].GetStandardSpacing(gpi);
+                // F1.5
+                elemInfos[i].GetRebarLocation();
+            }
+
+            // F2
+            for (int i = 0; i < elemInfos.Count; i++)
+            {
+                // F2.1 + F2.2
+                if (i == 0)
+                {
+                    elemInfos[i].GetShortenType(elemInfos[i + 1].PlaneInfo);
+                    elemInfos[i].GetDesignInfoAB(elemInfos[i + 1].DesignInfo, elemInfos[0].DesignInfo);
+                }
+                else if (i == elemInfos.Count - 1)
+                {
+                    elemInfos[i].GetShortenType(elemInfos[i].PlaneInfo);
+                    elemInfos[i].GetDesignInfoAB(elemInfos[i].DesignInfo, elemInfos[i - 1].DesignInfo);
+                }
+                else
+                {
+                    elemInfos[i].GetShortenType(elemInfos[i + 1].PlaneInfo);
+                    elemInfos[i].GetDesignInfoAB(elemInfos[i + 1].DesignInfo, elemInfos[i -1].DesignInfo);
+                }
+
+                // F2.3
+                elemInfos[i].GetRebarInformation();
+                // F2.4
+                elemInfos[i].GetStandardPlaneInfo(elemType, gpi);
+            }
+        }
     }
 
     public class ElementInfoSorter : IComparer<IElementInfo>
@@ -59,4 +112,5 @@ namespace AutoRebaring.ElementInfo
             return first.RevitInfo.Elevation.CompareTo(second.RevitInfo.Elevation);
         }
     }
+    public enum ElementTypeEnum { Column, Wall}
 }

@@ -13,11 +13,21 @@ namespace AutoRebaring.ElementInfo
         public Document Document { get; set; }
         public Element Element { get; set; }
         public double Elevation { get; set; }
+        public Level Level { get; set; }
+
         public RevitInfo(Document doc, Element e)
         {
             Document = doc;
             Element = e;
-            Elevation = e.get_BoundingBox(null).Min.Z;
+            if (!(e is Wall))
+            {
+                Level = doc.GetElement(e.LookupParameter("Base Level").AsElementId()) as Level;
+            }
+            else
+            {
+                Level = doc.GetElement(e.LookupParameter("Base Constraint").AsElementId()) as Level;
+            }
+            Elevation = Level.Elevation;
         }
     }
 }

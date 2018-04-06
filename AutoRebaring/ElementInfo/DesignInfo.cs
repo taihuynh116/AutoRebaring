@@ -40,6 +40,17 @@ namespace AutoRebaring.ElementInfo
             MiddleSpacings = new List<double> { m1, m2 };
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
         }
+        public ColumnDesignInfo(Level level, List<RebarBarType> standTypes, List<RebarHookType> hookTypes, List<int> standNumbers, List<RebarBarType> stirrTypes, List<double> btSpacs, List<double> mSpacs)
+        {
+            Level = level;
+            StandardTypes = standTypes;
+            StandardHookTypes = hookTypes;
+            StandardNumbers = standNumbers;
+            StirrupTypes = stirrTypes;
+            BotTopSpacings = btSpacs;
+            MiddleSpacings = mSpacs;
+            StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
+        }
         public void GetStandardSpacing(IPlaneInfo pi, GeneralParameterInput gpi)
         {
             GeneralParameterInput = gpi;
@@ -90,7 +101,17 @@ namespace AutoRebaring.ElementInfo
             MiddleSpacings = new List<double> { m1, m2 };
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
         }
-
+        public WallDesignInfo(Level level, List<RebarBarType> standTypes, List<RebarHookType> hookTypes, List<int> standNumbers, List<RebarBarType> stirrTypes, List<double> btSpacs, List<double> mSpacs)
+        {
+            Level = level;
+            StandardTypes = standTypes;
+            StandardHookTypes = hookTypes;
+            StandardNumbers = standNumbers;
+            StirrupTypes = stirrTypes;
+            BotTopSpacings = btSpacs;
+            MiddleSpacings = mSpacs;
+            StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
+        }
         public void GetStandardSpacing(IPlaneInfo pi, GeneralParameterInput gpi)
         {
             GeneralParameterInput = gpi;
