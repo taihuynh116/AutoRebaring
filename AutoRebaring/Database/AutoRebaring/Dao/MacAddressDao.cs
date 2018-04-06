@@ -18,8 +18,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             {
                 ARMacAddress ma = new ARMacAddress()
                 {
-                    MacAddress = macAddress,
-                    IsActive = true
+                    MacAddress = macAddress
                 };
                 db.ARMacAddresses.Add(ma);
             }
