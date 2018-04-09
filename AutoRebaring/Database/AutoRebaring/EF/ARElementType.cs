@@ -12,7 +12,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ARElementType()
         {
-            ARDimensionParameters = new HashSet<ARDimensionParameter>();
+            ARDimensionParameterTypes = new HashSet<ARDimensionParameterType>();
             AREDParameterTypes = new HashSet<AREDParameterType>();
         }
 
@@ -25,7 +25,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public string Type { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ARDimensionParameter> ARDimensionParameters { get; set; }
+        public virtual ICollection<ARDimensionParameterType> ARDimensionParameterTypes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AREDParameterType> AREDParameterTypes { get; set; }

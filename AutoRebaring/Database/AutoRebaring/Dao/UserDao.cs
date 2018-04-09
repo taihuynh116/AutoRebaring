@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    public class UserDao
+    class UserDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public UserDao() { }
@@ -16,24 +16,27 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             var res = db.ARUsers.Where(x => x.Username == userName);
             if (res.Count() == 0)
             {
-                ARUser u = new ARUser()
+                var obj = new ARUser()
                 {
                     Username = userName,
                     Password = password
                 };
-                db.ARUsers.Add(u);
+                db.ARUsers.Add(obj);
             }
             else
             {
-                ARUser user = res.First();
-                user.Password = password;
+                var obj = res.First();
+                obj.Password = password;
             }
             db.SaveChanges();
         }
-        public long GetID(string userName)
+        public long GetId(string userName)
         {
             var res = db.ARUsers.Where(x => x.Username == userName);
-            if (res.Count() == 0) return -1;
+            if (res.Count() == 0)
+            {
+                return -1;
+            }
             return res.First().ID;
         }
     }

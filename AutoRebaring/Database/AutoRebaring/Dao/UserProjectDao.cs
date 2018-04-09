@@ -7,30 +7,44 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    public class UserProjectDao
+    class UserProjectDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public UserProjectDao() { }
         public void Update(long idProject, long idUserType, long idUser, long idMacAddress)
         {
-            var res = db.ARUserProjects.Where(x => x.IDProject == idProject && x.IDUserType== idUserType && x.IDUser == idUser && x.IDMacAddress == idMacAddress);
+            var res = db.ARUserProjects.Where(x => x.IDProject == idProject && x.IDUser == idUser);
             if (res.Count() == 0)
             {
-                ARUserProject up = new ARUserProject()
+                var obj = new ARUserProject()
                 {
                     IDProject = idProject,
-                    IDUserType = idUserType,
                     IDUser = idUser,
-                    IDMacAddress = idMacAddress
+                    IDUserType = idUserType,
+                    IDMacAddress = idMacAddress,
+                    IsActive = false
                 };
-                db.ARUserProjects.Add(up);
+                db.ARUserProjects.Add(obj);
+            }
+            else
+            {
+                var obj = res.First();
+                if (obj.IDMacAddress != idMacAddress)
+                {
+                    obj.IDUserType = idUserType;
+                    obj.IDMacAddress = idMacAddress;
+                    obj.IsActive = false;
+                }
             }
             db.SaveChanges();
         }
-        public long GetID(long idProject, long idUserType, long idUser, long idMacAddress)
+        public long GetId(long idProject, long idUser)
         {
-            var res = db.ARUserProjects.Where(x => x.IDProject == idProject && x.IDUserType == idUserType && x.IDUser == idUser && x.IDMacAddress == idMacAddress);
-            if (res.Count() == 0) return -1;
+            var res = db.ARUserProjects.Where(x => x.IDProject == idProject && x.IDUser == idUser);
+            if (res.Count() == 0)
+            {
+                return -1;
+            }
             return res.First().ID;
         }
     }

@@ -15,6 +15,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
             ARAnchorParameters = new HashSet<ARAnchorParameter>();
             ARCoverParameters = new HashSet<ARCoverParameter>();
             ARDevelopmentParameters = new HashSet<ARDevelopmentParameter>();
+            ARDimensionParameterValues = new HashSet<ARDimensionParameterValue>();
             ARLevels = new HashSet<ARLevel>();
             ARLockheadParameters = new HashSet<ARLockheadParameter>();
             ARMarks = new HashSet<ARMark>();
@@ -41,6 +42,9 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARDevelopmentParameter> ARDevelopmentParameters { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARDimensionParameterValue> ARDimensionParameterValues { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARLevel> ARLevels { get; set; }

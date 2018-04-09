@@ -7,32 +7,32 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class ProjectDao
+    class AnchorParametersDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
-        public ProjectDao() { }
-        public void Update(long idProject, string name)
+        public AnchorParametersDao() { }
+        public void Update(long idProject, int anchorMulti)
         {
-            var res = db.ARProjects.Where(x => x.ID == idProject);
+            var res = db.ARAnchorParameters.Where(x => x.IDProject == idProject);
             if (res.Count() == 0)
             {
-                var obj = new ARProject()
+                var obj = new ARAnchorParameter()
                 {
-                    ID = idProject,
-                    Name = name
+                    IDProject = idProject,
+                    AnchorMultiply = anchorMulti
                 };
-                db.ARProjects.Add(obj);
+                db.ARAnchorParameters.Add(obj);
             }
             else
             {
                 var obj = res.First();
-                obj.Name = name;
+                obj.AnchorMultiply = anchorMulti;
             }
             db.SaveChanges();
         }
-        public long GetId(string name)
+        public long GetId(long idProject)
         {
-            var res = db.ARProjects.Where(x => x.Name == name);
+            var res = db.ARAnchorParameters.Where(x => x.IDProject == idProject);
             if (res.Count() == 0)
             {
                 return -1;

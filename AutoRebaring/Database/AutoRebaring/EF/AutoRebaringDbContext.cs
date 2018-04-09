@@ -17,7 +17,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual DbSet<ARDesignGeneral> ARDesignGenerals { get; set; }
         public virtual DbSet<ARDesignLevel> ARDesignLevels { get; set; }
         public virtual DbSet<ARDevelopmentParameter> ARDevelopmentParameters { get; set; }
-        public virtual DbSet<ARDimensionParameter> ARDimensionParameters { get; set; }
+        public virtual DbSet<ARDimensionParameterType> ARDimensionParameterTypes { get; set; }
+        public virtual DbSet<ARDimensionParameterValue> ARDimensionParameterValues { get; set; }
         public virtual DbSet<AREDParameterType> AREDParameterTypes { get; set; }
         public virtual DbSet<AREDParameterValue> AREDParameterValues { get; set; }
         public virtual DbSet<ARElementType> ARElementTypes { get; set; }
@@ -80,13 +81,19 @@ namespace AutoRebaring.Database.AutoRebaring.EF
                 .HasForeignKey(e => e.IDDesignLevel)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ARDimensionParameter>()
+            modelBuilder.Entity<ARDimensionParameterType>()
                 .Property(e => e.B1_Param)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<ARDimensionParameter>()
+            modelBuilder.Entity<ARDimensionParameterType>()
                 .Property(e => e.B2_Param)
                 .IsUnicode(false);
+
+            modelBuilder.Entity<ARDimensionParameterType>()
+                .HasMany(e => e.ARDimensionParameterValues)
+                .WithRequired(e => e.ARDimensionParameterType)
+                .HasForeignKey(e => e.IDDimensoinParameterType)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AREDParameterType>()
                 .Property(e => e.Type)
@@ -103,7 +110,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
                 .IsUnicode(false);
 
             modelBuilder.Entity<ARElementType>()
-                .HasMany(e => e.ARDimensionParameters)
+                .HasMany(e => e.ARDimensionParameterTypes)
                 .WithRequired(e => e.ARElementType)
                 .HasForeignKey(e => e.IDElementType)
                 .WillCascadeOnDelete(false);
@@ -189,6 +196,12 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
             modelBuilder.Entity<ARProject>()
                 .HasMany(e => e.ARDevelopmentParameters)
+                .WithRequired(e => e.ARProject)
+                .HasForeignKey(e => e.IDProject)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARProject>()
+                .HasMany(e => e.ARDimensionParameterValues)
                 .WithRequired(e => e.ARProject)
                 .HasForeignKey(e => e.IDProject)
                 .WillCascadeOnDelete(false);

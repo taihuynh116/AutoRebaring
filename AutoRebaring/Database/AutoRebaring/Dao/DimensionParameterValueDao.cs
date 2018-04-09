@@ -7,32 +7,32 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class ProjectDao
+    class DimensionParameterValueDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
-        public ProjectDao() { }
-        public void Update(long idProject, string name)
+        public DimensionParameterValueDao() { }
+        public void Update(long idProject, int idDimParamType)
         {
-            var res = db.ARProjects.Where(x => x.ID == idProject);
+            var res = db.ARDimensionParameterValues.Where(x => x.IDProject == idProject);
             if (res.Count() == 0)
             {
-                var obj = new ARProject()
+                var obj = new ARDimensionParameterValue()
                 {
-                    ID = idProject,
-                    Name = name
+                    IDProject = idProject,
+                    IDDimensoinParameterType = idDimParamType
                 };
-                db.ARProjects.Add(obj);
+                db.ARDimensionParameterValues.Add(obj);
             }
             else
             {
                 var obj = res.First();
-                obj.Name = name;
+                obj.IDDimensoinParameterType = idDimParamType;
             }
             db.SaveChanges();
         }
-        public long GetId(string name)
+        public long GetId(long idProject)
         {
-            var res = db.ARProjects.Where(x => x.Name == name);
+            var res = db.ARDimensionParameterValues.Where(x => x.IDProject == idProject);
             if (res.Count() == 0)
             {
                 return -1;

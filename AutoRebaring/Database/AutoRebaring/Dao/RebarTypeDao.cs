@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class UserTypeDao
+    class RebarTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
-        public UserTypeDao() { }
+        public RebarTypeDao() { }
         public long GetId(string type)
         {
-            var res = db.ARUserTypes.Where(x => x.Type == type);
+            var res = db.ARRebarTypes.Where(x => x.Type == type);
             if (res.Count() == 0)
             {
                 return -1;

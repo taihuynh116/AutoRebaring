@@ -7,26 +7,27 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class MacAddressDao
+    class MarkDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
-        public MacAddressDao() { }
-        public void Update(string macAddress)
+        public MarkDao() { }
+        public void Update( long idProject, string mark)
         {
-            var res = db.ARMacAddresses.Where(x => x.MacAddress == macAddress);
+            var res = db.ARMarks.Where(x => x.IDProject == idProject && x.Mark == mark);
             if (res.Count() == 0)
             {
-                var obj = new ARMacAddress()
+                var obj = new ARMark()
                 {
-                    MacAddress = macAddress
+                    IDProject = idProject,
+                    Mark = mark
                 };
-                db.ARMacAddresses.Add(obj);
+                db.ARMarks.Add(obj);
             }
             db.SaveChanges();
         }
-        public long GetId(string macAddress)
+        public long GetId(long idProject, string mark)
         {
-            var res = db.ARMacAddresses.Where(x => x.MacAddress == macAddress);
+            var res = db.ARMarks.Where(x => x.IDProject == idProject && x.Mark == mark);
             if (res.Count() == 0)
             {
                 return -1;
