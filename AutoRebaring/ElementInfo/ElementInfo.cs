@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using AutoRebaring.Database;
+using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
 using Geometry;
 using System;
@@ -19,74 +20,74 @@ namespace AutoRebaring.ElementInfo
         public IStandardPlaneInfo StandardPlaneInfo { get; set; }
 
         public ElementInfo() { }
-        public void GetPlaneInfo(ElementTypeEnum elemType, GeneralParameterInput gpi)
+        public void GetPlaneInfo(ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio)
         {
-            switch (elemType)
+            switch (elemType.Type)
             {
-                case ElementTypeEnum.Column:
-                    PlaneInfo = new ColumnPlaneInfo(RevitInfo, gpi);
+                case "Column":
+                    PlaneInfo = new ColumnPlaneInfo(RevitInfo);
                     break;
-                case ElementTypeEnum.Wall:
-                    PlaneInfo = new ColumnPlaneInfo(RevitInfo, gpi);
+                case "Wall":
+                    PlaneInfo = new WallPlaneInfo(RevitInfo, edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio);
                     break;
             }
         }
-        public void GetDesignInfo(IInputForm inputForm)
+        public void GetDesignInfo(List<IDesignInfo> designInfos)
         {
             bool isDesignAssigned = false;
-            for (int j = 0; j < inputForm.DesignInfos.Count; j++)
+            for (int j = 0; j < designInfos.Count; j++)
             {
-                if (GeomUtil.IsSmaller(RevitInfo.Elevation, inputForm.DesignInfos[j].Level.Elevation))
+                if (GeomUtil.IsSmaller(RevitInfo.Elevation, designInfos[j].Level.Elevation))
                 {
-                    DesignInfo = inputForm.DesignInfos[j - 1];
+                    DesignInfo = designInfos[j - 1];
                     isDesignAssigned = true;
                     break;
                 }
-                else if (GeomUtil.IsEqual(RevitInfo.Elevation, inputForm.DesignInfos[j].Level.Elevation))
+                else if (GeomUtil.IsEqual(RevitInfo.Elevation, designInfos[j].Level.Elevation))
                 {
-                    DesignInfo = inputForm.DesignInfos[j];
+                    DesignInfo = designInfos[j];
                     isDesignAssigned = true;
                     break;
                 }
             }
             if (!isDesignAssigned)
             {
-                DesignInfo = inputForm.DesignInfos[inputForm.DesignInfos.Count];
+                DesignInfo = designInfos[designInfos.Count];
             }
         }
-        public void GetVerticalInfo(ElementTypeEnum elemType, GeneralParameterInput gpi)
+        public void GetVerticalInfo(ARElementType elemType)
         {
-            switch (elemType)
+            switch (elemType.Type)
             {
-                case ElementTypeEnum.Column:
+                case "Column":
                     VerticalInfo = new ColumnVerticalInfo(RevitInfo);
                     break;
-                case ElementTypeEnum.Wall:
+                case "Wall":
                     VerticalInfo = new WallVerticalInfo(RevitInfo);
                     break;
             }
         }
-        public void GetStandardSpacing(GeneralParameterInput gpi)
+        public void GetStandardSpacing(ARCoverParameter cp)
         {
-            DesignInfo.GetStandardSpacing(PlaneInfo, gpi);
+            DesignInfo.GetStandardSpacing(PlaneInfo, cp);
         }
-        public void GetRebarLocation()
+        public void GetRebarLocation(ARCoverParameter cp)
         {
-            PlaneInfo.GetRebarLocation(DesignInfo);
+            PlaneInfo.GetRebarLocation(DesignInfo, cp);
         }
-        public void GetRebarInformation()
+        public void GetRebarInformation(ARAnchorParameter ap, ARDevelopmentParameter dp)
         {
-            VerticalInfo.GetRebarInformation(DesignInfo);
+            VerticalInfo.GetRebarInformation(DesignInfo, ap, dp);
         }
-        public void GetStandardPlaneInfo(ElementTypeEnum elemType, GeneralParameterInput gpi)
+        public void GetStandardPlaneInfo(ARElementType elemType, ARLockheadParameter lp)
         {
-            switch (elemType)
+            switch (elemType.Type)
             {
-                case ElementTypeEnum.Column:
-                    StandardPlaneInfo = new ColumnStandardPlaneInfo(PlaneInfo, DesignInfo, gpi);
+                case "Column":
+                    StandardPlaneInfo = new ColumnStandardPlaneInfo(PlaneInfo, DesignInfo,lp);
                     break;
-                case ElementTypeEnum.Wall:
-                    StandardPlaneInfo = new WallStandardPlaneInfo(PlaneInfo, DesignInfo, gpi);
+                case "Wall":
+                    StandardPlaneInfo = new WallStandardPlaneInfo(PlaneInfo, DesignInfo,lp);
                     break;
             }
         }

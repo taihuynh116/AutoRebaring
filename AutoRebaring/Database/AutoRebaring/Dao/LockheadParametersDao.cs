@@ -11,7 +11,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public LockheadParametersDao() { }
-        public void Update(long idProject, double shortenLimit, int lockheadMulti, double lockheadConcCover)
+        public void Update(long idProject, double shortenLimit, int lockheadMulti, double lockheadConcCover, double smallConcCover)
         {
             var res = db.ARLockheadParameters.Where(x => x.IDProject == idProject);
             if (res.Count() == 0)
@@ -21,7 +21,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDProject = idProject,
                     ShortenLimit = shortenLimit,
                     LockheadMutiply = lockheadMulti,
-                    LockheadConcreteCover = lockheadConcCover
+                    LockheadConcreteCover = lockheadConcCover,
+                    SmallConcreteCover = smallConcCover
                 };
                 db.ARLockheadParameters.Add(obj);
             }
@@ -31,6 +32,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 obj.ShortenLimit = shortenLimit;
                 obj.LockheadMutiply = lockheadMulti;
                 obj.LockheadConcreteCover = lockheadConcCover;
+                obj.SmallConcreteCover = smallConcCover;
             }
             db.SaveChanges();
         }

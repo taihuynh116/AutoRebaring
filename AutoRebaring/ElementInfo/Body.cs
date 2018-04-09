@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using AutoRebaring.Database;
+using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
 using AutoRebaring.ElementInfo.Shorten;
 using System;
@@ -17,13 +18,13 @@ namespace AutoRebaring.ElementInfo
         IVerticalInfo VerticalInfo { get; set; }
         IDesignInfo DesignInfo { get; set; }
         IRevitInfo RevitInfo { get; set; }
-        void GetPlaneInfo(ElementTypeEnum elemType, GeneralParameterInput gpi);
-        void GetDesignInfo(IInputForm inputForm);
-        void GetVerticalInfo(ElementTypeEnum elemType, GeneralParameterInput gpi);
-        void GetStandardSpacing(GeneralParameterInput gpi);
-        void GetRebarLocation();
-        void GetRebarInformation();
-        void GetStandardPlaneInfo(ElementTypeEnum elemType, GeneralParameterInput gpi);
+        void GetPlaneInfo(ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio);
+        void GetDesignInfo(List<IDesignInfo> designInfos);
+        void GetVerticalInfo(ARElementType elemType);
+        void GetStandardSpacing(ARCoverParameter cp);
+        void GetRebarLocation(ARCoverParameter cp);
+        void GetRebarInformation(ARAnchorParameter ap, ARDevelopmentParameter dp);
+        void GetStandardPlaneInfo(ARElementType elemType, ARLockheadParameter lp);
         void GetShortenType(IPlaneInfo planeInfo);
         void GetDesignInfoAB(IDesignInfo diA, IDesignInfo diB);
     }
@@ -40,10 +41,9 @@ namespace AutoRebaring.ElementInfo
         List<double> StirrupDiameters { get; set; }
         List<double> BotTopSpacings { get; set; }
         List<double> MiddleSpacings { get; set; }
-        bool IsDoubleN2 { get; set; }
         IDesignInfo DesignInfoAfter { get; set; }
         IDesignInfo DesignInfoBefore { get; set; }
-        void GetStandardSpacing(IPlaneInfo pi, GeneralParameterInput gpi);
+        void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp);
         void GetDesignInfo(IDesignInfo diA, IDesignInfo diB);
     }
     public enum ShortenEnum
@@ -75,9 +75,8 @@ namespace AutoRebaring.ElementInfo
         List<List<UV>> StandardRebarPointLists { get; }
         List<List<UV>> StirrupRebarPointLists { get; }
         IPlaneInfo PlaneInfoAfter { get; set; }
-        void GetFullPlaneInfo(GeneralParameterInput gpi);
-        void GetRebarLocation(IDesignInfo di);
-        void GetShortenType(IPlaneInfo pia);
+        void GetRebarLocation(IDesignInfo di, ARCoverParameter cp);
+        void GetShortenType(IPlaneInfo pia, ARLockheadParameter lp);
     }
     public interface IRevitInfo
     {
@@ -106,8 +105,8 @@ namespace AutoRebaring.ElementInfo
         double BottomStirrup2 { get; }
         List<double> RebarDevelopmentLengths { get; set; }
         List<StirrupDistribution> StirrupDistributions { get; set; }
-        void GetInformation(GeneralParameterInput gpi);
-        void GetRebarInformation(IDesignInfo di);
+        void GetInformation(ARRebarVerticalParameter rvpStand, ARRebarVerticalParameter rvpStirr, ARLockheadParameter lpp);
+        void GetRebarInformation(IDesignInfo di, ARAnchorParameter ap, ARDevelopmentParameter dp);
     }
     public enum RebarLocation
     {

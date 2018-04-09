@@ -20,6 +20,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public double LockheadConcreteCover { get; set; }
 
+        public double SmallConcreteCover { get; set; }
+
         public virtual ARProject ARProject { get; set; }
     }
 }

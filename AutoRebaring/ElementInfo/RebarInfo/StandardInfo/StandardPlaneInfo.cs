@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using AutoRebaring.Constant;
 using AutoRebaring.Database;
+using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo;
 using Geometry;
 using System;
@@ -15,15 +16,17 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
     {
         public IPlaneInfo PlaneInfo { get; set; }
         public IDesignInfo DesignInfo { get; set; }
-        public GeneralParameterInput GeneralParameterInput { get; set; }
+        
+        public ARLockheadParameter LockheadParameter { get; set; }
         public List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
-        public ColumnStandardPlaneInfo(IPlaneInfo planeInfo, IDesignInfo designInfo, GeneralParameterInput gpi)
+        public ColumnStandardPlaneInfo(IPlaneInfo planeInfo, IDesignInfo designInfo, ARLockheadParameter lp)
         {
             PlaneInfo = planeInfo;
             DesignInfo = designInfo;
-            GeneralParameterInput = gpi;
+            LockheadParameter = lp;
+
 
             GetNormalStandardPlaneInfos();
             GetShortenStandardPlaneInfos();
@@ -158,7 +161,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             UV vecV = PlaneInfo.VectorV;
             double dia = DesignInfo.StandardDiameters[0];
             double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = GeneralParameterInput.ShortenLimit * ConstantValue.milimeter2Feet;
+            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecY : vecY;
             XYZ vecExpSmall = index == 0 ? vecY : -vecY;
@@ -602,7 +605,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             UV vecV = PlaneInfo.VectorV;
             double dia = DesignInfo.StandardDiameters[0];
             double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = GeneralParameterInput.ShortenLimit * ConstantValue.milimeter2Feet;
+            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecX : vecX;
             XYZ vecExpSmall = index == 0 ? vecX : -vecX;
@@ -1252,15 +1255,16 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
     {
         public IPlaneInfo PlaneInfo { get; set; }
         public IDesignInfo DesignInfo { get; set; }
-        public GeneralParameterInput GeneralParameterInput { get; set; }
+
+        public ARLockheadParameter LockheadParameter { get; set; }
         public List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
-        public WallStandardPlaneInfo(IPlaneInfo planeInfo, IDesignInfo designInfo, GeneralParameterInput gpi)
+        public WallStandardPlaneInfo(IPlaneInfo planeInfo, IDesignInfo designInfo, ARLockheadParameter lp)
         {
             PlaneInfo = planeInfo;
             DesignInfo = designInfo;
-            GeneralParameterInput = gpi;
+            LockheadParameter = lp;
 
             GetNormalStandardPlaneInfos();
             GetShortenStandardPlaneInfos();
@@ -1272,8 +1276,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne12 = DesignInfo.StandardNumbers[1];
             int ce12 = DesignInfo.StandardNumbers[2];
             int ne2 = DesignInfo.StandardNumbers[3];
-            int nm = DesignInfo.StandardNumbers[4];
-            bool isDoubleNE2 = DesignInfo.IsDoubleN2;
+            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = DesignInfo.StandardNumbers[5];
+            
             double spacE11 = DesignInfo.StandardSpacings[0];
             double spacE12 = DesignInfo.StandardSpacings[1];
             double spacE2 = DesignInfo.StandardSpacings[2];
@@ -1595,8 +1600,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne12 = DesignInfo.StandardNumbers[1];
             int ce12 = DesignInfo.StandardNumbers[2];
             int ne2 = DesignInfo.StandardNumbers[3];
-            int nm = DesignInfo.StandardNumbers[4];
-            bool isDoubleNE2 = DesignInfo.IsDoubleN2;
+            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = DesignInfo.StandardNumbers[5];
 
             List<int> ie12 = new List<int>();
             double jumpe12 = (ne2 - 1) / (double)(ce12 + 1);
@@ -1642,14 +1647,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne12 = DesignInfo.StandardNumbers[1];
             int ce12 = DesignInfo.StandardNumbers[2];
             int ne2 = DesignInfo.StandardNumbers[3];
-            int nm = DesignInfo.StandardNumbers[4];
+            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = DesignInfo.StandardNumbers[5];
             int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
             int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
             int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
             int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[4];
-            bool isDoubleNE2 = DesignInfo.IsDoubleN2;
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.IsDoubleN2;
+            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4] == 1 ? true : false;
+            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            
             double spacE11 = DesignInfo.StandardSpacings[0];
             double spacE12 = DesignInfo.StandardSpacings[1];
             double spacE2 = DesignInfo.StandardSpacings[2];
@@ -1662,7 +1668,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[locIndex];
             double dia = DesignInfo.StandardDiameters[0];
             double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = GeneralParameterInput.ShortenLimit * ConstantValue.milimeter2Feet;
+            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecY : vecY;
             XYZ vecExpSmall = index == 0 ? vecY : -vecY;
@@ -2045,14 +2051,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne12 = DesignInfo.StandardNumbers[1];
             int ce12 = DesignInfo.StandardNumbers[2];
             int ne2 = DesignInfo.StandardNumbers[3];
-            int nm = DesignInfo.StandardNumbers[4];
+            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = DesignInfo.StandardNumbers[5];
             int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
             int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
             int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
             int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[4];
-            bool isDoubleNE2 = DesignInfo.IsDoubleN2;
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.IsDoubleN2;
+            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4]==1 ? true:false;
+            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            
             double spacE11 = DesignInfo.StandardSpacings[0];
             double spacE12 = DesignInfo.StandardSpacings[1];
             double spacE2 = DesignInfo.StandardSpacings[2];
@@ -2065,7 +2072,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[locIndex];
             double dia = DesignInfo.StandardDiameters[0];
             double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = GeneralParameterInput.ShortenLimit * ConstantValue.milimeter2Feet;
+            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecX : vecX;
             XYZ vecExpSmall = index == 0 ? vecX : -vecX;
@@ -2452,14 +2459,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne12 = DesignInfo.StandardNumbers[1];
             int ce12 = DesignInfo.StandardNumbers[2];
             int ne2 = DesignInfo.StandardNumbers[3];
-            int nm = DesignInfo.StandardNumbers[4];
+            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = DesignInfo.StandardNumbers[5];
             int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
             int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
             int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
             int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[4];
-            bool isDoubleNE2 = DesignInfo.IsDoubleN2;
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.IsDoubleN2;
+            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4] == 1 ? true : false;
+            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            
             double spacE11 = DesignInfo.StandardSpacings[0];
             double spacE12 = DesignInfo.StandardSpacings[1];
             double spacE2 = DesignInfo.StandardSpacings[2];
@@ -2472,7 +2480,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[locIndex];
             double dia = DesignInfo.StandardDiameters[0];
             double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = GeneralParameterInput.ShortenLimit * ConstantValue.milimeter2Feet;
+            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = vecY;
             Shorten.ShortenType shortenType = PlaneInfo.ShortenTypes[locIndex];
@@ -2639,14 +2647,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne12 = DesignInfo.StandardNumbers[1];
             int ce12 = DesignInfo.StandardNumbers[2];
             int ne2 = DesignInfo.StandardNumbers[3];
-            int nm = DesignInfo.StandardNumbers[4];
+            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = DesignInfo.StandardNumbers[5];
             int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
             int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
             int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
             int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[4];
-            bool isDoubleNE2 = DesignInfo.IsDoubleN2;
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.IsDoubleN2;
+            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4]==1? true:false;
+            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            
             double spacE11 = DesignInfo.StandardSpacings[0];
             double spacE12 = DesignInfo.StandardSpacings[1];
             double spacE2 = DesignInfo.StandardSpacings[2];
@@ -2659,7 +2668,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[1];
             double dia = DesignInfo.StandardDiameters[1];
             double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[1];
-            double shortenLimit = GeneralParameterInput.ShortenLimit * ConstantValue.milimeter2Feet;
+            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecY : vecY;
             XYZ vecExpSmall = index == 0 ? vecY : -vecY;
@@ -3038,14 +3047,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne12 = DesignInfo.StandardNumbers[1];
             int ce12 = DesignInfo.StandardNumbers[2];
             int ne2 = DesignInfo.StandardNumbers[3];
-            int nm = DesignInfo.StandardNumbers[4];
+            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = DesignInfo.StandardNumbers[5];
             int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
             int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
             int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
             int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[4];
-            bool isDoubleNE2 = DesignInfo.IsDoubleN2;
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.IsDoubleN2;
+            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4]==1? true:false;
+            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            
             double spacE11 = DesignInfo.StandardSpacings[0];
             double spacE12 = DesignInfo.StandardSpacings[1];
             double spacE2 = DesignInfo.StandardSpacings[2];

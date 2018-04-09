@@ -74,13 +74,17 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
@@ -89,18 +93,35 @@
     <Compile Include="Constant\ConstantValue.cs" />
     <Compile Include="Database\AutoRebaring\Dao\AnchorParametersDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\CoverParametersDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\DesignGeneralDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\DesignLevelDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\DevelopmentParametersDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\DimensionParameterTypeDao.cs" />
-    <Compile Include="Database\AutoRebaring\Dao\DimensionParameterValueDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\EDParameterValueDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\ElementTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\ElementTypeProjectDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\LevelDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\LockheadParametersDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\MacAddressDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\EDParameterTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\MarkDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\ProjectDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\RebarBarTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\RebarDesignTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\RebarTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\RebarVericalParametersDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardDesignDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardDesignParameterTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardDesignParameterValueDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardEndTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardFitLengthDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardFitTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardStartZDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardStartZTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StirrupDesignDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StirrupDesignParameterTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StirrupDesignParameterValueDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StirrupFamilyTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\UserDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\UserProjectDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\UserTypeDao.cs" />
@@ -114,6 +135,7 @@
     <Compile Include="Database\AutoRebaring\EF\AREDParameterType.cs" />
     <Compile Include="Database\AutoRebaring\EF\AREDParameterValue.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARElementType.cs" />
+    <Compile Include="Database\AutoRebaring\EF\ARElementTypeProject.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARLevel.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARLockheadParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARMacAddress.cs" />
@@ -153,6 +175,9 @@
     <Compile Include="ElementInfo\VerticalInfo.cs" />
     <Compile Include="ElementInfo\Shorten\ShortenType.cs" />
     <Compile Include="ElementInfo\StirrupDistribution.cs" />
+    <Compile Include="Form\InputForm.xaml.cs">
+      <DependentUpon>InputForm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Others\ComputerInfo.cs" />
     <Compile Include="Others\Encryting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,6 +215,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ElementInfo\RebarInfo\StirrupInfo\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Form\InputForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

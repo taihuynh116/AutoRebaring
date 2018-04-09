@@ -14,6 +14,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         {
             ARDimensionParameterTypes = new HashSet<ARDimensionParameterType>();
             AREDParameterTypes = new HashSet<AREDParameterType>();
+            ARElementTypeProjects = new HashSet<ARElementTypeProject>();
+            ARRebarDesignTypes = new HashSet<ARRebarDesignType>();
         }
 
         public long ID { get; set; }
@@ -29,5 +31,11 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AREDParameterType> AREDParameterTypes { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARElementTypeProject> ARElementTypeProjects { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARRebarDesignType> ARRebarDesignTypes { get; set; }
     }
 }

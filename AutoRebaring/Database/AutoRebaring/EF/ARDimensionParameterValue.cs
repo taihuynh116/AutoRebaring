@@ -13,7 +13,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public DateTime CreateDate { get; set; }
 
-        public long IDDimensoinParameterType { get; set; }
+        public long IDDimensionParameterType { get; set; }
 
         public long IDProject { get; set; }
 

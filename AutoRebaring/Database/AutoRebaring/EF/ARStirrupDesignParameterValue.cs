@@ -17,7 +17,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public long IDStirrupDesignParameterType { get; set; }
 
-        public int Value { get; set; }
+        public double Value { get; set; }
 
         public virtual ARDesignLevel ARDesignLevel { get; set; }
 

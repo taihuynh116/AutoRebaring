@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using AutoRebaring.Database;
+using AutoRebaring.Database.AutoRebaring.EF;
 using Geometry;
 using System;
 using System.Collections.Generic;
@@ -23,19 +24,17 @@ namespace AutoRebaring.ElementInfo
             get { return elemInfos[i]; }
             set { elemInfos[i] = value; }
         }
-        public ElementInfoCollection(Document doc, Element e, GeneralParameterInput gpi, IInputForm inputForm)
+        public ElementInfoCollection(Document doc, Element e, ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio, ARCoverParameter cp, ARAnchorParameter ap, ARDevelopmentParameter dp, ARLockheadParameter lp, List<IDesignInfo> designInfos)
         {
-            ElementTypeEnum elemType = (gpi.ElementType == "Column") ? ElementTypeEnum.Column : ElementTypeEnum.Wall;
-
             // F0
-            GetRelatedElements(doc, e, gpi);
+            GetRelatedElements(doc, e);
 
             // F1
-            GetAllParameters(inputForm, gpi, elemType);
+            GetAllParameters(elemType, edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio, cp, ap, dp,lp, designInfos);
         }
-        public void GetRelatedElements(Document doc, Element e, GeneralParameterInput gpi)
+        public void GetRelatedElements(Document doc, Element e)
         {
-            Polygon pl = new PlaneInfo(doc, e, gpi).Polygon;
+            Polygon pl = new PlaneInfo(doc, e).Polygon;
             FilteredElementCollector col = new FilteredElementCollector(doc).WhereElementIsNotElementType();
             List<Element> elems = new List<Element>();
             foreach (Element eA in col)
@@ -43,7 +42,7 @@ namespace AutoRebaring.ElementInfo
                 if (eA == null) continue;
                 if (eA is Wall || (eA is FamilyInstance && eA.Category.Id.IntegerValue == (int)BuiltInCategory.OST_StructuralColumns))
                 {
-                    PlaneInfo pi = new PlaneInfo(doc, eA, gpi);
+                    PlaneInfo pi = new PlaneInfo(doc, e);
                     Polygon plA = pi.Polygon;
                     plA = CheckGeometry.GetProjectPolygon(pl.Plane, plA);
                     PolygonComparePolygonResult res = new PolygonComparePolygonResult(pl, plA);
@@ -59,21 +58,21 @@ namespace AutoRebaring.ElementInfo
             }
             elemInfos.Sort(new ElementInfoSorter());
         }
-        public void GetAllParameters(IInputForm inputForm, GeneralParameterInput gpi, ElementTypeEnum elemType)
+        public void GetAllParameters(ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio, ARCoverParameter cp, ARAnchorParameter ap, ARDevelopmentParameter dp, ARLockheadParameter lp, List<IDesignInfo> designInfos)
         {
             // F1
             for (int i = 0; i < elemInfos.Count; i++)
             {
                 // F1.1
-                elemInfos[i].GetPlaneInfo(elemType, gpi);
+                elemInfos[i].GetPlaneInfo(elemType, edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio);
                 // F1.2
-                elemInfos[i].GetDesignInfo(inputForm);
+                elemInfos[i].GetDesignInfo(designInfos);
                 // F1.3
-                elemInfos[i].GetVerticalInfo(elemType, gpi);
+                elemInfos[i].GetVerticalInfo(elemType);
                 // F1.4
-                elemInfos[i].GetStandardSpacing(gpi);
+                elemInfos[i].GetStandardSpacing(cp);
                 // F1.5
-                elemInfos[i].GetRebarLocation();
+                elemInfos[i].GetRebarLocation(cp);
             }
 
             // F2
@@ -97,9 +96,9 @@ namespace AutoRebaring.ElementInfo
                 }
 
                 // F2.3
-                elemInfos[i].GetRebarInformation();
+                elemInfos[i].GetRebarInformation(ap, dp);
                 // F2.4
-                elemInfos[i].GetStandardPlaneInfo(elemType, gpi);
+                elemInfos[i].GetStandardPlaneInfo(elemType,lp);
             }
         }
     }

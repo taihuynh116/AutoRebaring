@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using AutoRebaring.Constant;
 using AutoRebaring.Database;
+using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
 using Geometry;
 using System;
@@ -33,7 +34,6 @@ namespace AutoRebaring.ElementInfo
         public List<double> RebarDevelopmentLengths { get; set; }
         public List<StirrupDistribution> StirrupDistributions { get; set; }
         #endregion
-        public GeneralParameterInput GeneralParameterInput { get; set; }
 
         public VerticalInfo(IRevitInfo revitInfo)
         {
@@ -154,40 +154,38 @@ namespace AutoRebaring.ElementInfo
                 EndLevel = doc.GetElement(e.LookupParameter("Top Level").AsElementId()) as Level;
             }
         }
-        public void GetInformation(GeneralParameterInput gpi)
+        public void GetInformation(ARRebarVerticalParameter rvpStand, ARRebarVerticalParameter rvpStirr, ARLockheadParameter lpp)
         {
-            GeneralParameterInput = gpi;
+            Top = rvpStand.IsInsideBeam ? TopFloor : TopBeam;
 
-            Top = gpi.IsInsideBeam ? TopFloor : TopBeam;
-
-            double d = gpi.OffsetInclude ? gpi.TopOffset * ConstantValue.milimeter2Feet : 0;
-            d = gpi.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * gpi.TopOffsetRatio) : d;
+            double d = rvpStand.OffsetInclude ? rvpStand.TopOffset * ConstantValue.milimeter2Feet : 0;
+            d = rvpStand.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * rvpStand.TopOffsetRatio) : d;
             TopOffset = Top - d;
 
-            TopLockHead = Top - gpi.LockheadConcreteCover * ConstantValue.milimeter2Feet;
-            TopSmall = Top - gpi.ConcreteSmallCover * ConstantValue.milimeter2Feet;
+            TopLockHead = Top - lpp.LockheadConcreteCover * ConstantValue.milimeter2Feet;
+            TopSmall = Top - lpp.SmallConcreteCover * ConstantValue.milimeter2Feet;
 
-            d = gpi.OffsetInclude ? gpi.BottomOffset * ConstantValue.milimeter2Feet : 0;
-            d = gpi.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * gpi.BottomOffsetRatio) : d;
+            d = rvpStand.OffsetInclude ? rvpStand.BottomOffset * ConstantValue.milimeter2Feet : 0;
+            d = rvpStand.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * rvpStand.BottomOffsetRatio) : d;
             BottomOffset = Bottom + d;
 
-            TopStirrup2 = gpi.IsStirrupInsideBeam ? TopFloor : TopBeam;
+            TopStirrup2 = rvpStirr.IsInsideBeam ? TopFloor : TopBeam;
             BottomStirrup1 = Bottom;
 
-            d = gpi.StirrupOffsetInclude ? gpi.TopOffsetStirrup * ConstantValue.milimeter2Feet : 0;
-            d = gpi.StirrupOffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * gpi.TopOffsetStirrupRatio) : d;
+            d = rvpStirr.OffsetInclude ? rvpStirr.TopOffset * ConstantValue.milimeter2Feet : 0;
+            d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.TopOffsetRatio) : d;
             TopStirrup2 = TopStirrup1 - d;
 
-            d = gpi.StirrupOffsetInclude ? gpi.BottomOffsetStirrup * ConstantValue.milimeter2Feet : 0;
-            d = gpi.StirrupOffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * gpi.BottomOffsetStirrupRatio) : d;
+            d = rvpStirr.OffsetInclude ? rvpStirr.BottomOffset * ConstantValue.milimeter2Feet : 0;
+            d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.BottomOffsetRatio) : d;
             BottomStirrup2 = BottomStirrup1 + d;
         }
-        public void GetRebarInformation(IDesignInfo di)
+        public void GetRebarInformation(IDesignInfo di, ARAnchorParameter ap, ARDevelopmentParameter dp)
         {
             TopAnchorAfters = di.DesignInfoAfter.StandardDiameters.
-                Select(x => GeneralParameterInput.AnchorMultiply * x).ToList();
+                Select(x => ap.AnchorMultiply * x).ToList();
             RebarDevelopmentLengths = di.StandardDiameters.
-                Select(x => GeneralParameterInput.DevelopmentMultiply * x).ToList();
+                Select(x => dp.DevelopmentMultiply * x).ToList();
         }
     }
     public class ColumnVerticalInfo : VerticalInfo

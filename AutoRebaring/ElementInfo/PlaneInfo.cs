@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using AutoRebaring.Constant;
 using AutoRebaring.ElementInfo;
 using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
+using AutoRebaring.Database.AutoRebaring.EF;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -21,17 +22,21 @@ namespace AutoRebaring.ElementInfo
         public UV VectorV { get; set; }
         public UV CentralPoint { get; set; }
         public Polygon Polygon { get; set; }
-        public GeneralParameterInput GeneralParameterInput { get; set; }
 
-        public PlaneInfo(IRevitInfo revitInfo, GeneralParameterInput gpi)
+        public PlaneInfo(IRevitInfo revitInfo)
         {
             Document doc = revitInfo.Document;
             Element e = revitInfo.Element;
-            GeneralParameterInput = gpi;
             GetPlaneInfo(doc, e);
         }   
-        public PlaneInfo(Document doc, Element e, GeneralParameterInput gpi)
+        public PlaneInfo(Document doc, Element e)
         {
+            GetPlaneInfo(doc, e);
+        }
+        public PlaneInfo(IRevitInfo revitInfo, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio)
+        {
+            Document doc = revitInfo.Document;
+            Element e = revitInfo.Element;
             GetPlaneInfo(doc, e);
         }
         public void GetPlaneInfo(Document doc, Element e)
@@ -90,15 +95,12 @@ namespace AutoRebaring.ElementInfo
         public IPlaneInfo PlaneInfoAfter { get; set; }
         #endregion
 
-        public GeneralParameterInput GeneralParameterInput { get; set; }
-        public ColumnPlaneInfo(IRevitInfo revitInfo, GeneralParameterInput gpi) : base(revitInfo, gpi)
+        public ColumnPlaneInfo(IRevitInfo revitInfo) : base(revitInfo)
         {
-            GetFullPlaneInfo(gpi);
+            GetFullPlaneInfo();
         }
-        public void GetFullPlaneInfo(GeneralParameterInput gpi)
+        public void GetFullPlaneInfo()
         {
-            GeneralParameterInput = gpi;
-
             List<UV> boundPoints = new List<UV>
             {
                 CentralPoint - VectorU * B1 / 2 - VectorV * B2 / 2,
@@ -111,15 +113,15 @@ namespace AutoRebaring.ElementInfo
             B2s = new List<double> { B2 };
             BoundaryPointLists = new List<List<UV>> { boundPoints };
         }
-        public void GetShortenType(IPlaneInfo pia)
+        public void GetShortenType(IPlaneInfo pia, ARLockheadParameter lp)
         {
             PlaneInfoAfter = pia;
             ShortenTypes = new List<ShortenType>
             {
-                getShotenType()
+                getShotenType(lp)
             };
         }
-        private ShortenType getShotenType()
+        private ShortenType getShotenType(ARLockheadParameter lp)
         {
             double d = 0;
             List<UV> pnts = BoundaryPointLists[0];
@@ -127,29 +129,29 @@ namespace AutoRebaring.ElementInfo
 
             return new ShortenType()
             {
-                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d),
+                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d,lp),
                 DeltaU1 = d,
-                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d),
+                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d,lp),
                 DeltaU2 = d,
-                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d),
+                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d,lp),
                 DeltaV1 = d,
-                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d),
+                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d,lp),
                 DeltaV2 = d
             };
         }
-        private ShortenEnum GetShorten(double u, double uAfter, out double d)
+        private ShortenEnum GetShorten(double u, double uAfter, out double d, ARLockheadParameter lp)
         {
             d = Math.Abs(u - uAfter);
-            double shorten = ConstantValue.milimeter2Feet * GeneralParameterInput.ShortenLimit;
+            double shorten = ConstantValue.milimeter2Feet * lp.ShortenLimit;
             if (GeomUtil.IsEqual(shorten, d) || d > shorten)
                 return ShortenEnum.Big;
             else if (GeomUtil.IsBigger(d, 0))
                 return ShortenEnum.Small;
             return ShortenEnum.None;
         }
-        public void GetRebarLocation(IDesignInfo di)
+        public void GetRebarLocation(IDesignInfo di, ARCoverParameter cp)
         {
-            double offset = GeneralParameterInput.ConcreteCover*ConstantValue.milimeter2Feet + di.StandardDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
+            double offset = cp.ConcreteCover*ConstantValue.milimeter2Feet + di.StandardDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
             List<UV> boundPnts = BoundaryPointLists[0];
 
             List<UV> standardPnts = new List<UV>()
@@ -165,7 +167,7 @@ namespace AutoRebaring.ElementInfo
                 standardPnts
             };
 
-            offset = GeneralParameterInput.ConcreteCover*ConstantValue.milimeter2Feet + di.StirrupDiameters[0]/2;
+            offset = cp.ConcreteCover*ConstantValue.milimeter2Feet + di.StirrupDiameters[0]/2;
             List<UV> stirrPnts = new List<UV>()
             {
                 boundPnts[0] + (VectorU+VectorV)*offset,
@@ -195,16 +197,15 @@ namespace AutoRebaring.ElementInfo
         public IPlaneInfo PlaneInfoAfter { get; set; }
         #endregion
 
-        public GeneralParameterInput GeneralParameterInput { get; set; }
-        public WallPlaneInfo(IRevitInfo revitInfo, GeneralParameterInput gpi) : base(revitInfo, gpi)
+        public WallPlaneInfo(IRevitInfo revitInfo, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio):base(revitInfo,edgeDimInclude,edgeRatioInclude,edgeDim, edgeRatio)
         {
-            GetFullPlaneInfo(gpi);
+            GetFullPlaneInfo(edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio);
         }
-        public void GetFullPlaneInfo(GeneralParameterInput gpi)
+        public void GetFullPlaneInfo(bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio)
         {
             double edge = 0;
-            if (gpi.EdgeDimensionInclude) edge = gpi.EdgeDimension * ConstantValue.milimeter2Feet;
-            if (gpi.EdgeRatioInclude) edge = Math.Max(edge, gpi.EdgeRatio * B1);
+            if (edgeDimInclude) edge = edgeDim * ConstantValue.milimeter2Feet;
+            if (edgeRatioInclude) edge = Math.Max(edge, edgeRatio * B1);
             double middle = B1 - edge * 2;
 
             B1s = new List<double> { edge, middle, edge };
@@ -226,17 +227,17 @@ namespace AutoRebaring.ElementInfo
                 centralPnt - VectorU * b1 / 2 + VectorV * b2 / 2
             };
         }
-        public void GetShortenType(IPlaneInfo pia)
+        public void GetShortenType(IPlaneInfo pia, ARLockheadParameter lp)
         {
             PlaneInfoAfter = pia;
             ShortenTypes = new List<ShortenType>()
             {
-                getShotenType(0),
-                getShotenType(1),
-                getShotenType(2)
+                getShotenType(0,lp),
+                getShotenType(1,lp),
+                getShotenType(2,lp)
             };
         }
-        private ShortenType getShotenType(int index)
+        private ShortenType getShotenType(int index, ARLockheadParameter lp)
         {
             double d = 0;
             List<UV> pnts = BoundaryPointLists[index];
@@ -244,21 +245,21 @@ namespace AutoRebaring.ElementInfo
 
             return new ShortenType()
             {
-                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d),
+                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d,lp),
                 DeltaU1 = d,
-                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d),
+                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d,lp),
                 DeltaU2 = d,
-                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d),
+                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d,lp),
                 DeltaV1 = d,
-                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d),
+                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d,lp),
                 DeltaV2 = d
             };
         }
 
-        private ShortenEnum GetShorten(double u, double uAfter, out double d)
+        private ShortenEnum GetShorten(double u, double uAfter, out double d, ARLockheadParameter lp)
         {
             d = Math.Abs(u - uAfter);
-            double shorten = ConstantValue.milimeter2Feet * GeneralParameterInput.ShortenLimit;
+            double shorten = ConstantValue.milimeter2Feet * lp.ShortenLimit;
             if (GeomUtil.IsEqual(shorten, d) || d > shorten)
                 return ShortenEnum.Big;
             else if (GeomUtil.IsBigger(d, 0))
@@ -266,12 +267,12 @@ namespace AutoRebaring.ElementInfo
             return ShortenEnum.None;
         }
 
-        public void GetRebarLocation(IDesignInfo di)
+        public void GetRebarLocation(IDesignInfo di, ARCoverParameter cp)
         {
             StandardRebarPointLists = new List<List<UV>>();
             StirrupRebarPointLists = new List<List<UV>>();
 
-            double offConc = GeneralParameterInput.ConcreteCover * ConstantValue.milimeter2Feet;
+            double offConc = cp.ConcreteCover * ConstantValue.milimeter2Feet;
             double offStirr = di.StirrupDiameters[0];
             double offCntr = di.StirrupDiameters[0]* ( ConstantValue.RebarStandardOffsetControl-1);
             double offStand= di.StandardDiameters[0];

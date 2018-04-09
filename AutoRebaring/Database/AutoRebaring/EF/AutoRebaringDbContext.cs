@@ -22,6 +22,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual DbSet<AREDParameterType> AREDParameterTypes { get; set; }
         public virtual DbSet<AREDParameterValue> AREDParameterValues { get; set; }
         public virtual DbSet<ARElementType> ARElementTypes { get; set; }
+        public virtual DbSet<ARElementTypeProject> ARElementTypeProjects { get; set; }
         public virtual DbSet<ARLevel> ARLevels { get; set; }
         public virtual DbSet<ARLockheadParameter> ARLockheadParameters { get; set; }
         public virtual DbSet<ARMacAddress> ARMacAddresses { get; set; }
@@ -92,7 +93,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
             modelBuilder.Entity<ARDimensionParameterType>()
                 .HasMany(e => e.ARDimensionParameterValues)
                 .WithRequired(e => e.ARDimensionParameterType)
-                .HasForeignKey(e => e.IDDimensoinParameterType)
+                .HasForeignKey(e => e.IDDimensionParameterType)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<AREDParameterType>()
@@ -117,6 +118,18 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
             modelBuilder.Entity<ARElementType>()
                 .HasMany(e => e.AREDParameterTypes)
+                .WithRequired(e => e.ARElementType)
+                .HasForeignKey(e => e.IDElementType)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARElementType>()
+                .HasMany(e => e.ARElementTypeProjects)
+                .WithRequired(e => e.ARElementType)
+                .HasForeignKey(e => e.IDElementType)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARElementType>()
+                .HasMany(e => e.ARRebarDesignTypes)
                 .WithRequired(e => e.ARElementType)
                 .HasForeignKey(e => e.IDElementType)
                 .WillCascadeOnDelete(false);
@@ -177,6 +190,12 @@ namespace AutoRebaring.Database.AutoRebaring.EF
                 .HasMany(e => e.AREDParameterValues)
                 .WithOptional(e => e.ARMark)
                 .HasForeignKey(e => e.IDMark);
+
+            modelBuilder.Entity<ARMark>()
+                .HasMany(e => e.ARElementTypeProjects)
+                .WithRequired(e => e.ARMark)
+                .HasForeignKey(e => e.IDMark)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ARProject>()
                 .Property(e => e.Name)

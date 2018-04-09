@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB.Structure;
 using AutoRebaring.Constant;
 using AutoRebaring.Database;
+using AutoRebaring.Database.AutoRebaring.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,7 @@ namespace AutoRebaring.ElementInfo
         public List<double> MiddleSpacings { get; set; }
         public IDesignInfo DesignInfoAfter { get; set; }
         public IDesignInfo DesignInfoBefore { get; set; }
-        public bool IsDoubleN2 { get; set; }
         public List<double> StandardSpacings { get; set; }
-        public GeneralParameterInput GeneralParameterInput { get; set; }
         #endregion
 
         public ColumnDesignInfo(Level level, RebarBarType standType, RebarHookType hookType, int n1, int n2, RebarBarType stirType1, RebarBarType stirType2, double bt1, double bt2, double m1, double m2)
@@ -51,12 +50,11 @@ namespace AutoRebaring.ElementInfo
             MiddleSpacings = mSpacs;
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
         }
-        public void GetStandardSpacing(IPlaneInfo pi, GeneralParameterInput gpi)
+        public void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp)
         {
-            GeneralParameterInput = gpi;
             double standDia = StandardTypes[0].BarDiameter;
             double stirrDia = StirrupTypes[0].BarDiameter;
-            double cover = GeneralParameterInput.ConcreteCover * ConstantValue.milimeter2Feet * 2 - stirrDia * 2 - standDia;
+            double cover = cp.ConcreteCover * ConstantValue.milimeter2Feet * 2 - stirrDia * 2 - standDia;
             StandardSpacings = new List<double>
             {
                 (pi.B1s[0] - cover)/(StandardNumbers[0]-1)*2,
@@ -83,19 +81,16 @@ namespace AutoRebaring.ElementInfo
         public List<double> MiddleSpacings { get; set; }
         public IDesignInfo DesignInfoAfter { get; set; }
         public IDesignInfo DesignInfoBefore { get; set; }
-        public bool IsDoubleN2 { get; set; } 
         public List<double> StandardSpacings { get; set; }
-        public GeneralParameterInput GeneralParameterInput { get; set; }
         #endregion
 
-        public WallDesignInfo(Level level, RebarBarType edgeStandType,RebarHookType edgeHookType, RebarBarType midStandType, RebarHookType middleHookType, int ne11, int ne12, int ce12, int ne2, bool isDouNe2, int nm, RebarBarType stirType1, RebarBarType stirType2, RebarBarType stirType3,
+        public WallDesignInfo(Level level, RebarBarType edgeStandType,RebarHookType edgeHookType, RebarBarType midStandType, RebarHookType middleHookType, int ne11, int ne12, int ce12, int ne2, int de2, int nm, RebarBarType stirType1, RebarBarType stirType2, RebarBarType stirType3,
             double bt1, double bt2, double m1, double m2)
         {
             Level = level;
             StandardTypes = new List<RebarBarType> { edgeStandType, midStandType };
             StandardHookTypes = new List<RebarHookType> { edgeHookType, middleHookType };
-            StandardNumbers = new List<int> { ne11, ne12, ce12, ne2, nm };
-            IsDoubleN2 = isDouNe2;
+            StandardNumbers = new List<int> { ne11, ne12, ce12, ne2,de2, nm };
             StirrupTypes = new List<RebarBarType> { stirType1, stirType2, stirType3 };
             BotTopSpacings = new List<double> { bt1, bt2 };
             MiddleSpacings = new List<double> { m1, m2 };
@@ -112,13 +107,12 @@ namespace AutoRebaring.ElementInfo
             MiddleSpacings = mSpacs;
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
         }
-        public void GetStandardSpacing(IPlaneInfo pi, GeneralParameterInput gpi)
+        public void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp)
         {
-            GeneralParameterInput = gpi;
             double edgeStandDia = StandardTypes[0].BarDiameter;
             double middleStandDia = StandardTypes[1].BarDiameter;
             double stirrDia = StirrupTypes[0].BarDiameter;
-            double cover = GeneralParameterInput.ConcreteCover * ConstantValue.milimeter2Feet;
+            double cover = cp.ConcreteCover * ConstantValue.milimeter2Feet;
             StandardSpacings = new List<double>
             {
                 (pi.B1s[0] - cover- stirrDia*1.5-edgeStandDia)/(StandardNumbers[0]-1)*2,
