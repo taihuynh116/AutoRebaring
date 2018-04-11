@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutoRebaring.Form"
-             mc:Ignorable="d" Width="1142.926" Height="1442.592">
+             mc:Ignorable="d" Width="1142.926" Height="950">
     <Grid>
         <ScrollViewer Margin="0,0,0,0" VerticalScrollBarVisibility="Visible">
             <StackPanel Orientation="Vertical">
@@ -14,7 +14,7 @@
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="Tên dự án:"></Label>
-                                    <ComboBox x:Name="cbbProject" HorizontalAlignment="Left" Margin="50,0,0,0" VerticalAlignment="Top" Width="130"/>
+                                    <Label x:Name="lblProject" Content="Bêtông bảo vệ:" HorizontalAlignment="Right" TextBlock.TextAlignment="Right" Margin="88,0,0,0" VerticalAlignment="Top"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="Tên đăng nhập:"></Label>
@@ -31,23 +31,19 @@
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
-                    <GroupBox x:Name="colParamGrb" Header="THAM BIẾN KÍCH THƯỚC CỘT" HorizontalAlignment="Left" Height="100" Margin="0,0,0,0" VerticalAlignment="Top" Width="204" FontWeight="Normal">
+                    <GroupBox x:Name="colParamGrb" Header="THAM BIẾN " HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top"  FontWeight="Normal">
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                    <Label Content="B1:" Width="39"></Label>
-                                    <ComboBox x:Name="cbbB1" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="75"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                                    <Label Content="B2:" Width="39"></Label>
-                                    <ComboBox x:Name="cbbB2" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="74"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                     <Label Content="Mark:" Width="39"></Label>
-                                    <ComboBox x:Name="cbbMark" IsEditable="True" Width="74" HorizontalAlignment="Left" Height="22" Margin="0,0,0,0" Text="" VerticalAlignment="Center" />
+                                    <ComboBox x:Name="cbbMark" IsEditable="True" Width="74" HorizontalAlignment="Left" Height="22" Margin="10,0,0,0" Text="" VerticalAlignment="Center" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                    <Label Content="Type:" Width="39"></Label>
+                                    <RadioButton x:Name="rbtColumn" VerticalAlignment="Center" Content="Column" Margin="10,0,0,0" Checked="rbtColumn_Checked"/>
+                                    <RadioButton x:Name="rbtWall" VerticalAlignment="Center" Content="Wall" Margin="15,0,0,0" Checked="rbtColumn_Checked"></RadioButton>
                                 </StackPanel>
                             </StackPanel>
-                            <Button x:Name="btnCheckParams" Content="OK" HorizontalAlignment="Left" Margin="27,0,0,11" VerticalAlignment="Bottom" Width="43" Click="btnCheckParams_Click"/>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
@@ -175,39 +171,39 @@
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <GroupBox x:Name="rebarChosenGrb" Header="CHỌN THÉP" Height="388" Width="467" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <GroupBox x:Name="rebarChosenGrb" Header="CHỌN THÉP" Width="467" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Vertical">
                                     <Label Content="Thép dọc:" FontWeight="Bold" ></Label>
                                     <Label Content="Phối thép chuẩn:"></Label>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="L ="></Label>
-                                        <TextBox x:Name="txtStandardL0" HorizontalAlignment="Left" Height="23" Margin="52,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardL1" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardL2" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardL3" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardL4" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardL5" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardL6" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL0" HorizontalAlignment="Left" Height="23" Margin="52,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL1" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL2" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL3" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL4" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL5" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL6" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="L1+L2 ="></Label>
-                                        <TextBox x:Name="txtStandardPairL0" HorizontalAlignment="Left" Height="23" Margin="25,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardPairL1" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardPairL2" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardPairL3" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardPairL4" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardPairL5" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardPairL6" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL20" HorizontalAlignment="Left" Height="23" Margin="25,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL21" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL22" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL23" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL24" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL25" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL26" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="L1+L2+L3 ="></Label>
-                                        <TextBox x:Name="txtStandardTripL0" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardTripL1" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardTripL2" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardTripL3" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardTripL4" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardTripL5" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtStandardTripL6" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL30" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL31" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL32" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL33" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL34" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL35" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtFitL36" HorizontalAlignment="Left" Height="22" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
                                     </StackPanel>
                                     <Label Content="Phối thép dư:"></Label>
                                     <StackPanel Orientation="Horizontal">
@@ -239,21 +235,29 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="L1+L2 ="></Label>
-                                        <TextBox x:Name="txtImplantPairL0" HorizontalAlignment="Left" Height="23" Margin="25,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtImplantPairL1" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtImplantPairL2" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtImplantPairL3" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtImplantPairL4" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtImplantPairL5" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
-                                        <TextBox x:Name="txtImplantPairL6" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtImplantL20" HorizontalAlignment="Left" Height="23" Margin="25,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtImplantL21" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtImplantL22" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtImplantL23" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtImplantL24" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtImplantL25" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
+                                        <TextBox x:Name="txtImplantL26" HorizontalAlignment="Left" Height="23" Margin="5,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="49"/>
                                     </StackPanel>
                                     <Label Content="Thép đai:" FontWeight="Bold" ></Label>
                                     <Label Content="Loại family:" ></Label>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Label Content="Đai ngoài:"></Label>
-                                        <ComboBox x:Name="cbbFamilyStirrup1" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Center" Width="115"/>
-                                        <Label Content="Đai trong:" Margin="30,0,0,0"></Label>
-                                        <ComboBox x:Name="cbbFamilyStirrup2" HorizontalAlignment="Left" Margin="7,0,0,0" VerticalAlignment="Top" Width="131"/>
+                                    <StackPanel Orientation="Vertical">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Đai Bao:"></Label>
+                                            <ComboBox x:Name="cbbFamilyDaiBao" HorizontalAlignment="Left" Height="20" Margin="10,0,0,0" VerticalAlignment="Center" Width="130"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label x:Name="lblDaiBien" Content="Đai Biên:" Margin="0,0,0,0"></Label>
+                                            <ComboBox x:Name="cbbFamilyDaiBien" HorizontalAlignment="Left" Height="20" Margin="7,0,0,0" VerticalAlignment="Center" Width="130"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Đai C:" Margin="0,0,0,0"></Label>
+                                            <ComboBox x:Name="cbbFamilyDaiC" HorizontalAlignment="Left" Height="20" Margin="23,0,0,0" VerticalAlignment="Center" Width="130"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
@@ -262,25 +266,24 @@
                                     <Label Content="Kiểm tra tiết diện" FontWeight="Bold"></Label>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Content="Tầng:"></Label>
-                                        <ComboBox x:Name="cbbCheckLevel" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Width="99" SelectionChanged="cbbCheckLevel_SelectionChanged"/>
+                                        <Label x:Name="lblCheckLevel" TextBlock.TextAlignment="Left" Content="b2=" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Top" Width="150"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel Orientation="Vertical">
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Content="B1:"></Label>
-                                                <Label x:Name="lblCheckb1" TextBlock.TextAlignment="Right" Content="b2=" HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Width="42"/>
+                                                <Label x:Name="lblCheckb1" TextBlock.TextAlignment="Left" Content="b2=" HorizontalAlignment="Left" Margin="33,0,0,0" VerticalAlignment="Top" Width="100"/>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal">
                                                 <Label Content="B2:"></Label>
-                                                <Label x:Name="lblCheckb2" TextBlock.TextAlignment="Right" Content="b2=" HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Width="42"/>
+                                                <Label x:Name="lblCheckb2" TextBlock.TextAlignment="Left" Content="b2=" HorizontalAlignment="Left" Margin="33,0,0,0" VerticalAlignment="Top" Width="100"/>
                                             </StackPanel>
                                         </StackPanel>
-                                        <Button x:Name="Reverse" Content="Nghịch đảo" HorizontalAlignment="Left" Margin="15,0,0,0" VerticalAlignment="Center" Width="69" Click="Reverse_Click"/>
                                     </StackPanel>
                                     <Label Content="Hiển thị thép trên View3d" FontWeight="Bold"></Label>
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="chkView3d" Content="Yes/No" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Center" Checked="chkView3d_Checked" Unchecked="chkView3d_Checked"/>
-                                        <ComboBox x:Name="cbbView3d" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Width="149" SelectionChanged="cbbCheckLevel_SelectionChanged"/>
+                                        <ComboBox x:Name="cbbView3d" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Width="149"/>
                                     </StackPanel>
                                     <Label Content="Các tham biến liên quan" FontWeight="Bold"></Label>
                                     <StackPanel Orientation="Horizontal">
@@ -451,7 +454,7 @@
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
-                    <Button x:Name="btnOK" Content="OK" HorizontalAlignment="Center" Margin="130,0,0,20" VerticalAlignment="Bottom" Width="123" Click="btnOK_Click" Height="48" FontSize="36" FontWeight="Bold"/>
+                    <Button x:Name="btnOK" Content="OK" HorizontalAlignment="Center" Margin="130,0,0,20" VerticalAlignment="Bottom" Width="123" Height="48" FontSize="36" FontWeight="Bold" Click="btnOK_Click"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

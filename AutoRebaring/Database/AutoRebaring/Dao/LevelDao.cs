@@ -21,7 +21,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDProject = idProject,
                     Name = name,
                     Title = title,
-                    Elevation = elevation
+                    Elevation = elevation,
+                    CreateDate = DateTime.Now
                 };
                 db.ARLevels.Add(obj);
             }

@@ -145,13 +145,13 @@ namespace AutoRebaring.ElementInfo
 
             if (e is Wall)
             {
-                StartLevel = doc.GetElement(e.LookupParameter("Base Constraint").AsElementId()) as Level;
-                EndLevel = doc.GetElement(e.LookupParameter("Top Constraint").AsElementId()) as Level;
+                StartLevel = doc.GetElement(e.LookupParameter(ConstantValue.StartLevelColumn).AsElementId()) as Level;
+                EndLevel = doc.GetElement(e.LookupParameter(ConstantValue.EndLevelColumn).AsElementId()) as Level;
             }
             else
             {
-                StartLevel = doc.GetElement(e.LookupParameter("Base Level").AsElementId()) as Level;
-                EndLevel = doc.GetElement(e.LookupParameter("Top Level").AsElementId()) as Level;
+                StartLevel = doc.GetElement(e.LookupParameter(ConstantValue.StartLevelWall).AsElementId()) as Level;
+                EndLevel = doc.GetElement(e.LookupParameter(ConstantValue.EndLevelWall).AsElementId()) as Level;
             }
         }
         public void GetInformation(ARRebarVerticalParameter rvpStand, ARRebarVerticalParameter rvpStirr, ARLockheadParameter lpp)

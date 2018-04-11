@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StandardFitLengthDao
+    public class StandardFitLengthDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StandardFitLengthDao() { }
@@ -21,7 +21,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDProject = idProject,
                     IDStandardFitType = idStandardFitType,
                     Numeric = numeric,
-                    Length = length
+                    Length = length,
+                    CreateDate = DateTime.Now
                 };
                 db.ARStandardFitLengths.Add(obj);
             }
@@ -40,6 +41,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARStandardFitLength GetStandardFitLength(long id)
+        {
+            var res = db.ARStandardFitLengths.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

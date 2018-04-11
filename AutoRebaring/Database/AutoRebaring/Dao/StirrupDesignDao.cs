@@ -11,31 +11,30 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StirrupDesignDao() { }
-        public void Update(long idStirFamType, long idRebarDesType, long idRebarBarType, long idDesLevel)
+        public void Update(long idStirFamType, long idRebarBarType, long idDesLevel)
         {
-            var res = db.ARStirrupDesigns.Where(x => x.IDDesignLevel == idDesLevel && x.IDRebarDesignType== idRebarDesType);
+            var res = db.ARStirrupDesigns.Where(x => x.IDDesignLevel == idDesLevel && x.IDStirrupFamilyType== idStirFamType);
             if (res.Count() == 0)
             {
                 var obj = new ARStirrupDesign()
                 {
                     IDDesignLevel = idDesLevel,
                     IDStirrupFamilyType = idStirFamType,
-                    IDRebarDesignType= idRebarDesType,
-                    IDRebarBarType = idRebarBarType
+                    IDRebarBarType = idRebarBarType,
+                    CreateDate = DateTime.Now
                 };
                 db.ARStirrupDesigns.Add(obj);
             }
             else
             {
                 var obj = res.First();
-                obj.IDStirrupFamilyType = idStirFamType;
                 obj.IDRebarBarType = idRebarBarType;
             }
             db.SaveChanges();
         }
-        public long GetId(long idRebarDesType, long idDesLevel)
+        public long GetId(long idStirFamType, long idDesLevel)
         {
-            var res = db.ARStirrupDesigns.Where(x => x.IDDesignLevel == idDesLevel && x.IDRebarDesignType == idRebarDesType);
+            var res = db.ARStirrupDesigns.Where(x => x.IDDesignLevel == idDesLevel && x.IDStirrupFamilyType == idStirFamType);
             if (res.Count() == 0)
             {
                 return -1;

@@ -21,7 +21,9 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDStandardDesignGeneral = idDesignGeneral,
                     IDStandardStartZType = idStandardDesignGeneral,
                     Z1 = z1,
-                    Z2 = z2
+                    Z2 = z2,
+                    CreateDate = DateTime.Now
+
                 };
                 db.ARStandardStartZs.Add(obj);
             }

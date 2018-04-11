@@ -79,9 +79,11 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -105,11 +107,13 @@
     <Compile Include="Database\AutoRebaring\Dao\MacAddressDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\EDParameterTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\MarkDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\OtherParameterDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\ProjectDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\RebarBarTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\RebarDesignTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\RebarTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\RebarVericalParametersDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StandardChosenDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\StandardDesignDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\StandardDesignParameterTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\StandardDesignParameterValueDao.cs" />
@@ -121,10 +125,12 @@
     <Compile Include="Database\AutoRebaring\Dao\StirrupDesignDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\StirrupDesignParameterTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\StirrupDesignParameterValueDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\StirrupFamilyNameDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\StirrupFamilyTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\UserDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\UserProjectDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\UserTypeDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\View3dDao.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARAnchorParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARCoverParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARDesignGeneral.cs" />
@@ -140,6 +146,7 @@
     <Compile Include="Database\AutoRebaring\EF\ARLockheadParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARMacAddress.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARMark.cs" />
+    <Compile Include="Database\AutoRebaring\EF\AROtherParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARProject.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARRebarBarType.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARRebarDesignType.cs" />
@@ -157,12 +164,16 @@
     <Compile Include="Database\AutoRebaring\EF\ARStirrupDesign.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARStirrupDesignParameterType.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARStirrupDesignParameterValue.cs" />
+    <Compile Include="Database\AutoRebaring\EF\ARStirrupFamilyName.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARStirrupFamilyType.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARStirrupParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARUser.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARUserProject.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARUserType.cs" />
+    <Compile Include="Database\AutoRebaring\EF\ARView3d.cs" />
     <Compile Include="Database\AutoRebaring\EF\AutoRebaringDbContext.cs" />
+    <Compile Include="Database\BIM_PORTAL\BIM_PORTALDbContext.cs" />
+    <Compile Include="Database\BIM_PORTAL\Projects.cs" />
     <Compile Include="ElementInfo\Body.cs" />
     <Compile Include="ElementInfo\DesignInfo.cs" />
     <Compile Include="ElementInfo\ElementInfo.cs" />
@@ -178,6 +189,7 @@
     <Compile Include="Form\InputForm.xaml.cs">
       <DependentUpon>InputForm.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Form\WindowForm.cs" />
     <Compile Include="Others\ComputerInfo.cs" />
     <Compile Include="Others\Encryting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class UserProjectDao
+    public class UserProjectDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public UserProjectDao() { }
@@ -22,16 +22,19 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDUser = idUser,
                     IDUserType = idUserType,
                     IDMacAddress = idMacAddress,
-                    IsActive = false
+                    IsActive = false,
+                    CreateDate = DateTime.Now,
+                    LastLogin = DateTime.Now
                 };
                 db.ARUserProjects.Add(obj);
             }
             else
             {
                 var obj = res.First();
+                obj.IDUserType = idUserType;
+                obj.LastLogin = DateTime.Now;
                 if (obj.IDMacAddress != idMacAddress)
                 {
-                    obj.IDUserType = idUserType;
                     obj.IDMacAddress = idMacAddress;
                     obj.IsActive = false;
                 }
@@ -46,6 +49,21 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public long GetUserId(long idProject, long idMacAddress)
+        {
+            var res = db.ARUserProjects.Where(x => x.IDProject == idProject && x.IDMacAddress == idMacAddress);
+            if (res.Count() == 0)
+            {
+                return -1;
+            }
+            return res.OrderByDescending(x=> x.LastLogin).First().IDUser;
+        }
+        public int GetStatus(long id)
+        {
+            var res = db.ARUserProjects.Where(x => x.ID == id);
+            if (res.Count() == 0) return -1;
+            return res.First().IsActive ? 1 : 0;
         }
     }
 }

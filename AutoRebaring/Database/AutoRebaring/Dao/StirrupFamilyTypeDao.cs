@@ -7,18 +7,48 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StirrupFamilyTypeDao
+    public class StirrupFamilyTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StirrupFamilyTypeDao() { }
-        public long GetId(string type)
+        public void Update(long idProject, long idRebarDesType, long idStirFamName)
         {
-            var res = db.ARStirrupFamilyTypes.Where(x => x.Type == type);
+            var res = db.ARStirrupFamilyTypes.Where(x=> x.IDProject == idProject && x.IDRebarDesignType == idRebarDesType);
+            if (res.Count() == 0)
+            {
+                var obj = new ARStirrupFamilyType()
+                {
+                    IDProject = idProject,
+                    IDRebarDesignType = idRebarDesType,
+                    IDStirrupFamilyName = idStirFamName,
+                    CreateDate = DateTime.Now
+                };
+                db.ARStirrupFamilyTypes.Add(obj);
+            }
+            else
+            {
+                var obj = res.First();
+                obj.IDStirrupFamilyName = idStirFamName;
+            }
+            db.SaveChanges();
+        }
+        public long GetId(long idProject, long idRebarDesType)
+        {
+            var res = db.ARStirrupFamilyTypes.Where(x => x.IDProject == idProject && x.IDRebarDesignType == idRebarDesType);
             if (res.Count() == 0)
             {
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARStirrupFamilyType GetStirrupFamilyType(long id)
+        {
+            var res = db.ARStirrupFamilyTypes.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

@@ -20,7 +20,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 {
                     IDDesignLevel = idDesignLevel,
                     IDStandardDesignParameterType = idStandDesParamType,
-                    Value = value
+                    Value = value,
+                    CreateDate = DateTime.Now
                 };
                 db.ARStandardDesignParameterValues.Add(obj);
             }

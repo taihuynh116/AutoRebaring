@@ -20,6 +20,37 @@ namespace AutoRebaring.Constant
         public const string B1Param_Wall = "Length";
         public const string B2Param_Wall = "Width";
 
-        
+        public const string StartLevelWall = "Base Constraint";
+        public const string EndLevelWall = "Top Constraint";
+        public const string StartLevelColumn = "Base Level";
+        public const string EndLevelColumn = "Top Level";
+
+        public const string WrongPassword = "Tên đăng nhập, mật khẩu không đúng!";
+        public const string NonAuthorized = "Tài khoản của bạn không được phân quyền vào dự án này!";
+        public const string AuthorizationNotExisted = "Tài khoản bạn không tồn tại, liên hệ bộ phận kĩ thuật để xử lý vấn đề.";
+        public const string AuthorizationNotActive = "Tài khoản bạn chưa được kích hoạt, liên hệ bộ phận kĩ thuật để xử lý vấn đề.";
+
+        public const string User = "User";
+        public const string Admin = "Admin";
+
+        public const string Column = "Column";
+        public const string Wall = "Wall";
+
+        public const string Standard = "Standard";
+        public const string Stirrup = "Stirrup";
+
+        public const string FitL = "FitL";
+        public const string FitL2 = "FitL2";
+        public const string FitL3 = "FitL3";
+        public const string ImplantL = "ImplantL";
+        public const string ImplantL2 = "ImplantL2";
+
+        public const string CoverStirrup = "CoverStirrup";
+        public const string EdgeStandard = "EdgeStandard";
+        public const string MiddleStandard = "MiddleStandard";
+        public const string EdgeCoverStirrup = "EdgeCoverStirrup";
+        public const string CStirrup = "CStirrup";
+
+        public const string Name = "Name";
     }
 }

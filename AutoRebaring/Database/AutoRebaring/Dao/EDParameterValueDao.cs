@@ -20,7 +20,9 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 {
                     IDParameterType= idParamType,
                     IDMark = idMark,
-                    Value = value
+                    Value = value,
+                    CreateDate = DateTime.Now
+
                 };
                 db.AREDParameterValues.Add(obj);
             }

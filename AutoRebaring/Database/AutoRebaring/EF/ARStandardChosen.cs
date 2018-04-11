@@ -19,13 +19,9 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public double Lmin { get; set; }
 
-        [Required]
-        [StringLength(10)]
-        public string Step { get; set; }
+        public double Step { get; set; }
 
-        [Required]
-        [StringLength(10)]
-        public string LImplantMax { get; set; }
+        public double LImplantMax { get; set; }
 
         public virtual ARProject ARProject { get; set; }
     }

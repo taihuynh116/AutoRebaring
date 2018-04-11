@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class LockheadParametersDao
+    public class LockheadParametersDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public LockheadParametersDao() { }
-        public void Update(long idProject, double shortenLimit, int lockheadMulti, double lockheadConcCover, double smallConcCover)
+        public void Update(long idProject, double shortenLimit, int lockheadMulti, double lockheadConcCover, double smallConcCover, double lhRatio)
         {
             var res = db.ARLockheadParameters.Where(x => x.IDProject == idProject);
             if (res.Count() == 0)
@@ -22,7 +22,9 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     ShortenLimit = shortenLimit,
                     LockheadMutiply = lockheadMulti,
                     LockheadConcreteCover = lockheadConcCover,
-                    SmallConcreteCover = smallConcCover
+                    SmallConcreteCover = smallConcCover,
+                    LHRatio = lhRatio,
+                    CreateDate = DateTime.Now
                 };
                 db.ARLockheadParameters.Add(obj);
             }
@@ -33,6 +35,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 obj.LockheadMutiply = lockheadMulti;
                 obj.LockheadConcreteCover = lockheadConcCover;
                 obj.SmallConcreteCover = smallConcCover;
+                obj.LHRatio = lhRatio;
             }
             db.SaveChanges();
         }
@@ -44,6 +47,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARLockheadParameter GetLockheadParameter(long id)
+        {
+            var res = db.ARLockheadParameters.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

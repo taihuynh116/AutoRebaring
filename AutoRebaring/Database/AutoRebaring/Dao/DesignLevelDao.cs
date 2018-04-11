@@ -19,7 +19,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 var obj = new ARDesignLevel()
                 {
                     IDMark = idmark,
-                    IDDesignLevel = idDesignLevel
+                    IDDesignLevel = idDesignLevel,
+                    CreateDate = DateTime.Now
                 };
                 db.ARDesignLevels.Add(obj);
             }

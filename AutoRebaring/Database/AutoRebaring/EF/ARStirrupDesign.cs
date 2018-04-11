@@ -15,8 +15,6 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public long IDStirrupFamilyType { get; set; }
 
-        public long IDRebarDesignType { get; set; }
-
         public long IDRebarBarType { get; set; }
 
         public long IDDesignLevel { get; set; }
@@ -24,8 +22,6 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual ARDesignLevel ARDesignLevel { get; set; }
 
         public virtual ARRebarBarType ARRebarBarType { get; set; }
-
-        public virtual ARRebarDesignType ARRebarDesignType { get; set; }
 
         public virtual ARStirrupFamilyType ARStirrupFamilyType { get; set; }
     }

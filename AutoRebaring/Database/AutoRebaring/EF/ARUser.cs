@@ -20,7 +20,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public DateTime CreateDate { get; set; }
 
         [Required]
-        [StringLength(30)]
+        [StringLength(50)]
         public string Username { get; set; }
 
         [Required]

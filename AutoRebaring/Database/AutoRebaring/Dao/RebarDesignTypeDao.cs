@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class RebarDesignTypeDao
+    public class RebarDesignTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public RebarDesignTypeDao() { }
-        public long GetId(string type)
+        public long GetId(long idElemType, long idRebarType, string type)
         {
-            var res = db.ARRebarDesignTypes.Where(x => x.Type == type);
+            var res = db.ARRebarDesignTypes.Where(x => x.IDElementType == idElemType && x.IDRebarType == idRebarType && x.Type == type);
             if (res.Count() == 0)
             {
                 return -1;

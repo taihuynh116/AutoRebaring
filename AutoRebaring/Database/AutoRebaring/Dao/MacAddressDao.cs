@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class MacAddressDao
+    public class MacAddressDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public MacAddressDao() { }
@@ -18,7 +18,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             {
                 var obj = new ARMacAddress()
                 {
-                    MacAddress = macAddress
+                    MacAddress = macAddress,
+                    CreateDate = DateTime.Now
                 };
                 db.ARMacAddresses.Add(obj);
             }

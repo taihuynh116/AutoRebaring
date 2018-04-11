@@ -21,7 +21,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDMark = idMark,
                     IDStartLevel = idStartLevel,
                     IDEndLevel = idEndLevel,
-                    IDStandardEndType = idStandardEndType
+                    IDStandardEndType = idStandardEndType,
+                    CreateDate= DateTime.Now
                 };
                 db.ARDesignGenerals.Add(obj);
             }

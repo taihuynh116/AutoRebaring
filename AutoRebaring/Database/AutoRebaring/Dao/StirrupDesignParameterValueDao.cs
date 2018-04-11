@@ -20,7 +20,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 {
                     IDDesignLevel = idDesignLevel,
                     IDStirrupDesignParameterType = idStirDesParamType,
-                    Value = value
+                    Value = value,
+                    CreateDate = DateTime.Now
                 };
                 db.ARStirrupDesignParameterValues.Add(obj);
             }

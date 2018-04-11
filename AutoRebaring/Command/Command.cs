@@ -4,6 +4,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using AutoRebaring.Form;
 using Geometry;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,9 @@ using System.Threading.Tasks;
 namespace AutoRebaring.Command
 {
     [Transaction(TransactionMode.Manual)]
-    public class DeleteRebar : IExternalCommand
+    public class Command : IExternalCommand
     {
+        private WindowForm Window { get; set; }
         const string r = "Revit";
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -27,10 +29,12 @@ namespace AutoRebaring.Command
             Transaction tx = new Transaction(doc, "AutoRebaring");
             tx.Start();
 
-            Wall e = doc.GetElement(sel.PickObject(ObjectType.Element)) as Wall;
-            Line l = (e.Location as LocationCurve).Curve as Line;
-            SketchPlane sp = SketchPlane.Create(doc, Plane.CreateByOriginAndBasis(l.GetEndPoint(0), l.Direction.Normalize(), XYZ.BasisZ));
-            ModelCurve mc = doc.Create.NewModelCurve(l, sp);
+            Element e = doc.GetElement(sel.PickObject(ObjectType.Element, new WallAndColumnSelection()));
+
+            Window = new WindowForm();
+            Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
+            Window.Form = new InputForm(doc, e);
+            Window.ShowDialog();
 
             tx.Commit();
             return Result.Succeeded;

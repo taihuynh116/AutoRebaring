@@ -32,7 +32,7 @@ namespace AutoRebaring.Others
         /// Gets the MAC address of the current PC.
         /// </summary>
         /// <returns></returns>
-        public static PhysicalAddress GetMacAddress()
+        public static string GetMacAddress()
         {
             foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
             {
@@ -40,7 +40,7 @@ namespace AutoRebaring.Others
                 if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
                     nic.OperationalStatus == OperationalStatus.Up)
                 {
-                    return nic.GetPhysicalAddress();
+                    return nic.GetPhysicalAddress().ToString();
                 }
             }
             return null;

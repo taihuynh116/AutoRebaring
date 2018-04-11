@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class ElementTypeProjectDao
+    public class ElementTypeProjectDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public ElementTypeProjectDao() { }
-        public void Update(long idMark, int idElemType)
+        public void Update(long idMark, long idElemType)
         {
             var res = db.ARElementTypeProjects.Where(x => x.IDMark == idMark);
             if (res.Count() == 0)
@@ -19,7 +19,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 var obj = new ARElementTypeProject()
                 {
                     IDMark = idMark,
-                    IDElementType = idElemType
+                    IDElementType = idElemType,
+                    CreateDate = DateTime.Now
                 };
                 db.ARElementTypeProjects.Add(obj);
             }
@@ -38,6 +39,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARElementTypeProject GetElementTypeProject(long idMark)
+        {
+            var res = db.ARElementTypeProjects.Where(x => x.IDMark == idMark);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

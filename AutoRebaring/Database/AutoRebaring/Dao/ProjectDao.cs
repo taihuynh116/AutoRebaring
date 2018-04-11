@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class ProjectDao
+    public class ProjectDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public ProjectDao() { }
@@ -19,6 +19,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 var obj = new ARProject()
                 {
                     ID = idProject,
+                    CreateDate = DateTime.Now,
                     Name = name
                 };
                 db.ARProjects.Add(obj);

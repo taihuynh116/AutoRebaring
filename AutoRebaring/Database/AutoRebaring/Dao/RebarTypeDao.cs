@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class RebarTypeDao
+    public class RebarTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public RebarTypeDao() { }

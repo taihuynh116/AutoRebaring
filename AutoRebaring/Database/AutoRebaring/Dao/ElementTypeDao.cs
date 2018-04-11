@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class ElementTypeDao
+    public class ElementTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public ElementTypeDao() { }
@@ -19,6 +19,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public string GetElementType(long id)
+        {
+            var res = db.ARElementTypes.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First().Type;
         }
     }
 }

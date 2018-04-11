@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class RebarVericalParametersDao
+    public class RebarVericalParametersDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public RebarVericalParametersDao() { }
@@ -26,7 +26,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     TopOffsetRatio = topOffRatio,
                     OffsetInclude = offInclude,
                     OffsetRatioInclude = offRaitoInclude,
-                    IsInsideBeam = isInsideBeam
+                    IsInsideBeam = isInsideBeam,
+                    CreateDate = DateTime.Now
                 };
                 db.ARRebarVerticalParameters.Add(obj);
             }
@@ -51,6 +52,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARRebarVerticalParameter GetRebarVerticalParameter(long id)
+        {
+            var res = db.ARRebarVerticalParameters.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

@@ -12,6 +12,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ARRebarType()
         {
+            ARRebarDesignTypes = new HashSet<ARRebarDesignType>();
             ARRebarVerticalParameters = new HashSet<ARRebarVerticalParameter>();
         }
 
@@ -22,6 +23,9 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         [Required]
         [StringLength(15)]
         public string Type { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARRebarDesignType> ARRebarDesignTypes { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARRebarVerticalParameter> ARRebarVerticalParameters { get; set; }

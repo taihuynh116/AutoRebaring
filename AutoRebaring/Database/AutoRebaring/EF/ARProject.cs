@@ -22,7 +22,9 @@ namespace AutoRebaring.Database.AutoRebaring.EF
             ARRebarVerticalParameters = new HashSet<ARRebarVerticalParameter>();
             ARStandardChosens = new HashSet<ARStandardChosen>();
             ARStandardFitLengths = new HashSet<ARStandardFitLength>();
+            ARStirrupFamilyTypes = new HashSet<ARStirrupFamilyType>();
             ARUserProjects = new HashSet<ARUserProject>();
+            ARView3d = new HashSet<ARView3d>();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -65,6 +67,12 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual ICollection<ARStandardFitLength> ARStandardFitLengths { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARStirrupFamilyType> ARStirrupFamilyTypes { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARUserProject> ARUserProjects { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARView3d> ARView3d { get; set; }
     }
 }

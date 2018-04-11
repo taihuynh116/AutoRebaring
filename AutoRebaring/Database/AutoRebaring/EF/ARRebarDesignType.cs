@@ -13,7 +13,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public ARRebarDesignType()
         {
             ARStandardDesigns = new HashSet<ARStandardDesign>();
-            ARStirrupDesigns = new HashSet<ARStirrupDesign>();
+            ARStirrupFamilyTypes = new HashSet<ARStirrupFamilyType>();
         }
 
         public long ID { get; set; }
@@ -22,16 +22,20 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public long IDElementType { get; set; }
 
+        public long IDRebarType { get; set; }
+
         [Required]
-        [StringLength(15)]
+        [StringLength(30)]
         public string Type { get; set; }
 
         public virtual ARElementType ARElementType { get; set; }
+
+        public virtual ARRebarType ARRebarType { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARStandardDesign> ARStandardDesigns { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ARStirrupDesign> ARStirrupDesigns { get; set; }
+        public virtual ICollection<ARStirrupFamilyType> ARStirrupFamilyTypes { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class DevelopmentParametersDao
+    public class DevelopmentParametersDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public DevelopmentParametersDao() { }
@@ -26,7 +26,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     DevelopmentErrorInclude = devErrInclude,
                     DevelopmentLevelOffsetAllowed = devLevelOffAllowed,
                     DevelopmentLevelOffsetInclude = devLevelOffInclude,
-                    ReinforcementStirrupInclude = reinforceStirrInclude
+                    ReinforcementStirrupInclude = reinforceStirrInclude,
+                    CreateDate = DateTime.Now
                 };
                 db.ARDevelopmentParameters.Add(obj);
             }
@@ -52,6 +53,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARDevelopmentParameter GetDevelopmentParameter(long id)
+        {
+            var res = db.ARDevelopmentParameters.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

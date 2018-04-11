@@ -22,6 +22,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public double SmallConcreteCover { get; set; }
 
+        public double LHRatio { get; set; }
+
         public virtual ARProject ARProject { get; set; }
     }
 }

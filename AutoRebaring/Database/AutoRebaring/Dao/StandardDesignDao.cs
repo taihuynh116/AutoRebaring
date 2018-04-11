@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StandardDesignDao
+    public class StandardDesignDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StandardDesignDao() { }
@@ -20,7 +20,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 {
                     IDDesignLevel = idDesLevel,
                     IDRebarDesignType = idRebarDesType,
-                    IDRebarBarType = idRebarBarType
+                    IDRebarBarType = idRebarBarType,
+                    CreateDate = DateTime.Now
                 };
                 db.ARStandardDesigns.Add(obj);
             }

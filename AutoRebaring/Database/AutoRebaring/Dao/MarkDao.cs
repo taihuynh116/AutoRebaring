@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class MarkDao
+    public class MarkDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public MarkDao() { }
@@ -19,7 +19,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 var obj = new ARMark()
                 {
                     IDProject = idProject,
-                    Mark = mark
+                    Mark = mark,
+                    CreateDate = DateTime.Now
                 };
                 db.ARMarks.Add(obj);
             }
@@ -33,6 +34,12 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public List<string> GetAllMarkNames (long idProject)
+        {
+            var res = db.ARMarks.Where(x => x.IDProject == idProject);
+            if (res.Count() == 0) return new List<string>();
+            return res.OrderByDescending(x => x.CreateDate).Select(x => x.Mark).ToList();
         }
     }
 }

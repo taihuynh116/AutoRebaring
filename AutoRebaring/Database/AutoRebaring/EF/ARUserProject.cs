@@ -9,7 +9,6 @@ namespace AutoRebaring.Database.AutoRebaring.EF
     [Table("ARUserProject")]
     public partial class ARUserProject
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long ID { get; set; }
 
         public DateTime CreateDate { get; set; }
@@ -21,6 +20,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public long IDUser { get; set; }
 
         public long IDMacAddress { get; set; }
+
+        public DateTime LastLogin { get; set; }
 
         public bool IsActive { get; set; }
 

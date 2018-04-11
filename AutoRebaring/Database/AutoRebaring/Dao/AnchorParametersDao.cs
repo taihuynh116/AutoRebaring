@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class AnchorParametersDao
+    public class AnchorParametersDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public AnchorParametersDao() { }
@@ -19,7 +19,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 var obj = new ARAnchorParameter()
                 {
                     IDProject = idProject,
-                    AnchorMultiply = anchorMulti
+                    AnchorMultiply = anchorMulti,
+                    CreateDate = DateTime.Now
                 };
                 db.ARAnchorParameters.Add(obj);
             }
@@ -38,6 +39,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARAnchorParameter GetAnchorParameter(long id)
+        {
+            var res = db.ARAnchorParameters.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

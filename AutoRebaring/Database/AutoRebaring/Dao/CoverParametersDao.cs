@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class CoverParametersDao
+    public class CoverParametersDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public CoverParametersDao() { }
@@ -19,7 +19,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 var obj = new ARCoverParameter()
                 {
                     IDProject = idProject,
-                    ConcreteCover = concCover
+                    ConcreteCover = concCover,
+                    CreateDate = DateTime.Now
                 };
                 db.ARCoverParameters.Add(obj);
             }
@@ -38,6 +39,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARCoverParameter GetCoverParameter(long id)
+        {
+            var res = db.ARCoverParameters.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }
