@@ -33,7 +33,7 @@ namespace AutoRebaring.ElementInfo
         {
             GetPlaneInfo(doc, e);
         }
-        public PlaneInfo(IRevitInfo revitInfo, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio)
+        public PlaneInfo(IRevitInfo revitInfo, ARWallParameter wp)
         {
             Document doc = revitInfo.Document;
             Element e = revitInfo.Element;
@@ -197,15 +197,15 @@ namespace AutoRebaring.ElementInfo
         public IPlaneInfo PlaneInfoAfter { get; set; }
         #endregion
 
-        public WallPlaneInfo(IRevitInfo revitInfo, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio):base(revitInfo,edgeDimInclude,edgeRatioInclude,edgeDim, edgeRatio)
+        public WallPlaneInfo(IRevitInfo revitInfo, ARWallParameter wp):base(revitInfo,wp)
         {
-            GetFullPlaneInfo(edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio);
+            GetFullPlaneInfo(wp);
         }
-        public void GetFullPlaneInfo(bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio)
+        public void GetFullPlaneInfo(ARWallParameter wp)
         {
             double edge = 0;
-            if (edgeDimInclude) edge = edgeDim * ConstantValue.milimeter2Feet;
-            if (edgeRatioInclude) edge = Math.Max(edge, edgeRatio * B1);
+            if (wp.EdgeWidthInclude) edge = wp.EdgeWidth * ConstantValue.milimeter2Feet;
+            if (wp.EdgeRatioInclude) edge = Math.Max(edge, wp.EdgeRatio * B1);
             double middle = B1 - edge * 2;
 
             B1s = new List<double> { edge, middle, edge };

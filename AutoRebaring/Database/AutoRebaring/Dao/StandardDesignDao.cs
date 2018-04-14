@@ -41,5 +41,14 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             }
             return res.First().ID;
         }
+        public ARStandardDesign GetStandardDesign(long id)
+        {
+            var res = db.ARStandardDesigns.Where(x => x.ID==id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
+        }
     }
 }

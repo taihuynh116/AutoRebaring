@@ -4,6 +4,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
+using AutoRebaring.ElementInfo;
 using AutoRebaring.Form;
 using Geometry;
 using System;
@@ -35,6 +36,10 @@ namespace AutoRebaring.Command
             Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
             Window.Form = new InputForm(doc, e);
             Window.ShowDialog();
+
+            IInputForm inputForm = Window.Form;
+            ElementInfoCollection elemInfoCol = new ElementInfoCollection(inputForm);
+
 
             tx.Commit();
             return Result.Succeeded;

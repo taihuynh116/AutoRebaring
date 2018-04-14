@@ -24,10 +24,9 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public long IDProject { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(50)]
         public string Name { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string Title { get; set; }
 

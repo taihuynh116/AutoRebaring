@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class LevelDao
+    public class LevelDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public LevelDao() { }
-        public void Update(long idProject, string name, string title, double elevation)
+        public void Update(long idProject, string name, double elevation, string title= null)
         {
             var res = db.ARLevels.Where(x => x.IDProject == idProject && x.Name == name);
             if (res.Count() == 0)
@@ -29,7 +29,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             else
             {
                 var obj = res.First();
-                obj.Title = title;
+                if (title != null)
+                    obj.Title = title;
                 obj.Elevation = elevation;
             }
             db.SaveChanges();
@@ -42,6 +43,21 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public List<ARLevel> GetLevels(long idProject)
+        {
+            var res = db.ARLevels.Where(x => x.IDProject == idProject);
+            if (res.Count() == 0) return new List<ARLevel>();
+            return res.ToList();
+        }
+        public ARLevel GetLevel(long id)
+        {
+            var res = db.ARLevels.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace AutoRebaring.ElementInfo
         IVerticalInfo VerticalInfo { get; set; }
         IDesignInfo DesignInfo { get; set; }
         IRevitInfo RevitInfo { get; set; }
-        void GetPlaneInfo(ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio);
+        void GetPlaneInfo(ARElementType elemType, ARWallParameter wp);
         void GetDesignInfo(List<IDesignInfo> designInfos);
         void GetVerticalInfo(ARElementType elemType);
         void GetStandardSpacing(ARCoverParameter cp);
@@ -142,6 +142,14 @@ namespace AutoRebaring.ElementInfo
     }
     public interface IInputForm
     {
+        Document Document { get; set; }
+        Element Element { get; set; }
+        ARElementType ElementType { get; set; }
+        ARWallParameter WallParameter { get; set; }
+        ARCoverParameter CoverParameter { get; set; }
+        ARAnchorParameter AnchorParameter { get; set; }
+        ARDevelopmentParameter DevelopmentParameter { get; set; }
+        ARLockheadParameter LockheadParameter { get; set; }
         List<IDesignInfo> DesignInfos { get; set; }
     }
 }

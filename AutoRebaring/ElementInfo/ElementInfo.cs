@@ -20,7 +20,7 @@ namespace AutoRebaring.ElementInfo
         public IStandardPlaneInfo StandardPlaneInfo { get; set; }
 
         public ElementInfo() { }
-        public void GetPlaneInfo(ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio)
+        public void GetPlaneInfo(ARElementType elemType, ARWallParameter wp)
         {
             switch (elemType.Type)
             {
@@ -28,7 +28,7 @@ namespace AutoRebaring.ElementInfo
                     PlaneInfo = new ColumnPlaneInfo(RevitInfo);
                     break;
                 case "Wall":
-                    PlaneInfo = new WallPlaneInfo(RevitInfo, edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio);
+                    PlaneInfo = new WallPlaneInfo(RevitInfo, wp);
                     break;
             }
         }
@@ -39,7 +39,7 @@ namespace AutoRebaring.ElementInfo
             {
                 if (GeomUtil.IsSmaller(RevitInfo.Elevation, designInfos[j].Level.Elevation))
                 {
-                    DesignInfo = designInfos[j - 1];
+                    DesignInfo = designInfos[j==0 ? j:j - 1];
                     isDesignAssigned = true;
                     break;
                 }
@@ -52,7 +52,7 @@ namespace AutoRebaring.ElementInfo
             }
             if (!isDesignAssigned)
             {
-                DesignInfo = designInfos[designInfos.Count];
+                DesignInfo = designInfos[designInfos.Count-1];
             }
         }
         public void GetVerticalInfo(ARElementType elemType)

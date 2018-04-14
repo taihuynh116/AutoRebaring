@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StirrupDesignDao
+    public class StirrupDesignDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StirrupDesignDao() { }
@@ -40,6 +40,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARStirrupDesign GetStirrupDesign(long id)
+        {
+            var res = db.ARStirrupDesigns.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

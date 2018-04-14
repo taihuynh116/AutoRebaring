@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class DesignGeneralDao
+    public class DesignGeneralDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public DesignGeneralDao() { }
@@ -36,6 +36,24 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public long GetId(long idMark)
+        {
+            var res = db.ARDesignGenerals.Where(x => x.IDMark == idMark);
+            if (res.Count() == 0)
+            {
+                return -1;
+            }
+            return res.OrderByDescending(x => x.CreateDate).First().ID;
+        }
+        public ARDesignGeneral GetDesignGeneral(long id)
+        {
+            var res = db.ARDesignGenerals.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

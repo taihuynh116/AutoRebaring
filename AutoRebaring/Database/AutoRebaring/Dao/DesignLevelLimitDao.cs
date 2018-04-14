@@ -7,43 +7,42 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    public class DesignLevelDao
+    public class DesignLevelLimitDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
-        public DesignLevelDao() { }
-        public void Update(long idmark, long idDesignLevel, int numeric)
+        public DesignLevelLimitDao() { }
+        public void Update(long idmark, int limit)
         {
-            var res = db.ARDesignLevels.Where(x => x.IDMark == idmark && x.Numeric == numeric);
+            var res = db.ARDesignLevelLimits.Where(x => x.IDMark == idmark);
             if (res.Count() == 0)
             {
-                var obj = new ARDesignLevel()
+                var obj = new ARDesignLevelLimit()
                 {
                     IDMark = idmark,
-                    Numeric = numeric,
-                    IDDesignLevel = idDesignLevel,
+                    Limit = limit,
                     CreateDate = DateTime.Now
                 };
-                db.ARDesignLevels.Add(obj);
+                db.ARDesignLevelLimits.Add(obj);
             }
             else
             {
-                var obj = new ARDesignLevel();
-                obj.IDDesignLevel = idDesignLevel;
+                var obj = res.First();
+                obj.Limit = limit;
             }
             db.SaveChanges();
         }
-        public long GetId(long idmark, int numeric)
+        public long GetId(long idmark)
         {
-            var res = db.ARDesignLevels.Where(x => x.IDMark == idmark && x.Numeric == numeric);
+            var res = db.ARDesignLevelLimits.Where(x => x.IDMark == idmark);
             if (res.Count() == 0)
             {
                 return -1;
             }
             return res.First().ID;
         }
-        public ARDesignLevel GetDesignLevel(long id)
+        public ARDesignLevelLimit GetDesignLevelLimit(long id)
         {
-            var res = db.ARDesignLevels.Where(x => x.ID == id);
+            var res = db.ARDesignLevelLimits.Where(x => x.ID == id);
             if (res.Count() == 0)
             {
                 return null;

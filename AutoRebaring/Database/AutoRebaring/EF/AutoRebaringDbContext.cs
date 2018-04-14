@@ -16,6 +16,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual DbSet<ARCoverParameter> ARCoverParameters { get; set; }
         public virtual DbSet<ARDesignGeneral> ARDesignGenerals { get; set; }
         public virtual DbSet<ARDesignLevel> ARDesignLevels { get; set; }
+        public virtual DbSet<ARDesignLevelLimit> ARDesignLevelLimits { get; set; }
         public virtual DbSet<ARDevelopmentParameter> ARDevelopmentParameters { get; set; }
         public virtual DbSet<ARDimensionParameterType> ARDimensionParameterTypes { get; set; }
         public virtual DbSet<ARDimensionParameterValue> ARDimensionParameterValues { get; set; }
@@ -39,6 +40,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual DbSet<ARStandardDesignParameterValue> ARStandardDesignParameterValues { get; set; }
         public virtual DbSet<ARStandardEndType> ARStandardEndTypes { get; set; }
         public virtual DbSet<ARStandardFitLength> ARStandardFitLengths { get; set; }
+        public virtual DbSet<ARStandardFitLimit> ARStandardFitLimits { get; set; }
         public virtual DbSet<ARStandardFitType> ARStandardFitTypes { get; set; }
         public virtual DbSet<ARStandardStartZ> ARStandardStartZs { get; set; }
         public virtual DbSet<ARStandardStartZType> ARStandardStartZTypes { get; set; }
@@ -51,6 +53,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual DbSet<ARUserProject> ARUserProjects { get; set; }
         public virtual DbSet<ARUserType> ARUserTypes { get; set; }
         public virtual DbSet<ARView3d> ARView3d { get; set; }
+        public virtual DbSet<ARWallParameter> ARWallParameters { get; set; }
         public virtual DbSet<ARStirrupParameter> ARStirrupParameters { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -137,9 +140,11 @@ namespace AutoRebaring.Database.AutoRebaring.EF
                 .HasForeignKey(e => e.IDElementType)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ARLevel>()
-                .Property(e => e.Name)
-                .IsUnicode(false);
+            modelBuilder.Entity<ARElementType>()
+                .HasMany(e => e.ARStandardStartZTypes)
+                .WithRequired(e => e.ARElementType)
+                .HasForeignKey(e => e.IDElementType)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ARLevel>()
                 .Property(e => e.Title)
@@ -190,6 +195,12 @@ namespace AutoRebaring.Database.AutoRebaring.EF
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ARMark>()
+                .HasMany(e => e.ARDesignLevelLimits)
+                .WithRequired(e => e.ARMark)
+                .HasForeignKey(e => e.IDMark)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARMark>()
                 .HasMany(e => e.AREDParameterValues)
                 .WithOptional(e => e.ARMark)
                 .HasForeignKey(e => e.IDMark);
@@ -202,6 +213,12 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
             modelBuilder.Entity<ARMark>()
                 .HasMany(e => e.AROtherParameters)
+                .WithRequired(e => e.ARMark)
+                .HasForeignKey(e => e.IDMark)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARMark>()
+                .HasMany(e => e.ARWallParameters)
                 .WithRequired(e => e.ARMark)
                 .HasForeignKey(e => e.IDMark)
                 .WillCascadeOnDelete(false);
@@ -247,12 +264,6 @@ namespace AutoRebaring.Database.AutoRebaring.EF
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ARProject>()
-                .HasMany(e => e.ARMarks)
-                .WithRequired(e => e.ARProject)
-                .HasForeignKey(e => e.IDProject)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<ARProject>()
                 .HasMany(e => e.ARRebarVerticalParameters)
                 .WithRequired(e => e.ARProject)
                 .HasForeignKey(e => e.IDProject)
@@ -266,6 +277,12 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
             modelBuilder.Entity<ARProject>()
                 .HasMany(e => e.ARStandardFitLengths)
+                .WithRequired(e => e.ARProject)
+                .HasForeignKey(e => e.IDProject)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARProject>()
+                .HasMany(e => e.ARStandardFitLimits)
                 .WithRequired(e => e.ARProject)
                 .HasForeignKey(e => e.IDProject)
                 .WillCascadeOnDelete(false);
@@ -362,6 +379,12 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
             modelBuilder.Entity<ARStandardFitType>()
                 .HasMany(e => e.ARStandardFitLengths)
+                .WithRequired(e => e.ARStandardFitType)
+                .HasForeignKey(e => e.IDStandardFitType)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARStandardFitType>()
+                .HasMany(e => e.ARStandardFitLimits)
                 .WithRequired(e => e.ARStandardFitType)
                 .HasForeignKey(e => e.IDStandardFitType)
                 .WillCascadeOnDelete(false);

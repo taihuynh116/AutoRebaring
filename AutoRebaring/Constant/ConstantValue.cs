@@ -15,8 +15,8 @@ namespace AutoRebaring.Constant
         public const double feet2MiliMeter = feet2Meter * 1000;
         public const double milimeter2Feet = 1 / feet2MiliMeter;
 
-        public const string B1Param_Column = "b_cot";
-        public const string B2Param_Column = "h_cot";
+        public const string B1Param_Column = "b";
+        public const string B2Param_Column = "h";
         public const string B1Param_Wall = "Length";
         public const string B2Param_Wall = "Width";
 
@@ -52,5 +52,28 @@ namespace AutoRebaring.Constant
         public const string CStirrup = "CStirrup";
 
         public const string Name = "Name";
+
+        public const string Edge = "Edge";
+        public const string Middle = "Middle";
+
+        public const string Starter = "Starter";
+        public const string Lockhead = "Lockhead";
+
+        public const string B1 = "B1";
+        public const string B2 = "B2";
+        public const string NE11 = "NE11";
+        public const string NE12 = "NE12";
+        public const string CE12 = "CE12";
+        public const string NE2 = "NE2";
+        public const string DE2 = "DE2";
+        public const string NM = "NM";
+
+        public const string TB1 = "TB1";
+        public const string TB2 = "TB2";
+        public const string M1 = "M1";
+        public const string M2 = "M2";
+
+        public const string KieuThepDoc = "Kiểu thép dọc:";
+        public const string Vungbien = "Vùng biên:";
     }
 }

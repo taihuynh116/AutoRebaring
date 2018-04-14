@@ -38,6 +38,7 @@ namespace AutoRebaring.ElementInfo
             BotTopSpacings = new List<double> { bt1, bt2 };
             MiddleSpacings = new List<double> { m1, m2 };
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
+            StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
         public ColumnDesignInfo(Level level, List<RebarBarType> standTypes, List<RebarHookType> hookTypes, List<int> standNumbers, List<RebarBarType> stirrTypes, List<double> btSpacs, List<double> mSpacs)
         {
@@ -49,6 +50,7 @@ namespace AutoRebaring.ElementInfo
             BotTopSpacings = btSpacs;
             MiddleSpacings = mSpacs;
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
+            StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
         public void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp)
         {
@@ -58,7 +60,7 @@ namespace AutoRebaring.ElementInfo
             StandardSpacings = new List<double>
             {
                 (pi.B1s[0] - cover)/(StandardNumbers[0]-1)*2,
-                (pi.B2s[1] - cover)/(StandardNumbers[1]-1)*2
+                (pi.B2s[0] - cover)/(StandardNumbers[1]-1)*2
             };
         }
         public void GetDesignInfo(IDesignInfo diA, IDesignInfo diB)
@@ -95,6 +97,7 @@ namespace AutoRebaring.ElementInfo
             BotTopSpacings = new List<double> { bt1, bt2 };
             MiddleSpacings = new List<double> { m1, m2 };
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
+            StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
         public WallDesignInfo(Level level, List<RebarBarType> standTypes, List<RebarHookType> hookTypes, List<int> standNumbers, List<RebarBarType> stirrTypes, List<double> btSpacs, List<double> mSpacs)
         {
@@ -106,6 +109,7 @@ namespace AutoRebaring.ElementInfo
             BotTopSpacings = btSpacs;
             MiddleSpacings = mSpacs;
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
+            StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
         public void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp)
         {

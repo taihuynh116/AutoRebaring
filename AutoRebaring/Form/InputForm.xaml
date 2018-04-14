@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AutoRebaring.Form"
-             mc:Ignorable="d" Width="1142.926" Height="950">
+             mc:Ignorable="d" Width="1140" Height="1557">
     <Grid>
         <ScrollViewer Margin="0,0,0,0" VerticalScrollBarVisibility="Visible">
             <StackPanel Orientation="Vertical">
@@ -37,12 +37,29 @@
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                     <Label Content="Mark:" Width="39"></Label>
                                     <ComboBox x:Name="cbbMark" IsEditable="True" Width="74" HorizontalAlignment="Left" Height="22" Margin="10,0,0,0" Text="" VerticalAlignment="Center" />
+                                    <Button x:Name="btnLoad" Margin="15,0,0,0" Width="40" Content="Load" Click="btnLoad_Click"></Button>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
                                     <Label Content="Type:" Width="39"></Label>
                                     <RadioButton x:Name="rbtColumn" VerticalAlignment="Center" Content="Column" Margin="10,0,0,0" Checked="rbtColumn_Checked"/>
                                     <RadioButton x:Name="rbtWall" VerticalAlignment="Center" Content="Wall" Margin="15,0,0,0" Checked="rbtColumn_Checked"></RadioButton>
                                 </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox x:Name="wallParamGrb" Header="THAM BIẾN VÁCH">
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Include" Margin="200,-5,0,0" FontWeight="Bold"></Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Bề rộng biên:"></Label>
+                                <TextBox x:Name="txtEdgeWidth" Margin="25,0,0,0" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="38" IsEnabled="False"/>
+                                <Label Content="mm" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <CheckBox x:Name="chkEdgeWidth" Margin="43,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="chkEdgeWidth_Checked" Unchecked="chkEdgeWidth_Checked"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="L/" Margin="118,0,0,0"></Label>
+                                <TextBox x:Name="txtEdgeRatio" Margin="2,0,0,0" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="27" IsEnabled="False"/>
+                                <CheckBox x:Name="chkEdgeRatio" Margin="51,0,0,0" Content="" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="chkEdgeRatio_Checked" Unchecked="chkEdgeRatio_Checked"/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>
@@ -250,7 +267,7 @@
                                             <Label Content="Đai Bao:"></Label>
                                             <ComboBox x:Name="cbbFamilyDaiBao" HorizontalAlignment="Left" Height="20" Margin="10,0,0,0" VerticalAlignment="Center" Width="130"/>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel x:Name="spDaiBien" Orientation="Horizontal">
                                             <Label x:Name="lblDaiBien" Content="Đai Biên:" Margin="0,0,0,0"></Label>
                                             <ComboBox x:Name="cbbFamilyDaiBien" HorizontalAlignment="Left" Height="20" Margin="7,0,0,0" VerticalAlignment="Center" Width="130"/>
                                         </StackPanel>
@@ -306,7 +323,7 @@
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <GroupBox x:Name="rebarDesGrb" Header="THÉP THIẾT KẾ" Height="458" Width="751" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
+                    <GroupBox x:Name="rebarDesGrb" Header="THÉP THIẾT KẾ" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Vertical">
                                 <Label Content="Phạm vi thiết kế:" FontWeight="Bold"></Label>
@@ -322,135 +339,242 @@
                                 </StackPanel>
                                 <Label Content="Thép chờ cách cao độ tầng bắt đầu:" FontWeight="Bold"></Label>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="Z1="></Label>
-                                    <TextBox x:Name="txtRebarOff1" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="38"/>
-                                    <Label Content="mm" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                                    <Label Content="Z2=" Margin="30,0,0,0"></Label>
-                                    <TextBox x:Name="txtRebarOff2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="38"/>
-                                    <Label Content="mm" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                    <StackPanel Orientation="Vertical">
+                                        <Label x:Name="lblEdgeRebarZ" Content="Vùng biên:"></Label>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Z1="></Label>
+                                            <TextBox x:Name="txtRebarZ11" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="38"/>
+                                            <Label Content="mm" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                            <Label Content="Z2=" Margin="20,0,0,0"></Label>
+                                            <TextBox x:Name="txtRebarZ12" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="38"/>
+                                            <Label Content="mm" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel x:Name="spMidRebarZ" Orientation="Vertical" Margin="50,0,0,0">
+                                        <Label Content="Vùng giữa:"></Label>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Z1="></Label>
+                                            <TextBox x:Name="txtRebarZ21" HorizontalAlignment="Left" Height="23" Margin="0,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="38"/>
+                                            <Label Content="mm" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                            <Label Content="Z2=" Margin="20,0,0,0"></Label>
+                                            <TextBox x:Name="txtRebarZ22" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="38"/>
+                                            <Label Content="mm" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                             <Label Content="Thép bố trí:" FontWeight="Bold"></Label>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Tầng bắt đầu:" FontWeight="Normal"></Label>
-                                <ComboBox x:Name="cbbDesignLevel0" HorizontalAlignment="Left" Margin="15,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignLevel1" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignLevel2" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignLevel3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignLevel4" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignLevel5" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignLevel6" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignLevel7" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel0" HorizontalAlignment="Left" Margin="15,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel1" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel2" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel4" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel5" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel6" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesLevel7" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                            </StackPanel>
+                            <Label x:Name="lblStandardType" Content="Kiểu thép dọc:" FontStyle="Italic" ></Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Label x:Name="lblStandardType1" Content="Vùng biên:" Width="86" FontWeight="Normal"></Label>
+                                <ComboBox x:Name="cbbDesStandType10" HorizontalAlignment="Left" Margin="12,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType11" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType12" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType13" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType14" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType15" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType16" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType17" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                            </StackPanel>
+                            <StackPanel x:Name="spStandardType2" Orientation="Horizontal">
+                                <Label x:Name="lblStandardType2" Content="Vùng giữa:" Width="86" FontWeight="Normal"></Label>
+                                <ComboBox x:Name="cbbDesStandType20" HorizontalAlignment="Left" Margin="12,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType21" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType22" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType23" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType24" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType25" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType26" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStandType27" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                            </StackPanel>
+                            <Label Content="Thông số bố trí:" FontStyle="Italic"></Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Label x:Name="lblDesN1" Content="NE11:" Width="77" FontWeight="Normal"></Label>
+                                <TextBox x:Name="txtDesN10" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN11" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN12" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN13" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN14" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN15" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN16" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN17" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Kiểu thép dọc:" FontWeight="Normal"></Label>
-                                <ComboBox x:Name="cbbDesignRebarType0" HorizontalAlignment="Left" Margin="12,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignRebarType1" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignRebarType2" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignRebarType3" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignRebarType4" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignRebarType5" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignRebarType6" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignRebarType7" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <Label x:Name="lblDesN2" Content="NE12:" Width="77" FontWeight="Normal"></Label>
+                                <TextBox x:Name="txtDesN20" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN21" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN22" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN23" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN24" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN25" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN26" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN27" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                            </StackPanel>
+                            <StackPanel x:Name="spDesN3" Orientation="Horizontal">
+                                <Label x:Name="lblDesN3" Content="CE12:" Width="77" FontWeight="Normal"></Label>
+                                <TextBox x:Name="txtDesN30" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN31" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN32" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN33" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN34" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN35" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN36" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN37" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                            </StackPanel>
+                            <StackPanel x:Name="spDesN4" Orientation="Horizontal">
+                                <Label x:Name="lblDesN4" Content="NE2:" Width="77" FontWeight="Normal"></Label>
+                                <TextBox x:Name="txtDesN40" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN41" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN42" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN43" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN44" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN45" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN46" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN47" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                            </StackPanel>
+                            <StackPanel x:Name="spDesN5" Orientation="Horizontal">
+                                <Label x:Name="lblDesN5" Content="DE2:" Width="77" FontWeight="Normal"></Label>
+                                <TextBox x:Name="txtDesN50" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN51" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN52" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN53" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN54" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN55" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN56" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN57" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                            </StackPanel>
+                            <StackPanel x:Name="spEdgeSum" Orientation="Horizontal">
+                                <Label x:Name="lblEdgeSum" Content="Tổng biên:" Width="89"></Label>
+                                <Label x:Name="txtEdgeDesSum0" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="34,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtEdgeDesSum1" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtEdgeDesSum2" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtEdgeDesSum3" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtEdgeDesSum4" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtEdgeDesSum5" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtEdgeDesSum6" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtEdgeDesSum7" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                            </StackPanel>
+                            <StackPanel x:Name="spDesN6" Orientation="Horizontal">
+                                <Label x:Name="lblDesN6" Content="NM:" Width="77" FontWeight="Normal"></Label>
+                                <TextBox x:Name="txtDesN60" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN61" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN62" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN63" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN64" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN65" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN66" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesN67" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                            </StackPanel>
+                            <StackPanel x:Name="spMidSum" Orientation="Horizontal">
+                                <Label x:Name="lblMidSum" Content="Tổng giữa:" Width="89"></Label>
+                                <Label x:Name="txtMidDesSum0" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="34,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtMidDesSum1" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtMidDesSum2" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtMidDesSum3" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtMidDesSum4" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtMidDesSum5" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtMidDesSum6" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtMidDesSum7" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Số lượng B1:" FontWeight="Normal"></Label>
-                                <TextBox x:Name="txtDesignN10" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN11" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN12" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN13" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN14" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN15" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN16" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN17" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <Label Content="Tổng số lượng:"></Label>
+                                <Label x:Name="txtDesSum0" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="34,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtDesSum1" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtDesSum2" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtDesSum3" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtDesSum4" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtDesSum5" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtDesSum6" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
+                                <Label x:Name="txtDesSum7" Content="b2=" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0" HorizontalContentAlignment="Right" Width="50"/>
                             </StackPanel>
+                            <Label Content="Thông số thép đai:"  FontStyle="Italic"></Label>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Số lượng B2:" FontWeight="Normal"></Label>
-                                <TextBox x:Name="txtDesignN20" HorizontalAlignment="Left" Height="23" Margin="46,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN21" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN22" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN23" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN24" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN25" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN26" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignN27" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <Label Content="Kiểu đai bao:" FontWeight="Normal" Width="86"></Label>
+                                <ComboBox x:Name="cbbDesStirType10" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType11" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType12" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType13" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType14" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType15" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType16" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType17" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Tổng số lượng:" FontWeight="Normal"></Label>
-                                <Label x:Name="txtDesignSum0" Content="b2=" HorizontalAlignment="Left" Margin="50,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label x:Name="txtDesignSum1" Content="b2=" HorizontalAlignment="Left" Margin="49,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label x:Name="txtDesignSum2" Content="b2=" HorizontalAlignment="Left" Margin="49,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label x:Name="txtDesignSum3" Content="b2=" HorizontalAlignment="Left" Margin="49,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label x:Name="txtDesignSum4" Content="b2=" HorizontalAlignment="Left" Margin="49,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label x:Name="txtDesignSum5" Content="b2=" HorizontalAlignment="Left" Margin="49,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label x:Name="txtDesignSum6" Content="b2=" HorizontalAlignment="Left" Margin="49,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                                <Label x:Name="txtDesignSum7" Content="b2=" HorizontalAlignment="Left" Margin="49,0,0,0" TextBlock.TextAlignment="Right" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Kiểu đai ngoài:" FontWeight="Normal"></Label>
-                                <ComboBox x:Name="cbbDesignStirrupType10" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType11" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType12" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType13" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType14" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType15" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType16" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType17" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                            <StackPanel x:Name="spEdgeCoverStir" Orientation="Horizontal">
+                                <Label Content="Kiểu đai biên:" FontWeight="Normal" Width="86"></Label>
+                                <ComboBox x:Name="cbbDesStirType20" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType21" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType22" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType23" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType24" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType25" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType26" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType27" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Bước trên/dưới:" FontWeight="Normal"></Label>
-                                <TextBox x:Name="txtDesignStirrupTB10" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB11" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB12" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB13" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB14" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB15" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB16" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB17" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB10" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB11" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB12" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB13" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB14" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB15" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB16" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB17" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Bước giữa:" FontWeight="Normal"></Label>
-                                <TextBox x:Name="txtDesignStirrupM10" HorizontalAlignment="Left" Height="23" Margin="57,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM11" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM12" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM13" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM14" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM15" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM16" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM17" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM10" HorizontalAlignment="Left" Height="23" Margin="57,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM11" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM12" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM13" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM14" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM15" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM16" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM17" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Kiểu đai trong:" FontWeight="Normal"></Label>
-                                <ComboBox x:Name="cbbDesignStirrupType20" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType21" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType22" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType23" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType24" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType25" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType26" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
-                                <ComboBox x:Name="cbbDesignStirrupType27" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <Label Content="Kiểu đai C:" FontWeight="Normal" Width="86"></Label>
+                                <ComboBox x:Name="cbbDesStirType30" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType31" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType32" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType33" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType34" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType35" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType36" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
+                                <ComboBox x:Name="cbbDesStirType37" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Bước trên/dưới:" FontWeight="Normal"></Label>
-                                <TextBox x:Name="txtDesignStirrupTB20" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB21" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB22" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB23" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB24" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB25" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB26" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupTB27" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB20" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB21" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB22" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB23" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB24" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB25" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB26" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirTB27" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Bước giữa:" FontWeight="Normal"></Label>
-                                <TextBox x:Name="txtDesignStirrupM20" HorizontalAlignment="Left" Height="23" Margin="57,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM21" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM22" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM23" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM24" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM25" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM26" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesignStirrupM27" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM20" HorizontalAlignment="Left" Height="23" Margin="57,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM21" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM22" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM23" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM24" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM25" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM26" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtDesStirM27" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>

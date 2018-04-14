@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StandardDesignParameterValueDao
+    public class StandardDesignParameterValueDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StandardDesignParameterValueDao() { }
@@ -40,6 +40,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARStandardDesignParameterValue GetStandardDesignParameterValue(long id)
+        {
+            var res = db.ARStandardDesignParameterValues.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

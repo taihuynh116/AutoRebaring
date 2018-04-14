@@ -18,10 +18,10 @@ namespace AutoRebaring.Database.AutoRebaring.EF
             ARDimensionParameterValues = new HashSet<ARDimensionParameterValue>();
             ARLevels = new HashSet<ARLevel>();
             ARLockheadParameters = new HashSet<ARLockheadParameter>();
-            ARMarks = new HashSet<ARMark>();
             ARRebarVerticalParameters = new HashSet<ARRebarVerticalParameter>();
             ARStandardChosens = new HashSet<ARStandardChosen>();
             ARStandardFitLengths = new HashSet<ARStandardFitLength>();
+            ARStandardFitLimits = new HashSet<ARStandardFitLimit>();
             ARStirrupFamilyTypes = new HashSet<ARStirrupFamilyType>();
             ARUserProjects = new HashSet<ARUserProject>();
             ARView3d = new HashSet<ARView3d>();
@@ -55,9 +55,6 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual ICollection<ARLockheadParameter> ARLockheadParameters { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ARMark> ARMarks { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARRebarVerticalParameter> ARRebarVerticalParameters { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -65,6 +62,9 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARStandardFitLength> ARStandardFitLengths { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARStandardFitLimit> ARStandardFitLimits { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARStirrupFamilyType> ARStirrupFamilyTypes { get; set; }

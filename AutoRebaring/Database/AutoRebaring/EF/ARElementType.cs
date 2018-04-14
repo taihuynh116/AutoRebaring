@@ -16,6 +16,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
             AREDParameterTypes = new HashSet<AREDParameterType>();
             ARElementTypeProjects = new HashSet<ARElementTypeProject>();
             ARRebarDesignTypes = new HashSet<ARRebarDesignType>();
+            ARStandardStartZTypes = new HashSet<ARStandardStartZType>();
         }
 
         public long ID { get; set; }
@@ -37,5 +38,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARRebarDesignType> ARRebarDesignTypes { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARStandardStartZType> ARStandardStartZTypes { get; set; }
     }
 }

@@ -20,14 +20,14 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             }
             return res.First().ID;
         }
-        public string GetElementType(long id)
+        public ARElementType GetElementType(long id)
         {
             var res = db.ARElementTypes.Where(x => x.ID == id);
             if (res.Count() == 0)
             {
                 return null;
             }
-            return res.First().Type;
+            return res.First();
         }
     }
 }

@@ -13,6 +13,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public ARStandardFitType()
         {
             ARStandardFitLengths = new HashSet<ARStandardFitLength>();
+            ARStandardFitLimits = new HashSet<ARStandardFitLimit>();
         }
 
         public long ID { get; set; }
@@ -25,5 +26,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ARStandardFitLength> ARStandardFitLengths { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ARStandardFitLimit> ARStandardFitLimits { get; set; }
     }
 }

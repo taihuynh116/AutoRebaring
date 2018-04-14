@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StirrupDesignParameterTypeDao
+    public class StirrupDesignParameterTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StirrupDesignParameterTypeDao() { }
-        public long GetId(string param)
+        public long GetId(long idElemType, string param)
         {
-            var res = db.ARStirrupDesignParameterTypes.Where(x => x.Parameter == param);
+            var res = db.ARStirrupDesignParameterTypes.Where(x => x.IDElementType == idElemType && x.Parameter == param);
             if (res.Count() == 0)
             {
                 return -1;

@@ -26,6 +26,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public long IDDesignLevel { get; set; }
 
+        public int Numeric { get; set; }
+
         public virtual ARLevel ARLevel { get; set; }
 
         public virtual ARMark ARMark { get; set; }

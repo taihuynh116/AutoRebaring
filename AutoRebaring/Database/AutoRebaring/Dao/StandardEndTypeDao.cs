@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StandardEndTypeDao
+    public class StandardEndTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StandardEndTypeDao() { }
@@ -19,6 +19,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return -1;
             }
             return res.First().ID;
+        }
+        public ARStandardEndType GetStandardEndType(long id)
+        {
+            var res = db.ARStandardEndTypes.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
     }
 }

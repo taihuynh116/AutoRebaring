@@ -20,9 +20,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 {
                     IDProject = idProject,
                     Mark = mark,
-                    CreateDate = DateTime.Now
+                    CreateDate = DateTime.Now,
+                    LastUpdate = DateTime.Now
                 };
                 db.ARMarks.Add(obj);
+            }
+            else
+            {
+                var obj = res.First();
+                obj.LastUpdate = DateTime.Now;
             }
             db.SaveChanges();
         }
@@ -39,7 +45,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
         {
             var res = db.ARMarks.Where(x => x.IDProject == idProject);
             if (res.Count() == 0) return new List<string>();
-            return res.OrderByDescending(x => x.CreateDate).Select(x => x.Mark).ToList();
+            return res.OrderByDescending(x => x.LastUpdate).Select(x => x.Mark).ToList();
         }
     }
 }

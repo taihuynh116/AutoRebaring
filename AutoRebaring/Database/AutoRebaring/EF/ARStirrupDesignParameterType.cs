@@ -19,6 +19,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public DateTime CreateDate { get; set; }
 
+        public long IDElementType { get; set; }
+
         [Required]
         [StringLength(10)]
         public string Parameter { get; set; }

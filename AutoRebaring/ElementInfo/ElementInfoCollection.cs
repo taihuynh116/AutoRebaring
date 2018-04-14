@@ -12,7 +12,7 @@ namespace AutoRebaring.ElementInfo
 {
     public class ElementInfoCollection
     {
-        private List<IElementInfo> elemInfos;
+        private List<IElementInfo> elemInfos = new List<IElementInfo>();
         public int Count { get { return elemInfos.Count; } }
         public IEnumerator<IElementInfo> GetEnumerator() { return elemInfos.GetEnumerator(); }
         public void Sort()
@@ -24,13 +24,16 @@ namespace AutoRebaring.ElementInfo
             get { return elemInfos[i]; }
             set { elemInfos[i] = value; }
         }
-        public ElementInfoCollection(Document doc, Element e, ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio, ARCoverParameter cp, ARAnchorParameter ap, ARDevelopmentParameter dp, ARLockheadParameter lp, List<IDesignInfo> designInfos)
+        public ElementInfoCollection(IInputForm form):this(form.Document, form.Element, form.ElementType, form.WallParameter, form.CoverParameter, form.AnchorParameter, form.DevelopmentParameter, form.LockheadParameter, form.DesignInfos)
+        {
+        }
+        public ElementInfoCollection(Document doc, Element e, ARElementType elemType, ARWallParameter wp, ARCoverParameter cp, ARAnchorParameter ap, ARDevelopmentParameter dp, ARLockheadParameter lp, List<IDesignInfo> designInfos)
         {
             // F0
             GetRelatedElements(doc, e);
 
             // F1
-            GetAllParameters(elemType, edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio, cp, ap, dp,lp, designInfos);
+            GetAllParameters(elemType, wp, cp, ap, dp,lp, designInfos);
         }
         public void GetRelatedElements(Document doc, Element e)
         {
@@ -58,13 +61,13 @@ namespace AutoRebaring.ElementInfo
             }
             elemInfos.Sort(new ElementInfoSorter());
         }
-        public void GetAllParameters(ARElementType elemType, bool edgeDimInclude, bool edgeRatioInclude, double edgeDim, double edgeRatio, ARCoverParameter cp, ARAnchorParameter ap, ARDevelopmentParameter dp, ARLockheadParameter lp, List<IDesignInfo> designInfos)
+        public void GetAllParameters(ARElementType elemType, ARWallParameter wp, ARCoverParameter cp, ARAnchorParameter ap, ARDevelopmentParameter dp, ARLockheadParameter lp, List<IDesignInfo> designInfos)
         {
             // F1
             for (int i = 0; i < elemInfos.Count; i++)
             {
                 // F1.1
-                elemInfos[i].GetPlaneInfo(elemType, edgeDimInclude, edgeRatioInclude, edgeDim, edgeRatio);
+                elemInfos[i].GetPlaneInfo(elemType, wp);
                 // F1.2
                 elemInfos[i].GetDesignInfo(designInfos);
                 // F1.3

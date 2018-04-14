@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    class StandardStartZTypeDao
+    public class StandardStartZTypeDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public StandardStartZTypeDao() { }
-        public long GetId(string type)
+        public long GetId(long idElemType, string type)
         {
-            var res = db.ARStandardStartZTypes.Where(x => x.Type == type);
+            var res = db.ARStandardStartZTypes.Where(x => x.IDElementType == idElemType && x.Type == type);
             if (res.Count() == 0)
             {
                 return -1;
