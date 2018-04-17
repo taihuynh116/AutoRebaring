@@ -22,9 +22,15 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDStartLevel = idStartLevel,
                     IDEndLevel = idEndLevel,
                     IDStandardEndType = idStandardEndType,
-                    CreateDate= DateTime.Now
+                    CreateDate = DateTime.Now,
+                    LastUpdate = DateTime.Now
                 };
                 db.ARDesignGenerals.Add(obj);
+            }
+            else
+            {
+                var obj = res.First();
+                obj.LastUpdate = DateTime.Now;
             }
             db.SaveChanges();
         }
@@ -44,7 +50,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             {
                 return -1;
             }
-            return res.OrderByDescending(x => x.CreateDate).First().ID;
+            return res.OrderByDescending(x => x.LastUpdate).First().ID;
         }
         public ARDesignGeneral GetDesignGeneral(long id)
         {

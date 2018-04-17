@@ -91,7 +91,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Command\Command.cs" />
-    <Compile Include="Command\NhuCommand.cs" />
+    <Compile Include="Command\TestCommand.cs" />
     <Compile Include="Constant\ConstantValue.cs" />
     <Compile Include="Database\AutoRebaring\Dao\AnchorParametersDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\CoverParametersDao.cs" />

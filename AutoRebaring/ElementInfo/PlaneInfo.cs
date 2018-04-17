@@ -21,7 +21,6 @@ namespace AutoRebaring.ElementInfo
         public UV VectorU { get; set; }
         public UV VectorV { get; set; }
         public UV CentralPoint { get; set; }
-        public Polygon Polygon { get; set; }
 
         public PlaneInfo(IRevitInfo revitInfo)
         {
@@ -77,8 +76,6 @@ namespace AutoRebaring.ElementInfo
                 CentralPoint + VectorU * B1 / 2 + VectorV * B2 / 2,
                 CentralPoint - VectorU * B1 / 2 + VectorV * B2 / 2
             };
-
-            Polygon = new Polygon(boundPnts.Select(x => new XYZ(x.U, x.V, 0)).ToList());
         }
     }
     public class ColumnPlaneInfo : PlaneInfo, IPlaneInfo

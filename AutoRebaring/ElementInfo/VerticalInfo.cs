@@ -60,6 +60,20 @@ namespace AutoRebaring.ElementInfo
                         }
                     }
                 }
+                if (geoObj is GeometryInstance)
+                {
+                    GeometryInstance geoIns = geoObj as GeometryInstance;
+                    GeometryElement geoElem2 = geoIns.GetInstanceGeometry();
+                    foreach (GeometryObject geoObj2 in geoElem2)
+                    {
+                        s = geoObj2 as Solid;
+                        if (s != null)
+                        {
+                            if (s.Faces.Size != 0 && s.Edges.Size != 0)
+                                break;
+                        }
+                    }
+                }
             }
 
             XYZ centralPnt = s.ComputeCentroid();

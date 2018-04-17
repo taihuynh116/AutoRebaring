@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace AutoRebaring.Command
 {
     [Transaction(TransactionMode.Manual)]
-    public class Command : IExternalCommand
+    public class Test : IExternalCommand
     {
         private WindowForm Window { get; set; }
         const string r = "Revit";
@@ -29,16 +29,11 @@ namespace AutoRebaring.Command
             Selection sel = uidoc.Selection;
             Transaction tx = new Transaction(doc, "AutoRebaring");
             tx.Start();
-            
+
             Element e = doc.GetElement(sel.PickObject(ObjectType.Element, new WallAndColumnSelection()));
 
-            Window = new WindowForm();
-            Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
-            Window.Form = new InputForm(doc, e);
-            Window.ShowDialog();
-
-            IInputForm inputForm = Window.Form;
-            ElementInfoCollection elemInfoCol = new ElementInfoCollection(inputForm);
+            IRevitInfo revitInfo = new RevitInfo(doc, e);
+            IVerticalInfo  verticalInfo= new VerticalInfo(revitInfo);
 
 
             tx.Commit();

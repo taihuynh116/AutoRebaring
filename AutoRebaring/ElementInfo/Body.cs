@@ -25,7 +25,7 @@ namespace AutoRebaring.ElementInfo
         void GetRebarLocation(ARCoverParameter cp);
         void GetRebarInformation(ARAnchorParameter ap, ARDevelopmentParameter dp);
         void GetStandardPlaneInfo(ARElementType elemType, ARLockheadParameter lp);
-        void GetShortenType(IPlaneInfo planeInfo);
+        void GetShortenType(IPlaneInfo planeInfo, ARLockheadParameter lp);
         void GetDesignInfoAB(IDesignInfo diA, IDesignInfo diB);
     }
 
@@ -151,5 +151,7 @@ namespace AutoRebaring.ElementInfo
         ARDevelopmentParameter DevelopmentParameter { get; set; }
         ARLockheadParameter LockheadParameter { get; set; }
         List<IDesignInfo> DesignInfos { get; set; }
+        ARLevel StartLevel { get; set; }
+        ARLevel EndLevel { get; set; }
     }
 }

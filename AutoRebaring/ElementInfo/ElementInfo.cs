@@ -91,9 +91,9 @@ namespace AutoRebaring.ElementInfo
                     break;
             }
         }
-        public void GetShortenType(IPlaneInfo planeInfo)
+        public void GetShortenType(IPlaneInfo planeInfo, ARLockheadParameter lp)
         {
-            PlaneInfo.PlaneInfoAfter = planeInfo;
+            PlaneInfo.GetShortenType(planeInfo, lp);
         }
         public void GetDesignInfoAB(IDesignInfo diA, IDesignInfo diB)
         {

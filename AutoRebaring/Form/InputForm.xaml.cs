@@ -118,6 +118,8 @@ namespace AutoRebaring.Form
         public ARDevelopmentParameter DevelopmentParameter { get; set; }
         public ARLockheadParameter LockheadParameter { get; set; }
         public List<IDesignInfo> DesignInfos { get; set; }
+        public ARLevel StartLevel { get; set; }
+        public ARLevel EndLevel { get; set; }
         #endregion
 
         #region FormData
@@ -1973,7 +1975,12 @@ namespace AutoRebaring.Form
 
             DesignInfos = new List<IDesignInfo>();
             RebarHookType hookType = new FilteredElementCollector(Document).OfClass(typeof(RebarHookType)).Where(x => x != null).Cast<RebarHookType>().First();
-            
+
+            long idStartLevel = LevelDao.GetId(IDProject, cbbStartLevel.Text);
+            StartLevel = LevelDao.GetLevel(idStartLevel);
+            long idEndLevel = LevelDao.GetId(IDProject, cbbEndLevel.Text);
+            EndLevel = LevelDao.GetLevel(idEndLevel);
+
             var res = DesignLevelLimitDao.GetDesignLevelLimit(IDDesignLevelLimit);
             if (res != null)
             {

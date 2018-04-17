@@ -27,6 +27,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public long IDStandardEndType { get; set; }
 
+        public DateTime LastUpdate { get; set; }
+
         public virtual ARLevel ARLevel { get; set; }
 
         public virtual ARLevel ARLevel1 { get; set; }
