@@ -20,8 +20,9 @@ namespace AutoRebaring.ElementInfo
         public double B2 { get; set; }
         public UV VectorU { get; set; }
         public UV VectorV { get; set; }
+        public XYZ VectorX { get; set; }
+        public XYZ VectorY { get; set; }
         public UV CentralPoint { get; set; }
-
         public PlaneInfo(IRevitInfo revitInfo)
         {
             Document doc = revitInfo.Document;
@@ -76,6 +77,9 @@ namespace AutoRebaring.ElementInfo
                 CentralPoint + VectorU * B1 / 2 + VectorV * B2 / 2,
                 CentralPoint - VectorU * B1 / 2 + VectorV * B2 / 2
             };
+
+            VectorX = new XYZ(VectorU.U, VectorU.V, 0);
+            VectorY = new XYZ(VectorV.U, VectorV.V, 0);
         }
     }
     public class ColumnPlaneInfo : PlaneInfo, IPlaneInfo
@@ -85,8 +89,7 @@ namespace AutoRebaring.ElementInfo
         public List<double> B2s { get; set; }
         public List<List<UV>> BoundaryPointLists { get; set; }
         public List<ShortenType> ShortenTypes { get; set; }
-        public XYZ VectorX { get; set; }
-        public XYZ VectorY { get; set; }
+        
         public List<List<UV>> StandardRebarPointLists { get; set; }
         public List<List<UV>> StirrupRebarPointLists { get; set; }
         public IPlaneInfo PlaneInfoAfter { get; set; }
@@ -187,8 +190,6 @@ namespace AutoRebaring.ElementInfo
         public List<double> B2s { get; set; }
         public List<List<UV>> BoundaryPointLists { get; set; }
         public List<ShortenType> ShortenTypes { get; set; }
-        public XYZ VectorX { get; set; }
-        public XYZ VectorY { get; set; }
         public List<List<UV>> StandardRebarPointLists { get; set; }
         public List<List<UV>> StirrupRebarPointLists { get; set; }
         public IPlaneInfo PlaneInfoAfter { get; set; }

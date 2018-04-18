@@ -14,6 +14,7 @@ namespace AutoRebaring.ElementInfo
 {
     public interface IElementInfo
     {
+        int Index { get; set; }
         IPlaneInfo PlaneInfo { get; set; }
         IVerticalInfo VerticalInfo { get; set; }
         IDesignInfo DesignInfo { get; set; }
@@ -103,7 +104,15 @@ namespace AutoRebaring.ElementInfo
         double BottomOffset { get; }
         double BottomStirrup1 { get; }
         double BottomStirrup2 { get; }
+        double BottomOffsetValue { get; }
+        double EndLimit0 { get; set; }
+        double EndLimit1 { get; set; }
+        double StartLimit1 { get; set; }
+        double EndLimit2 { get; set; }
+        double StartLimit2 { get; set; }
+
         List<double> RebarDevelopmentLengths { get; set; }
+        List<bool> SmallStandardChosens { get; set; }
         List<StirrupDistribution> StirrupDistributions { get; set; }
         void GetInformation(ARRebarVerticalParameter rvpStand, ARRebarVerticalParameter rvpStirr, ARLockheadParameter lpp);
         void GetRebarInformation(IDesignInfo di, ARAnchorParameter ap, ARDevelopmentParameter dp);
@@ -153,5 +162,8 @@ namespace AutoRebaring.ElementInfo
         List<IDesignInfo> DesignInfos { get; set; }
         ARLevel StartLevel { get; set; }
         ARLevel EndLevel { get; set; }
+        ARStandardChosen StandardChosen { get; set; } 
+        List<double> LImplants { get; set; }
+        List<double> LPlusImplants { get; set; }
     }
 }

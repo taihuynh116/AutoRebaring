@@ -1,4 +1,6 @@
-﻿using Geometry;
+﻿using AutoRebaring.Database.AutoRebaring.EF;
+using AutoRebaring.ElementInfo;
+using Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -153,6 +155,10 @@ namespace AutoRebaring.RebarLogistic
                 }
             }
         }
+        public void SetImplant(List<double> lImplants, List<double> lPlusImplants, ARAnchorParameter ap, ARDevelopmentParameter dp, IElementInfo ei)
+        {
+            SetImplant(lImplants, lPlusImplants, ap.AnchorMultiply, dp.DevelopmentMultiply, ei.VerticalInfo.BottomOffsetValue, ei.VerticalInfo.TopOffset - ei.VerticalInfo.Bottom, ei.DesignInfo.DesignInfoAfter.StandardDiameters[0]);
+        }
         public void SetImplant(List<double> lImplants, List<double> lPlusImplants, int anchorMulti, int devMulti, double botOff, double lenFromTop, double diameter)
         {
             double lenBot1 = botOff + (devMulti * 2 + anchorMulti) * diameter;
@@ -199,58 +205,6 @@ namespace AutoRebaring.RebarLogistic
 
                     L1ResidualImplants.Add(LResiduals[i]);
                     L2ResidualImplants.Add(LImplants[j]);
-                }
-            }
-        }
-    }
-    public class VariableImplant
-    {
-        public List<double> Ls { get; set; }
-        public List<double> L1s { get; set; }
-        public List<double> L2s { get; set; }
-        public int Count1 { get { return L1s.Count; } }
-        public int Count2 { get { return Ls.Count; } }
-        public VariableImplant(double limplant1, double limplant2, double lmin, double lmax, double step)
-        {
-            Ls = new List<double> { limplant1, limplant2 };
-            for (double l = lmin; l <= lmax; l += step)
-            {
-                if (l == limplant1 || l == limplant2)
-                    continue;
-                Ls.Add(l);
-            }
-            L1s = new List<double>() { limplant1 };
-            L2s = new List<double>() { limplant2 };
-            for (double l = lmin; l <= lmax; l += step)
-            {
-                if (l == limplant1 || l == limplant2) continue;
-                if (l < limplant1)
-                {
-                    L1s.Add(limplant1); L2s.Add(l);
-                }
-                else
-                {
-                    L1s.Add(l); L2s.Add(limplant1);
-                }
-            }
-            for (double l = lmin; l <= lmax; l += step)
-            {
-                if (l == limplant1 || l == limplant2) continue;
-                if (l < limplant2)
-                {
-                    L1s.Add(limplant2); L2s.Add(l);
-                }
-                else
-                {
-                    L1s.Add(l); L2s.Add(limplant2);
-                }
-            }
-            for (double l1 = lmin; l1 <= lmax; l1 += step)
-            {
-                for (double l2 = lmin; l2 <= l1; l2 += step)
-                {
-                    if (l1 == limplant1 || l1 == limplant2 || l2 == limplant1 || l2 == limplant2) continue;
-                    L1s.Add(l1); L2s.Add(l2);
                 }
             }
         }

@@ -120,6 +120,7 @@ namespace AutoRebaring.Form
         public List<IDesignInfo> DesignInfos { get; set; }
         public ARLevel StartLevel { get; set; }
         public ARLevel EndLevel { get; set; }
+        public ARStandardChosen StandardChosen { get; set; }
         #endregion
 
         #region FormData
@@ -1980,6 +1981,9 @@ namespace AutoRebaring.Form
             StartLevel = LevelDao.GetLevel(idStartLevel);
             long idEndLevel = LevelDao.GetId(IDProject, cbbEndLevel.Text);
             EndLevel = LevelDao.GetLevel(idEndLevel);
+
+            long idStandChosen = StandardChosenDao.GetId(IDProject);
+            StandardChosen = StandardChosenDao.GetStandardChosen(idStandChosen);
 
             var res = DesignLevelLimitDao.GetDesignLevelLimit(IDDesignLevelLimit);
             if (res != null)

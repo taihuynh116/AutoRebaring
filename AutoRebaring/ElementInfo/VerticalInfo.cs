@@ -33,6 +33,8 @@ namespace AutoRebaring.ElementInfo
         public double BottomStirrup2 { get; set; }
         public List<double> RebarDevelopmentLengths { get; set; }
         public List<StirrupDistribution> StirrupDistributions { get; set; }
+        public List<bool> SmallStandardChosens { get; set; } = new List<bool>();
+        public double BottomOffsetValue { get; set; }
         #endregion
 
         public VerticalInfo(IRevitInfo revitInfo)
@@ -182,6 +184,7 @@ namespace AutoRebaring.ElementInfo
             d = rvpStand.OffsetInclude ? rvpStand.BottomOffset * ConstantValue.milimeter2Feet : 0;
             d = rvpStand.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * rvpStand.BottomOffsetRatio) : d;
             BottomOffset = Bottom + d;
+            BottomOffsetValue = d;
 
             TopStirrup2 = rvpStirr.IsInsideBeam ? TopFloor : TopBeam;
             BottomStirrup1 = Bottom;
@@ -200,6 +203,10 @@ namespace AutoRebaring.ElementInfo
                 Select(x => ap.AnchorMultiply * x).ToList();
             RebarDevelopmentLengths = di.StandardDiameters.
                 Select(x => dp.DevelopmentMultiply * x).ToList();
+            for (int i = 0; i < di.StandardDiameters.Count; i++)
+            {
+                SmallStandardChosens.Add(GeomUtil.IsBigger(di.StandardDiameters[i], di.DesignInfoAfter.StandardDiameters[i]));
+            }
         }
     }
     public class ColumnVerticalInfo : VerticalInfo

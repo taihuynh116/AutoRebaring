@@ -85,6 +85,7 @@ namespace AutoRebaring.ElementInfo
             // F1
             for (int i = 0; i < elemInfos.Count; i++)
             {
+                elemInfos[i].Index = i;
                 // F1.1
                 elemInfos[i].GetPlaneInfo(elemType, wp);
                 // F1.2

@@ -200,6 +200,7 @@
     <Compile Include="Others\Encryting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RebarLogistic\StandardLogistic.cs" />
+    <Compile Include="RebarLogistic\StandardTurn.cs" />
     <Compile Include="RebarLogistic\StirrupLogistic.cs" />
     <Compile Include="RebarLogistic\Variable.cs" />
     <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\CheckGeometry.cs">

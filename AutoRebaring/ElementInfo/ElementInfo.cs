@@ -13,6 +13,7 @@ namespace AutoRebaring.ElementInfo
 {
     public class ElementInfo : IElementInfo
     {
+        public int Index { get; set; }
         public IPlaneInfo PlaneInfo { get; set; }
         public IVerticalInfo VerticalInfo { get; set; }
         public IDesignInfo DesignInfo { get; set; }
