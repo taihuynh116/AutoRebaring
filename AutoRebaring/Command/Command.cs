@@ -6,6 +6,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using AutoRebaring.ElementInfo;
 using AutoRebaring.Form;
+using AutoRebaring.RebarLogistic;
 using Geometry;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,14 @@ namespace AutoRebaring.Command
 
             IInputForm inputForm = Window.Form;
             ElementInfoCollection elemInfoCol = new ElementInfoCollection(inputForm);
+
+            List<StandardLogistic> stanLogs = new List<StandardLogistic>();
+            for (int i = 0; i < elemInfoCol[0].LocationCount; i++)
+            {
+                StandardLogistic stanLog = new StandardLogistic(elemInfoCol, inputForm, i);
+                stanLog.RunLogistic();
+                stanLogs.Add(stanLog);
+            }
 
 
             tx.Commit();

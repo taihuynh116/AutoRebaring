@@ -104,24 +104,51 @@ namespace AutoRebaring.ElementInfo
                 // F2.1 + F2.2
                 if (i == 0)
                 {
-                    elemInfos[i].GetShortenType(elemInfos[i + 1].PlaneInfo,lp);
+                    elemInfos[i].GetShortenType(elemInfos[i + 1].PlaneInfo, lp);
                     elemInfos[i].GetDesignInfoAB(elemInfos[i + 1].DesignInfo, elemInfos[0].DesignInfo);
                 }
                 else if (i == elemInfos.Count - 1)
                 {
-                    elemInfos[i].GetShortenType(elemInfos[i].PlaneInfo,lp);
+                    elemInfos[i].GetShortenType(elemInfos[i].PlaneInfo, lp);
                     elemInfos[i].GetDesignInfoAB(elemInfos[i].DesignInfo, elemInfos[i - 1].DesignInfo);
                 }
                 else
                 {
-                    elemInfos[i].GetShortenType(elemInfos[i + 1].PlaneInfo,lp);
+                    elemInfos[i].GetShortenType(elemInfos[i + 1].PlaneInfo, lp);
                     elemInfos[i].GetDesignInfoAB(elemInfos[i + 1].DesignInfo, elemInfos[i - 1].DesignInfo);
                 }
 
                 // F2.3
                 elemInfos[i].GetRebarInformation(ap, dp);
+
                 // F2.4
                 elemInfos[i].GetStandardPlaneInfo(elemType, lp);
+            }
+
+            // F3
+            for (int i = 0; i < elemInfos.Count; i++)
+            {
+                elemInfos[i].VerticalInfo.EndLimit0s = elemInfos[i].VerticalInfo.RebarDevelopmentLengths.Select(x => elemInfos[i].VerticalInfo.TopOffset).ToList();
+                if (i < elemInfos.Count - 1)
+                {
+                    elemInfos[i].VerticalInfo.StartLimit1s = elemInfos[i + 1].VerticalInfo.RebarDevelopmentLengths.Select(x => elemInfos[i + 1].VerticalInfo.BottomOffset + x).ToList();
+                    elemInfos[i].VerticalInfo.EndLimit1s = elemInfos[i + 1].VerticalInfo.RebarDevelopmentLengths.Select(x => elemInfos[i + 1].VerticalInfo.TopOffset).ToList();
+                }
+                else
+                {
+                    elemInfos[i].VerticalInfo.StartLimit1s = elemInfos[i].VerticalInfo.EndLimit0s.Select(x => x + GeomUtil.milimeter2Feet(20000)).ToList();
+                    elemInfos[i].VerticalInfo.EndLimit1s = elemInfos[i].VerticalInfo.StartLimit1s.Select(x => x + GeomUtil.milimeter2Feet(5000)).ToList();
+                }
+                if (i < elemInfos.Count - 2)
+                {
+                    elemInfos[i].VerticalInfo.StartLimit2s = elemInfos[i + 2].VerticalInfo.RebarDevelopmentLengths.Select(x => elemInfos[i + 2].VerticalInfo.BottomOffset + x).ToList();
+                    elemInfos[i].VerticalInfo.EndLimit2s = elemInfos[i + 2].VerticalInfo.RebarDevelopmentLengths.Select(x => elemInfos[i + 2].VerticalInfo.TopOffset).ToList();
+                }
+                else
+                {
+                    elemInfos[i].VerticalInfo.StartLimit2s = elemInfos[i].VerticalInfo.EndLimit1s.Select(x => x + GeomUtil.milimeter2Feet(20000)).ToList();
+                    elemInfos[i].VerticalInfo.EndLimit2s = elemInfos[i].VerticalInfo.StartLimit2s.Select(x => x + GeomUtil.milimeter2Feet(5000)).ToList();
+                }
             }
         }
     }

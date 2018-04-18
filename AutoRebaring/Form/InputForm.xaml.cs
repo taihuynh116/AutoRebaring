@@ -111,16 +111,23 @@ namespace AutoRebaring.Form
         #endregion
 
         #region HandleData
-        public ARElementType ElementType { get;set;}
+        public ARElementType ElementType { get; set; }
         public ARWallParameter WallParameter { get; set; }
         public ARCoverParameter CoverParameter { get; set; }
         public ARAnchorParameter AnchorParameter { get; set; }
         public ARDevelopmentParameter DevelopmentParameter { get; set; }
         public ARLockheadParameter LockheadParameter { get; set; }
         public List<IDesignInfo> DesignInfos { get; set; }
+        public List<double> FitStandards { get; set; }
+        public List<double> PairFitStandards { get; set; }
+        public List<double> TripFitStandards { get; set; }
+        public List<double> FitImplants { get; set; }
+        public List<double> PairFitImplants { get; set; }
         public ARLevel StartLevel { get; set; }
         public ARLevel EndLevel { get; set; }
         public ARStandardChosen StandardChosen { get; set; }
+        public List<double> RebarZ1s { get; set; }
+        public List<double> RebarZ2s { get; set; }
         #endregion
 
         #region FormData
@@ -495,7 +502,7 @@ namespace AutoRebaring.Form
             txtDesStirM1s = new List<TextBox> { txtDesStirM10, txtDesStirM11, txtDesStirM12, txtDesStirM13, txtDesStirM14, txtDesStirM15, txtDesStirM16, txtDesStirM17 };
             txtDesStirM2s = new List<TextBox> { txtDesStirM20, txtDesStirM21, txtDesStirM22, txtDesStirM23, txtDesStirM24, txtDesStirM25, txtDesStirM26, txtDesStirM27 };
 
-            txtEdgeDesSums = new List<Label> {txtEdgeDesSum0, txtEdgeDesSum1, txtEdgeDesSum2, txtEdgeDesSum3, txtEdgeDesSum4, txtEdgeDesSum5, txtEdgeDesSum6, txtEdgeDesSum7 };
+            txtEdgeDesSums = new List<Label> { txtEdgeDesSum0, txtEdgeDesSum1, txtEdgeDesSum2, txtEdgeDesSum3, txtEdgeDesSum4, txtEdgeDesSum5, txtEdgeDesSum6, txtEdgeDesSum7 };
             txtMidDesSums = new List<Label> { txtMidDesSum0, txtMidDesSum1, txtMidDesSum2, txtMidDesSum3, txtMidDesSum4, txtMidDesSum5, txtMidDesSum6, txtMidDesSum7 };
             txtDesSums = new List<Label> { txtDesSum0, txtDesSum1, txtDesSum2, txtDesSum3, txtDesSum4, txtDesSum5, txtDesSum6, txtDesSum7 };
 
@@ -573,7 +580,7 @@ namespace AutoRebaring.Form
                             m2 = double.Parse(txtDesStirM2s[i].Text);
                         }
                         catch { }
-                        if (b1 == 0 || b2 == 0 || tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0 || desLev == -1 || desStandType == -1 || desStirType1==-1 || desStirType3==-1)
+                        if (b1 == 0 || b2 == 0 || tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0 || desLev == -1 || desStandType == -1 || desStirType1 == -1 || desStirType3 == -1)
                         {
                             visibility = System.Windows.Visibility.Collapsed;
                             isSet = true;
@@ -657,7 +664,7 @@ namespace AutoRebaring.Form
                             m2 = double.Parse(txtDesStirM2s[i].Text);
                         }
                         catch { }
-                        if (ne11 == 0 || ne12 == -1 || ce12 == -1 || ne2 == 0 || de2 == -1 || tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0 || 
+                        if (ne11 == 0 || ne12 == -1 || ce12 == -1 || ne2 == 0 || de2 == -1 || tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0 ||
                             desLev == -1 || desStandType1 == -1 || desStandType2 == -1 || desStirType1 == -1 || desStirType2 == -1 || desStirType3 == -1)
                         {
                             visibility = System.Windows.Visibility.Collapsed;
@@ -1974,6 +1981,61 @@ namespace AutoRebaring.Form
             DevelopmentParameter = DevelopmentParametersDao.GetDevelopmentParameter(IDDevelopmentParamter);
             LockheadParameter = LockheadParametersDao.GetLockheadParameter(IDLockheadParameter);
 
+            FitStandards = new List<double>();
+            long idStandFitLLim = StandardFitLimitDao.GetId(IDProject, IDStandardFitL);
+            var standFitLLimRes = StandardFitLimitDao.GetStandardFitLimit(idStandFitLLim);
+            if (standFitLLimRes != null)
+            {
+                for (int i = 0; i < standFitLLimRes.Limit; i++)
+                {
+                    FitStandards.Add(double.Parse(txtFitLs[i].Text) * ConstantValue.milimeter2Feet);
+                }
+            }
+
+            PairFitStandards = new List<double>();
+            long idStandFitL2Lim = StandardFitLimitDao.GetId(IDProject, IDStandardFitL2);
+            var standFitL2LimRes = StandardFitLimitDao.GetStandardFitLimit(idStandFitL2Lim);
+            if (standFitL2LimRes != null)
+            {
+                for (int i = 0; i < standFitL2LimRes.Limit; i++)
+                {
+                    PairFitStandards.Add(double.Parse(txtFitL2s[i].Text) * ConstantValue.milimeter2Feet);
+                }
+            }
+
+            TripFitStandards = new List<double>();
+            long idStandFitL3Lim = StandardFitLimitDao.GetId(IDProject, IDStandardFitL3);
+            var standFitL3LimRes = StandardFitLimitDao.GetStandardFitLimit(idStandFitL3Lim);
+            if (standFitL3LimRes != null)
+            {
+                for (int i = 0; i < standFitL3LimRes.Limit; i++)
+                {
+                    TripFitStandards.Add(double.Parse(txtFitL3s[i].Text) * ConstantValue.milimeter2Feet);
+                }
+            }
+
+            FitImplants = new List<double>();
+            long idImplantFitLLim = StandardFitLimitDao.GetId(IDProject, IDImplantL);
+            var implantFitLLimRes = StandardFitLimitDao.GetStandardFitLimit(idImplantFitLLim);
+            if (implantFitLLimRes != null)
+            {
+                for (int i = 0; i < implantFitLLimRes.Limit; i++)
+                {
+                    FitImplants.Add(double.Parse(txtImplantLs[i].Text) * ConstantValue.milimeter2Feet);
+                }
+            }
+
+            PairFitImplants = new List<double>();
+            long idImplantFitL2Lim = StandardFitLimitDao.GetId(IDProject, IDImplantL2);
+            var implantFitL2LimRes = StandardFitLimitDao.GetStandardFitLimit(idImplantFitL2Lim);
+            if (implantFitL2LimRes != null)
+            {
+                for (int i = 0; i < implantFitL2LimRes.Limit; i++)
+                {
+                    PairFitImplants.Add(double.Parse(txtImplantL2s[i].Text) * ConstantValue.milimeter2Feet);
+                }
+            }
+
             DesignInfos = new List<IDesignInfo>();
             RebarHookType hookType = new FilteredElementCollector(Document).OfClass(typeof(RebarHookType)).Where(x => x != null).Cast<RebarHookType>().First();
 
@@ -1981,6 +2043,37 @@ namespace AutoRebaring.Form
             StartLevel = LevelDao.GetLevel(idStartLevel);
             long idEndLevel = LevelDao.GetId(IDProject, cbbEndLevel.Text);
             EndLevel = LevelDao.GetLevel(idEndLevel);
+
+            double z11 = StartLevel.Elevation;
+            try
+            {
+                z11 += double.Parse(txtRebarZ11.Text);
+            }
+            catch { }
+
+            double z12 = StartLevel.Elevation;
+            try
+            {
+                z12 += double.Parse(txtRebarZ12.Text);
+            }
+            catch { }
+
+            double z21 = StartLevel.Elevation;
+            try
+            {
+                z21 += double.Parse(txtRebarZ21.Text);
+            }
+            catch { }
+
+            double z22 = StartLevel.Elevation;
+            try
+            {
+                z22 += double.Parse(txtRebarZ22.Text);
+            }
+            catch { }
+
+            RebarZ1s = new List<double> { z11 * ConstantValue.milimeter2Feet, z21 * ConstantValue.milimeter2Feet };
+            RebarZ1s = new List<double> { z21 * ConstantValue.milimeter2Feet, z22 * ConstantValue.milimeter2Feet };
 
             long idStandChosen = StandardChosenDao.GetId(IDProject);
             StandardChosen = StandardChosenDao.GetStandardChosen(idStandChosen);

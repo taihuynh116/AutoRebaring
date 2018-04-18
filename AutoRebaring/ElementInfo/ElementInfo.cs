@@ -13,6 +13,7 @@ namespace AutoRebaring.ElementInfo
 {
     public class ElementInfo : IElementInfo
     {
+        public int LocationCount { get; set; }
         public int Index { get; set; }
         public IPlaneInfo PlaneInfo { get; set; }
         public IVerticalInfo VerticalInfo { get; set; }
@@ -27,9 +28,11 @@ namespace AutoRebaring.ElementInfo
             {
                 case "Column":
                     PlaneInfo = new ColumnPlaneInfo(RevitInfo);
+                    LocationCount = 1;
                     break;
                 case "Wall":
                     PlaneInfo = new WallPlaneInfo(RevitInfo, wp);
+                    LocationCount = 2;
                     break;
             }
         }

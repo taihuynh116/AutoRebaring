@@ -35,6 +35,11 @@ namespace AutoRebaring.ElementInfo
         public List<StirrupDistribution> StirrupDistributions { get; set; }
         public List<bool> SmallStandardChosens { get; set; } = new List<bool>();
         public double BottomOffsetValue { get; set; }
+        public List<double> EndLimit0s { get; set; }
+        public List<double> StartLimit1s { get; set; }
+        public List<double> EndLimit1s { get; set; }
+        public List<double> StartLimit2s { get; set; }
+        public List<double> EndLimit2s { get; set; }
         #endregion
 
         public VerticalInfo(IRevitInfo revitInfo)
