@@ -36,13 +36,13 @@ namespace AutoRebaring.RebarLogistic
             for (int i = 0; i < elemInfoColl.Count; i++)
             {
                 StandardTurn st = new StandardTurn() {
-                        Index = i,
-                        LocationIndex = locIndex,
-                        ElementInfoCollection = elemInfoColl,
-                        Variable = new Variable(inputForm.StandardChosen, inputForm.FitStandards,
+                    Index = i,
+                    LocationIndex = locIndex,
+                    ElementInfoCollection = elemInfoColl,
+                    Variable = new Variable(inputForm.StandardChosen, inputForm.FitStandards,
                         inputForm.PairFitStandards, inputForm.TripFitStandards)
-                    };
-                st.GetL1L2();
+                };
+                //st.GetL1L2();
                 ProgressTurns.Add(st);
             }
             
@@ -96,7 +96,7 @@ namespace AutoRebaring.RebarLogistic
                             }
                             TrackingTopIndex = i;
                             TrackingTurns = new List<StandardTurn>();
-                            for (int k = i-LoopCount; k <= i; k++)
+                            for (int k = i - LoopCount; k <= i; k++)
                             {
                                 TrackingTurns.Add(new StandardTurn(ProgressTurns[k]));
                             }
@@ -111,7 +111,7 @@ namespace AutoRebaring.RebarLogistic
                                 throw new Exception("There are not any case matching this loop. You should increase loop count!");
                             }
                             int j = 0;
-                            for (int k = i-LoopCount; k <=i; k++)
+                            for (int k = i - LoopCount; k <= i; k++)
                             {
                                 ProgressTurns[k] = TrackingTurns[j]; j++;
                             }

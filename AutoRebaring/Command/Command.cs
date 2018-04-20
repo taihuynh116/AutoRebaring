@@ -30,15 +30,16 @@ namespace AutoRebaring.Command
             Selection sel = uidoc.Selection;
             Transaction tx = new Transaction(doc, "AutoRebaring");
             tx.Start();
-            
-            Element e = doc.GetElement(sel.PickObject(ObjectType.Element, new WallAndColumnSelection()));
+
+            ElementInfoUtils.AddElementTypeInfo();
+            ElementInfoUtils.PickElement(doc, sel);
 
             Window = new WindowForm();
             Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
-            Window.Form = new InputForm(doc, e);
+            Window.Form = new InputForm();
             Window.ShowDialog();
 
-            IInputForm inputForm = Window.Form;
+            InputForm inputForm = Window.Form;
             ElementInfoCollection elemInfoCol = new ElementInfoCollection(inputForm);
 
             List<StandardLogistic> stanLogs = new List<StandardLogistic>();

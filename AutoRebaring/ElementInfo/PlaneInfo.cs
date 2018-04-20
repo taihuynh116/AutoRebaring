@@ -16,6 +16,7 @@ namespace AutoRebaring.ElementInfo
 {
     public class PlaneInfo
     {
+        public int ID { get; set; }
         public double B1 { get; set; }
         public double B2 { get; set; }
         public UV VectorU { get; set; }
@@ -23,8 +24,10 @@ namespace AutoRebaring.ElementInfo
         public XYZ VectorX { get; set; }
         public XYZ VectorY { get; set; }
         public UV CentralPoint { get; set; }
-        public PlaneInfo(IRevitInfo revitInfo)
+        public PlaneInfo(int id)
         {
+            ID = id;
+            IRevitInfo revitInfo = Singleton.Singleton.Instance.GetRevitInfo(id);
             Document doc = revitInfo.Document;
             Element e = revitInfo.Element;
             GetPlaneInfo(doc, e);
@@ -92,12 +95,13 @@ namespace AutoRebaring.ElementInfo
         
         public List<List<UV>> StandardRebarPointLists { get; set; }
         public List<List<UV>> StirrupRebarPointLists { get; set; }
-        public IPlaneInfo PlaneInfoAfter { get; set; }
         #endregion
 
-        public ColumnPlaneInfo(IRevitInfo revitInfo) : base(revitInfo)
+        public ColumnPlaneInfo(int id) : base(id)
         {
             GetFullPlaneInfo();
+
+            Singleton.Singleton.Instance.AddPlaneInfo(this);
         }
         public void GetFullPlaneInfo()
         {
@@ -113,34 +117,34 @@ namespace AutoRebaring.ElementInfo
             B2s = new List<double> { B2 };
             BoundaryPointLists = new List<List<UV>> { boundPoints };
         }
-        public void GetShortenType(IPlaneInfo pia, ARLockheadParameter lp)
+        public void GetShortenType()
         {
-            PlaneInfoAfter = pia;
             ShortenTypes = new List<ShortenType>
             {
-                getShotenType(lp)
+                getShotenType()
             };
         }
-        private ShortenType getShotenType(ARLockheadParameter lp)
+        private ShortenType getShotenType()
         {
             double d = 0;
             List<UV> pnts = BoundaryPointLists[0];
-            List<UV> pntAs = PlaneInfoAfter.BoundaryPointLists[0];
+            List<UV> pntAs = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID).BoundaryPointLists[0];
 
             return new ShortenType()
             {
-                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d,lp),
+                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d),
                 DeltaU1 = d,
-                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d,lp),
+                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d),
                 DeltaU2 = d,
-                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d,lp),
+                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d),
                 DeltaV1 = d,
-                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d,lp),
+                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d),
                 DeltaV2 = d
             };
         }
-        private ShortenEnum GetShorten(double u, double uAfter, out double d, ARLockheadParameter lp)
+        private ShortenEnum GetShorten(double u, double uAfter, out double d)
         {
+            ARLockheadParameter lp = Singleton.Singleton.Instance.LockheadParameter;
             d = Math.Abs(u - uAfter);
             double shorten = ConstantValue.milimeter2Feet * lp.ShortenLimit;
             if (GeomUtil.IsEqual(shorten, d) || d > shorten)
@@ -149,8 +153,10 @@ namespace AutoRebaring.ElementInfo
                 return ShortenEnum.Small;
             return ShortenEnum.None;
         }
-        public void GetRebarLocation(IDesignInfo di, ARCoverParameter cp)
+        public void GetRebarLocation()
         {
+            IDesignInfo di = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
             double offset = cp.ConcreteCover*ConstantValue.milimeter2Feet + di.StandardDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
             List<UV> boundPnts = BoundaryPointLists[0];
 
@@ -192,15 +198,17 @@ namespace AutoRebaring.ElementInfo
         public List<ShortenType> ShortenTypes { get; set; }
         public List<List<UV>> StandardRebarPointLists { get; set; }
         public List<List<UV>> StirrupRebarPointLists { get; set; }
-        public IPlaneInfo PlaneInfoAfter { get; set; }
         #endregion
 
-        public WallPlaneInfo(IRevitInfo revitInfo, ARWallParameter wp):base(revitInfo,wp)
+        public WallPlaneInfo(int id):base(id)
         {
-            GetFullPlaneInfo(wp);
+            GetFullPlaneInfo();
+
+            Singleton.Singleton.Instance.AddPlaneInfo(this);
         }
-        public void GetFullPlaneInfo(ARWallParameter wp)
+        public void GetFullPlaneInfo()
         {
+            ARWallParameter wp = Singleton.Singleton.Instance.WallParameter;
             double edge = 0;
             if (wp.EdgeWidthInclude) edge = wp.EdgeWidth * ConstantValue.milimeter2Feet;
             if (wp.EdgeRatioInclude) edge = Math.Max(edge, wp.EdgeRatio * B1);
@@ -225,37 +233,37 @@ namespace AutoRebaring.ElementInfo
                 centralPnt - VectorU * b1 / 2 + VectorV * b2 / 2
             };
         }
-        public void GetShortenType(IPlaneInfo pia, ARLockheadParameter lp)
+        public void GetShortenType()
         {
-            PlaneInfoAfter = pia;
             ShortenTypes = new List<ShortenType>()
             {
-                getShotenType(0,lp),
-                getShotenType(1,lp),
-                getShotenType(2,lp)
+                getShotenType(0),
+                getShotenType(1),
+                getShotenType(2)
             };
         }
-        private ShortenType getShotenType(int index, ARLockheadParameter lp)
+        private ShortenType getShotenType(int index)
         {
             double d = 0;
             List<UV> pnts = BoundaryPointLists[index];
-            List<UV> pntAs = PlaneInfoAfter.BoundaryPointLists[index];
+            List<UV> pntAs = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID).BoundaryPointLists[index];
 
             return new ShortenType()
             {
-                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d,lp),
+                ShortenU1 = GetShorten(pnts[0].U, pntAs[0].U, out d),
                 DeltaU1 = d,
-                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d,lp),
+                ShortenU2 = GetShorten(pnts[2].U, pntAs[2].U, out d),
                 DeltaU2 = d,
-                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d,lp),
+                ShortenV1 = GetShorten(pnts[0].V, pntAs[0].V, out d),
                 DeltaV1 = d,
-                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d,lp),
+                ShortenV2 = GetShorten(pnts[2].V, pntAs[2].V, out d),
                 DeltaV2 = d
             };
         }
 
-        private ShortenEnum GetShorten(double u, double uAfter, out double d, ARLockheadParameter lp)
+        private ShortenEnum GetShorten(double u, double uAfter, out double d)
         {
+            ARLockheadParameter lp = Singleton.Singleton.Instance.LockheadParameter;
             d = Math.Abs(u - uAfter);
             double shorten = ConstantValue.milimeter2Feet * lp.ShortenLimit;
             if (GeomUtil.IsEqual(shorten, d) || d > shorten)
@@ -265,8 +273,11 @@ namespace AutoRebaring.ElementInfo
             return ShortenEnum.None;
         }
 
-        public void GetRebarLocation(IDesignInfo di, ARCoverParameter cp)
+        public void GetRebarLocation()
         {
+            IDesignInfo di = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
+
             StandardRebarPointLists = new List<List<UV>>();
             StirrupRebarPointLists = new List<List<UV>>();
 

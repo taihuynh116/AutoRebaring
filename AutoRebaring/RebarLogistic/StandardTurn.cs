@@ -14,6 +14,7 @@ namespace AutoRebaring.RebarLogistic
     {
         public StandardTurn()
         {
+
         }
         public StandardTurn(StandardTurn turn)
         {
@@ -118,11 +119,11 @@ namespace AutoRebaring.RebarLogistic
         public double Start2 { get; set; }
         public double End1
         {
-            get { return Start1 + End1; }
+            get { return Start1 + L1; }
         }
         public double End2
         {
-            get { return Start2 + End2; }
+            get { return Start2 + L2; }
         }
         public double L1 { get; set; }
         public double L2 { get; set; }
@@ -161,6 +162,8 @@ namespace AutoRebaring.RebarLogistic
         }
         public bool FirstPass { get; set; } = false;
         public TurnChosenType ChosenType { get; set; }
+
+
         public void SetFinish1(double lmax)
         {
             setFinish(lmax, Start1, End1, Finish1, l1Finish);

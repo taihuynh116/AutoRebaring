@@ -15,6 +15,7 @@ namespace AutoRebaring.ElementInfo
     public class VerticalInfo : IVerticalInfo
     {
         #region VerticalInfo
+        public int ID { get; set; }
         public Level StartLevel { get; set; }
         public Level EndLevel { get; set; }
         public double Top { get; set; }
@@ -42,11 +43,14 @@ namespace AutoRebaring.ElementInfo
         public List<double> EndLimit2s { get; set; }
         #endregion
 
-        public VerticalInfo(IRevitInfo revitInfo)
+        public VerticalInfo(int id)
         {
-            Element e = revitInfo.Element;
-            Document doc = revitInfo.Document;
-
+            ID = id;
+            IRevitInfo revitInfo = Singleton.Singleton.Instance.GetRevitInfo(id);
+            GetGeometry(revitInfo.Document, revitInfo.Element);
+        }
+        public void GetGeometry(Document doc, Element e)
+        {
             BoundingBoxXYZ bb = e.get_BoundingBox(null);
             Outline ol = new Outline(bb.Min, bb.Max);
             XYZ midPnt = new XYZ((bb.Min.X + bb.Max.X) / 2, (bb.Min.Y + bb.Max.Y) / 2, (bb.Min.Z + bb.Max.Z) / 2);
@@ -104,7 +108,7 @@ namespace AutoRebaring.ElementInfo
             List<Element> elems = new FilteredElementCollector(doc).WherePasses(floorOrBeamFilter).WherePasses(bbiFilter).WherePasses(eisFilter).ToList();
 
             double middle = centralPnt.Z;
-            double min = 0, maxLim = 0, maxFloor = 0, maxBeam =0;
+            double min = 0, maxLim = 0, maxFloor = 0, maxBeam = 0;
             bool firstSetMin = true, firstSetMaxLim = true, firstSetMaxFloor = true, firstSetMaxBeam = true;
             for (int i = 0; i < elems.Count; i++)
             {
@@ -175,16 +179,20 @@ namespace AutoRebaring.ElementInfo
                 EndLevel = doc.GetElement(e.LookupParameter(ConstantValue.EndLevelColumn).AsElementId()) as Level;
             }
         }
-        public void GetInformation(ARRebarVerticalParameter rvpStand, ARRebarVerticalParameter rvpStirr, ARLockheadParameter lpp)
+        public void GetInformation()
         {
+            ARRebarVerticalParameter rvpStand = Singleton.Singleton.Instance.StandardVeticalParameter;
+            ARRebarVerticalParameter rvpStirr = Singleton.Singleton.Instance.StirrupVerticalParameter;
+            ARLockheadParameter lp = Singleton.Singleton.Instance.LockheadParameter;
+
             Top = rvpStand.IsInsideBeam ? TopFloor : TopBeam;
 
             double d = rvpStand.OffsetInclude ? rvpStand.TopOffset * ConstantValue.milimeter2Feet : 0;
             d = rvpStand.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * rvpStand.TopOffsetRatio) : d;
             TopOffset = Top - d;
 
-            TopLockHead = Top - lpp.LockheadConcreteCover * ConstantValue.milimeter2Feet;
-            TopSmall = Top - lpp.SmallConcreteCover * ConstantValue.milimeter2Feet;
+            TopLockHead = Top - lp.LockheadConcreteCover * ConstantValue.milimeter2Feet;
+            TopSmall = Top - lp.SmallConcreteCover * ConstantValue.milimeter2Feet;
 
             d = rvpStand.OffsetInclude ? rvpStand.BottomOffset * ConstantValue.milimeter2Feet : 0;
             d = rvpStand.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * rvpStand.BottomOffsetRatio) : d;
@@ -202,9 +210,14 @@ namespace AutoRebaring.ElementInfo
             d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.BottomOffsetRatio) : d;
             BottomStirrup2 = BottomStirrup1 + d;
         }
-        public void GetRebarInformation(IDesignInfo di, ARAnchorParameter ap, ARDevelopmentParameter dp)
+        public void GetRebarInformation()
         {
-            TopAnchorAfters = di.DesignInfoAfter.StandardDiameters.
+            IDesignInfo di = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo diA = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            ARAnchorParameter ap = Singleton.Singleton.Instance.AnchorParameter;
+            ARDevelopmentParameter dp = Singleton.Singleton.Instance.DevelopmentParameter;
+
+            TopAnchorAfters = diA.StandardDiameters.
                 Select(x => ap.AnchorMultiply * x).ToList();
             RebarDevelopmentLengths = di.StandardDiameters.
                 Select(x => dp.DevelopmentMultiply * x).ToList();
@@ -216,14 +229,16 @@ namespace AutoRebaring.ElementInfo
     }
     public class ColumnVerticalInfo : VerticalInfo
     {
-        public ColumnVerticalInfo(IRevitInfo revitInfo) : base(revitInfo)
+        public ColumnVerticalInfo(int id) : base(id)
         {
+            Singleton.Singleton.Instance.AddVerticalInfo(this);
         }
     }
     public class WallVerticalInfo : VerticalInfo
     {
-        public WallVerticalInfo(IRevitInfo revitInfo) : base(revitInfo)
+        public WallVerticalInfo(int id) : base(id)
         {
+            Singleton.Singleton.Instance.AddVerticalInfo(this);
         }
     }
 }

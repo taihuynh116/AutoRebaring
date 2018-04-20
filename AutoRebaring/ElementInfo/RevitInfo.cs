@@ -10,6 +10,7 @@ namespace AutoRebaring.ElementInfo
     
     public class RevitInfo:IRevitInfo
     {
+        public int ID { get; set; }
         public Document Document { get; set; }
         public Element Element { get; set; }
         public double Elevation { get; set; }

@@ -14,6 +14,7 @@ namespace AutoRebaring.ElementInfo
     public class ColumnDesignInfo :IDesignInfo
     {
         #region IDesignInput
+        public int ID { get; set; }
         public Level Level { get; set; }
         public List<RebarBarType> StandardTypes { get; set; }
         public List<double> StandardDiameters { get; set; }
@@ -23,8 +24,6 @@ namespace AutoRebaring.ElementInfo
         public List<double> StirrupDiameters { get; set; }
         public List<double> BotTopSpacings { get; set; }
         public List<double> MiddleSpacings { get; set; }
-        public IDesignInfo DesignInfoAfter { get; set; }
-        public IDesignInfo DesignInfoBefore { get; set; }
         public List<double> StandardSpacings { get; set; }
         #endregion
 
@@ -52,8 +51,11 @@ namespace AutoRebaring.ElementInfo
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
             StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
-        public void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp)
+        public void GetStandardSpacing()
         {
+            IPlaneInfo pi = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
+
             double standDia = StandardTypes[0].BarDiameter;
             double stirrDia = StirrupTypes[0].BarDiameter;
             double cover = cp.ConcreteCover * ConstantValue.milimeter2Feet * 2 - stirrDia * 2 - standDia;
@@ -63,15 +65,11 @@ namespace AutoRebaring.ElementInfo
                 (pi.B2s[0] - cover)/(StandardNumbers[1]-1)*2
             };
         }
-        public void GetDesignInfo(IDesignInfo diA, IDesignInfo diB)
-        {
-            DesignInfoAfter = diA;
-            DesignInfoBefore = diB;
-        }
     }
     public class WallDesignInfo : IDesignInfo
     {
         #region IDesignInput
+        public int ID { get; set; }
         public Level Level { get; set; }
         public List<RebarBarType> StandardTypes { get; set; }
         public List<double> StandardDiameters { get; set; }
@@ -81,8 +79,6 @@ namespace AutoRebaring.ElementInfo
         public List<double> StirrupDiameters { get; set; }
         public List<double> BotTopSpacings { get; set; }
         public List<double> MiddleSpacings { get; set; }
-        public IDesignInfo DesignInfoAfter { get; set; }
-        public IDesignInfo DesignInfoBefore { get; set; }
         public List<double> StandardSpacings { get; set; }
         #endregion
 
@@ -111,8 +107,11 @@ namespace AutoRebaring.ElementInfo
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
             StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
-        public void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp)
+        public void GetStandardSpacing()
         {
+            IPlaneInfo pi = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
+
             double edgeStandDia = StandardTypes[0].BarDiameter;
             double middleStandDia = StandardTypes[1].BarDiameter;
             double stirrDia = StirrupTypes[0].BarDiameter;
@@ -124,11 +123,6 @@ namespace AutoRebaring.ElementInfo
                 (pi.B2s[0] - cover- stirrDia*1.5-edgeStandDia)/(StandardNumbers[3]-1)*2,
                 (pi.B1s[1]+stirrDia+ middleStandDia)/(StandardNumbers[4]+1)
             };
-        }
-        public void GetDesignInfo(IDesignInfo diA, IDesignInfo diB)
-        {
-            DesignInfoAfter = diA;
-            DesignInfoBefore = diB;
         }
     }
 }

@@ -14,35 +14,34 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 {
     public class ColumnStandardPlaneInfo : IStandardPlaneInfo
     {
-        public IPlaneInfo PlaneInfo { get; set; }
-        public IDesignInfo DesignInfo { get; set; }
-        
-        public ARLockheadParameter LockheadParameter { get; set; }
+        public int ID { get; set; }
         public List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
-        public ColumnStandardPlaneInfo(IPlaneInfo planeInfo, IDesignInfo designInfo, ARLockheadParameter lp)
+        public ColumnStandardPlaneInfo(int id)
         {
-            PlaneInfo = planeInfo;
-            DesignInfo = designInfo;
-            LockheadParameter = lp;
-
+            ID = id;
 
             GetNormalStandardPlaneInfos();
             GetShortenStandardPlaneInfos();
             GetImplantStandardPlaneInfos();
+
+            Singleton.Singleton.Instance.AddStandardPlaneInfo(this);
         }
         private void GetNormalStandardPlaneInfos()
         {
-            int n1 = DesignInfo.StandardNumbers[0];
-            int n2 = DesignInfo.StandardNumbers[1];
-            double spac1 = DesignInfo.StandardSpacings[0];
-            double spac2 = DesignInfo.StandardSpacings[1];
-            List<UV> pnts = PlaneInfo.StandardRebarPointLists[0];
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+
+            int n1 = designInfo.StandardNumbers[0];
+            int n2 = designInfo.StandardNumbers[1];
+            double spac1 = designInfo.StandardSpacings[0];
+            double spac2 = designInfo.StandardSpacings[1];
+            List<UV> pnts = planeInfo.StandardRebarPointLists[0];
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
 
             NormalStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
 
@@ -136,7 +135,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenStandardPlaneInfos()
         {
-            IShortenType shortenType = PlaneInfo.ShortenTypes[0];
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+
+            IShortenType shortenType = planeInfo.ShortenTypes[0];
             ShortenStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
             GetShortenV(0, shortenType.ShortenV1);
             GetShortenV(3, shortenType.ShortenV2);
@@ -145,29 +146,35 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenV(int index, ShortenEnum shorten)
         {
-            int n1 = DesignInfo.StandardNumbers[0];
-            int n2 = DesignInfo.StandardNumbers[1];
-            int nA1 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int nA2 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            double spac1 = DesignInfo.StandardSpacings[0];
-            double spac2 = DesignInfo.StandardSpacings[1];
-            double spacA1 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacA2 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
-            List<UV> pnts = PlaneInfo.StandardRebarPointLists[0];
-            List<UV> pntAs = PlaneInfo.PlaneInfoAfter.StandardRebarPointLists[0];
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
-            double dia = DesignInfo.StandardDiameters[0];
-            double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+
+            int n1 = designInfo.StandardNumbers[0];
+            int n2 = designInfo.StandardNumbers[1];
+            int nA1 = designInfoAfter.StandardNumbers[0];
+            int nA2 = designInfoAfter.StandardNumbers[1];
+            double spac1 = designInfo.StandardSpacings[0];
+            double spac2 = designInfo.StandardSpacings[1];
+            double spacA1 = designInfoAfter.StandardSpacings[0];
+            double spacA2 = designInfoAfter.StandardSpacings[1];
+            List<UV> pnts = planeInfo.StandardRebarPointLists[0];
+            List<UV> pntAs = planeInfo.PlaneInfoAfter.StandardRebarPointLists[0];
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
+            double dia = designInfo.StandardDiameters[0];
+            double diaAfter = designInfoAfter.StandardDiameters[0];
+            double shortenLimit = lockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecY : vecY;
             XYZ vecExpSmall = index == 0 ? vecY : -vecY;
-            double delV = (index == 0) ? PlaneInfo.ShortenTypes[0].DeltaV1 : PlaneInfo.ShortenTypes[0].DeltaV2;
-            double delU1 = PlaneInfo.ShortenTypes[0].DeltaU1;
-            double delU2 = PlaneInfo.ShortenTypes[0].DeltaU2;
+            double delV = (index == 0) ? planeInfo.ShortenTypes[0].DeltaV1 : planeInfo.ShortenTypes[0].DeltaV2;
+            double delU1 = planeInfo.ShortenTypes[0].DeltaU1;
+            double delU2 = planeInfo.ShortenTypes[0].DeltaU2;
             double dimExpSmall = delV + (diaAfter - dia) / 2;
 
             switch (shorten)
@@ -589,29 +596,35 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenU(int index, ShortenEnum shorten)
         {
-            int n1 = DesignInfo.StandardNumbers[0];
-            int n2 = DesignInfo.StandardNumbers[1];
-            int nA1 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int nA2 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            double spac1 = DesignInfo.StandardSpacings[0];
-            double spac2 = DesignInfo.StandardSpacings[1];
-            double spacA1 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacA2 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
-            List<UV> pnts = PlaneInfo.StandardRebarPointLists[0];
-            List<UV> pntAs = PlaneInfo.PlaneInfoAfter.StandardRebarPointLists[0];
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
-            double dia = DesignInfo.StandardDiameters[0];
-            double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+
+            int n1 = designInfo.StandardNumbers[0];
+            int n2 = designInfo.StandardNumbers[1];
+            int nA1 = designInfoAfter.StandardNumbers[0];
+            int nA2 = designInfoAfter.StandardNumbers[1];
+            double spac1 = designInfo.StandardSpacings[0];
+            double spac2 = designInfo.StandardSpacings[1];
+            double spacA1 = designInfoAfter.StandardSpacings[0];
+            double spacA2 = designInfoAfter.StandardSpacings[1];
+            List<UV> pnts = planeInfo.StandardRebarPointLists[0];
+            List<UV> pntAs = planeInfoAfter.StandardRebarPointLists[0];
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
+            double dia = designInfo.StandardDiameters[0];
+            double diaAfter = designInfoAfter.StandardDiameters[0];
+            double shortenLimit = lockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecX : vecX;
             XYZ vecExpSmall = index == 0 ? vecX : -vecX;
-            double delU = (index == 0) ? PlaneInfo.ShortenTypes[0].DeltaU1 : PlaneInfo.ShortenTypes[0].DeltaU2;
-            double delV1 = PlaneInfo.ShortenTypes[0].DeltaV1;
-            double delV2 = PlaneInfo.ShortenTypes[0].DeltaV2;
+            double delU = (index == 0) ? planeInfo.ShortenTypes[0].DeltaU1 : planeInfo.ShortenTypes[0].DeltaU2;
+            double delV1 = planeInfo.ShortenTypes[0].DeltaV1;
+            double delV2 = planeInfo.ShortenTypes[0].DeltaV2;
             double dimExpSmall = delU + (diaAfter - dia) / 2;
 
             switch (shorten)
@@ -1253,43 +1266,43 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
     }
     public class WallStandardPlaneInfo : IStandardPlaneInfo
     {
-        public IPlaneInfo PlaneInfo { get; set; }
-        public IDesignInfo DesignInfo { get; set; }
-
-        public ARLockheadParameter LockheadParameter { get; set; }
+        public int ID { get; set; }
         public List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
-        public WallStandardPlaneInfo(IPlaneInfo planeInfo, IDesignInfo designInfo, ARLockheadParameter lp)
+        public WallStandardPlaneInfo(int id)
         {
-            PlaneInfo = planeInfo;
-            DesignInfo = designInfo;
-            LockheadParameter = lp;
+            ID = id;
 
             GetNormalStandardPlaneInfos();
             GetShortenStandardPlaneInfos();
             GetImplantStandardPlaneInfos();
+
+            Singleton.Singleton.Instance.AddStandardPlaneInfo(this);
         }
         private void GetNormalStandardPlaneInfos()
         {
-            int ne11 = DesignInfo.StandardNumbers[0];
-            int ne12 = DesignInfo.StandardNumbers[1];
-            int ce12 = DesignInfo.StandardNumbers[2];
-            int ne2 = DesignInfo.StandardNumbers[3];
-            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
-            int nm = DesignInfo.StandardNumbers[5];
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+
+            int ne11 = designInfo.StandardNumbers[0];
+            int ne12 = designInfo.StandardNumbers[1];
+            int ce12 = designInfo.StandardNumbers[2];
+            int ne2 = designInfo.StandardNumbers[3];
+            bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = designInfo.StandardNumbers[5];
             
-            double spacE11 = DesignInfo.StandardSpacings[0];
-            double spacE12 = DesignInfo.StandardSpacings[1];
-            double spacE2 = DesignInfo.StandardSpacings[2];
-            double spacM = DesignInfo.StandardSpacings[3];
-            List<UV> pntE1s = PlaneInfo.StandardRebarPointLists[0];
-            List<UV> pntMs = PlaneInfo.StandardRebarPointLists[1];
-            List<UV> pntE2s = PlaneInfo.StandardRebarPointLists[2];
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
+            double spacE11 = designInfo.StandardSpacings[0];
+            double spacE12 = designInfo.StandardSpacings[1];
+            double spacE2 = designInfo.StandardSpacings[2];
+            double spacM = designInfo.StandardSpacings[3];
+            List<UV> pntE1s = planeInfo.StandardRebarPointLists[0];
+            List<UV> pntMs = planeInfo.StandardRebarPointLists[1];
+            List<UV> pntE2s = planeInfo.StandardRebarPointLists[2];
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
 
             List<int> ie12 = new List<int>();
             double jumpe12 = (ne2 - 1) / (double)(ce12 + 1);
@@ -1596,12 +1609,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenStandardPlaneInfos()
         {
-            int ne11 = DesignInfo.StandardNumbers[0];
-            int ne12 = DesignInfo.StandardNumbers[1];
-            int ce12 = DesignInfo.StandardNumbers[2];
-            int ne2 = DesignInfo.StandardNumbers[3];
-            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
-            int nm = DesignInfo.StandardNumbers[5];
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+
+            int ne11 = designInfo.StandardNumbers[0];
+            int ne12 = designInfo.StandardNumbers[1];
+            int ce12 = designInfo.StandardNumbers[2];
+            int ne2 = designInfo.StandardNumbers[3];
+            bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = designInfo.StandardNumbers[5];
 
             List<int> ie12 = new List<int>();
             double jumpe12 = (ne2 - 1) / (double)(ce12 + 1);
@@ -1610,9 +1626,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 ie12.Add((int)Math.Round(jumpe12 * (i + 1)));
             }
 
-            Shorten.ShortenType stE1 = PlaneInfo.ShortenTypes[0];
-            Shorten.ShortenType stM = PlaneInfo.ShortenTypes[1];
-            Shorten.ShortenType stE2 = PlaneInfo.ShortenTypes[2];
+            Shorten.ShortenType stE1 = planeInfo.ShortenTypes[0];
+            Shorten.ShortenType stM = planeInfo.ShortenTypes[1];
+            Shorten.ShortenType stE2 = planeInfo.ShortenTypes[2];
 
             ShortenStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
 
@@ -1639,40 +1655,46 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenVEdge(int locIndex, int index, ShortenEnum shorten)
         {
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
-            int ne11 = DesignInfo.StandardNumbers[0];
-            int ne12 = DesignInfo.StandardNumbers[1];
-            int ce12 = DesignInfo.StandardNumbers[2];
-            int ne2 = DesignInfo.StandardNumbers[3];
-            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
-            int nm = DesignInfo.StandardNumbers[5];
-            int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
-            int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4] == 1 ? true : false;
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
+            int ne11 = designInfo.StandardNumbers[0];
+            int ne12 = designInfo.StandardNumbers[1];
+            int ce12 = designInfo.StandardNumbers[2];
+            int ne2 = designInfo.StandardNumbers[3];
+            bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = designInfo.StandardNumbers[5];
+            int neA11 = designInfoAfter.StandardNumbers[0];
+            int neA12 = designInfoAfter.StandardNumbers[1];
+            int ceA12 = designInfoAfter.StandardNumbers[2];
+            int neA2 = designInfoAfter.StandardNumbers[3];
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4] == 1 ? true : false;
+            int nmA = designInfoAfter.StandardNumbers[5];
             
-            double spacE11 = DesignInfo.StandardSpacings[0];
-            double spacE12 = DesignInfo.StandardSpacings[1];
-            double spacE2 = DesignInfo.StandardSpacings[2];
-            double spacM = DesignInfo.StandardSpacings[3];
-            double spacEA11 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacEA12 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
-            double spacEA2 = DesignInfo.DesignInfoAfter.StandardSpacings[2];
-            double spacMA = DesignInfo.DesignInfoAfter.StandardSpacings[3];
-            List<UV> pnts = PlaneInfo.BoundaryPointLists[locIndex];
-            List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[locIndex];
-            double dia = DesignInfo.StandardDiameters[0];
-            double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
+            double spacE11 = designInfo.StandardSpacings[0];
+            double spacE12 = designInfo.StandardSpacings[1];
+            double spacE2 = designInfo.StandardSpacings[2];
+            double spacM = designInfo.StandardSpacings[3];
+            double spacEA11 = designInfoAfter.StandardSpacings[0];
+            double spacEA12 = designInfoAfter.StandardSpacings[1];
+            double spacEA2 = designInfoAfter.StandardSpacings[2];
+            double spacMA = designInfoAfter.StandardSpacings[3];
+            List<UV> pnts = planeInfo.BoundaryPointLists[locIndex];
+            List<UV> pntAs = planeInfoAfter.BoundaryPointLists[locIndex];
+            double dia = designInfo.StandardDiameters[0];
+            double diaAfter = designInfoAfter.StandardDiameters[0];
+            double shortenLimit = lockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecY : vecY;
             XYZ vecExpSmall = index == 0 ? vecY : -vecY;
-            Shorten.ShortenType shortenType = PlaneInfo.ShortenTypes[locIndex];
+            Shorten.ShortenType shortenType = planeInfo.ShortenTypes[locIndex];
             double delV = (index == 0) ? shortenType.DeltaV1 : shortenType.DeltaV2;
             double delU1 = shortenType.DeltaU1;
             double delU2 = shortenType.DeltaU2;
@@ -2043,40 +2065,46 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenUEdge(int locIndex, int index, ShortenEnum shorten)
         {
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
-            int ne11 = DesignInfo.StandardNumbers[0];
-            int ne12 = DesignInfo.StandardNumbers[1];
-            int ce12 = DesignInfo.StandardNumbers[2];
-            int ne2 = DesignInfo.StandardNumbers[3];
-            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
-            int nm = DesignInfo.StandardNumbers[5];
-            int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
-            int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4]==1 ? true:false;
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
+            int ne11 = designInfo.StandardNumbers[0];
+            int ne12 = designInfo.StandardNumbers[1];
+            int ce12 = designInfo.StandardNumbers[2];
+            int ne2 = designInfo.StandardNumbers[3];
+            bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = designInfo.StandardNumbers[5];
+            int neA11 = designInfoAfter.StandardNumbers[0];
+            int neA12 = designInfoAfter.StandardNumbers[1];
+            int ceA12 = designInfoAfter.StandardNumbers[2];
+            int neA2 = designInfoAfter.StandardNumbers[3];
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4]==1 ? true:false;
+            int nmA = designInfoAfter.StandardNumbers[5];
             
-            double spacE11 = DesignInfo.StandardSpacings[0];
-            double spacE12 = DesignInfo.StandardSpacings[1];
-            double spacE2 = DesignInfo.StandardSpacings[2];
-            double spacM = DesignInfo.StandardSpacings[3];
-            double spacEA11 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacEA12 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
-            double spacEA2 = DesignInfo.DesignInfoAfter.StandardSpacings[2];
-            double spacMA = DesignInfo.DesignInfoAfter.StandardSpacings[3];
-            List<UV> pnts = PlaneInfo.BoundaryPointLists[locIndex];
-            List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[locIndex];
-            double dia = DesignInfo.StandardDiameters[0];
-            double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
+            double spacE11 = designInfo.StandardSpacings[0];
+            double spacE12 = designInfo.StandardSpacings[1];
+            double spacE2 = designInfo.StandardSpacings[2];
+            double spacM = designInfo.StandardSpacings[3];
+            double spacEA11 = designInfoAfter.StandardSpacings[0];
+            double spacEA12 = designInfoAfter.StandardSpacings[1];
+            double spacEA2 = designInfoAfter.StandardSpacings[2];
+            double spacMA = designInfoAfter.StandardSpacings[3];
+            List<UV> pnts = planeInfo.BoundaryPointLists[locIndex];
+            List<UV> pntAs = planeInfoAfter.BoundaryPointLists[locIndex];
+            double dia = designInfo.StandardDiameters[0];
+            double diaAfter = designInfoAfter.StandardDiameters[0];
+            double shortenLimit = lockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecX : vecX;
             XYZ vecExpSmall = index == 0 ? vecX : -vecX;
-            Shorten.ShortenType shortenType = PlaneInfo.ShortenTypes[locIndex];
+            Shorten.ShortenType shortenType = planeInfo.ShortenTypes[locIndex];
             double delU = (index == 0) ? shortenType.DeltaU1 : shortenType.DeltaU2;
             double delV1 = shortenType.DeltaV1;
             double delV2 = shortenType.DeltaV2;
@@ -2451,39 +2479,45 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenVInside(int locIndex, int index12)
         {
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
-            int ne11 = DesignInfo.StandardNumbers[0];
-            int ne12 = DesignInfo.StandardNumbers[1];
-            int ce12 = DesignInfo.StandardNumbers[2];
-            int ne2 = DesignInfo.StandardNumbers[3];
-            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
-            int nm = DesignInfo.StandardNumbers[5];
-            int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
-            int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4] == 1 ? true : false;
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
+            int ne11 = designInfo.StandardNumbers[0];
+            int ne12 = designInfo.StandardNumbers[1];
+            int ce12 = designInfo.StandardNumbers[2];
+            int ne2 = designInfo.StandardNumbers[3];
+            bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = designInfo.StandardNumbers[5];
+            int neA11 = designInfoAfter.StandardNumbers[0];
+            int neA12 = designInfoAfter.StandardNumbers[1];
+            int ceA12 = designInfoAfter.StandardNumbers[2];
+            int neA2 = designInfoAfter.StandardNumbers[3];
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4] == 1 ? true : false;
+            int nmA = designInfoAfter.StandardNumbers[5];
             
-            double spacE11 = DesignInfo.StandardSpacings[0];
-            double spacE12 = DesignInfo.StandardSpacings[1];
-            double spacE2 = DesignInfo.StandardSpacings[2];
-            double spacM = DesignInfo.StandardSpacings[3];
-            double spacEA11 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacEA12 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
-            double spacEA2 = DesignInfo.DesignInfoAfter.StandardSpacings[2];
-            double spacMA = DesignInfo.DesignInfoAfter.StandardSpacings[3];
-            List<UV> pnts = PlaneInfo.BoundaryPointLists[locIndex];
-            List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[locIndex];
-            double dia = DesignInfo.StandardDiameters[0];
-            double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[0];
-            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
+            double spacE11 = designInfo.StandardSpacings[0];
+            double spacE12 = designInfo.StandardSpacings[1];
+            double spacE2 = designInfo.StandardSpacings[2];
+            double spacM = designInfo.StandardSpacings[3];
+            double spacEA11 = designInfoAfter.StandardSpacings[0];
+            double spacEA12 = designInfoAfter.StandardSpacings[1];
+            double spacEA2 = designInfoAfter.StandardSpacings[2];
+            double spacMA = designInfoAfter.StandardSpacings[3];
+            List<UV> pnts = planeInfo.BoundaryPointLists[locIndex];
+            List<UV> pntAs = planeInfoAfter.BoundaryPointLists[locIndex];
+            double dia = designInfo.StandardDiameters[0];
+            double diaAfter = designInfoAfter.StandardDiameters[0];
+            double shortenLimit = lockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = vecY;
-            Shorten.ShortenType shortenType = PlaneInfo.ShortenTypes[locIndex];
+            Shorten.ShortenType shortenType = planeInfo.ShortenTypes[locIndex];
             double delU1 = shortenType.DeltaU1;
             double delU2 = shortenType.DeltaU2;
 
@@ -2639,40 +2673,46 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenVMiddle(int index, ShortenEnum shorten)
         {
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
-            int ne11 = DesignInfo.StandardNumbers[0];
-            int ne12 = DesignInfo.StandardNumbers[1];
-            int ce12 = DesignInfo.StandardNumbers[2];
-            int ne2 = DesignInfo.StandardNumbers[3];
-            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
-            int nm = DesignInfo.StandardNumbers[5];
-            int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
-            int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4]==1? true:false;
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
+            int ne11 = designInfo.StandardNumbers[0];
+            int ne12 = designInfo.StandardNumbers[1];
+            int ce12 = designInfo.StandardNumbers[2];
+            int ne2 = designInfo.StandardNumbers[3];
+            bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = designInfo.StandardNumbers[5];
+            int neA11 = designInfoAfter.StandardNumbers[0];
+            int neA12 = designInfoAfter.StandardNumbers[1];
+            int ceA12 = designInfoAfter.StandardNumbers[2];
+            int neA2 = designInfoAfter.StandardNumbers[3];
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4]==1? true:false;
+            int nmA = designInfoAfter.StandardNumbers[5];
             
-            double spacE11 = DesignInfo.StandardSpacings[0];
-            double spacE12 = DesignInfo.StandardSpacings[1];
-            double spacE2 = DesignInfo.StandardSpacings[2];
-            double spacM = DesignInfo.StandardSpacings[3];
-            double spacEA11 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacEA12 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
-            double spacEA2 = DesignInfo.DesignInfoAfter.StandardSpacings[2];
-            double spacMA = DesignInfo.DesignInfoAfter.StandardSpacings[3];
-            List<UV> pnts = PlaneInfo.BoundaryPointLists[1];
-            List<UV> pntAs = PlaneInfo.PlaneInfoAfter.BoundaryPointLists[1];
-            double dia = DesignInfo.StandardDiameters[1];
-            double diaAfter = DesignInfo.DesignInfoAfter.StandardDiameters[1];
-            double shortenLimit = LockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
+            double spacE11 = designInfo.StandardSpacings[0];
+            double spacE12 = designInfo.StandardSpacings[1];
+            double spacE2 = designInfo.StandardSpacings[2];
+            double spacM = designInfo.StandardSpacings[3];
+            double spacEA11 = designInfoAfter.StandardSpacings[0];
+            double spacEA12 = designInfoAfter.StandardSpacings[1];
+            double spacEA2 = designInfoAfter.StandardSpacings[2];
+            double spacMA = designInfoAfter.StandardSpacings[3];
+            List<UV> pnts = planeInfo.BoundaryPointLists[1];
+            List<UV> pntAs = planeInfoAfter.BoundaryPointLists[1];
+            double dia = designInfo.StandardDiameters[1];
+            double diaAfter = designInfoAfter.StandardDiameters[1];
+            double shortenLimit = lockheadParameter.ShortenLimit * ConstantValue.milimeter2Feet;
 
             XYZ vecExpBig = index == 0 ? -vecY : vecY;
             XYZ vecExpSmall = index == 0 ? vecY : -vecY;
-            Shorten.ShortenType shortenType = PlaneInfo.ShortenTypes[1];
+            Shorten.ShortenType shortenType = planeInfo.ShortenTypes[1];
             double delV = (index == 0) ? shortenType.DeltaV1 : shortenType.DeltaV2;
             double delU1 = shortenType.DeltaU1;
             double delU2 = shortenType.DeltaU2;
@@ -3043,37 +3083,42 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetImplantStandardPlaneInfos()
         {
-            int ne11 = DesignInfo.StandardNumbers[0];
-            int ne12 = DesignInfo.StandardNumbers[1];
-            int ce12 = DesignInfo.StandardNumbers[2];
-            int ne2 = DesignInfo.StandardNumbers[3];
-            bool isDoubleNE2 = DesignInfo.StandardNumbers[4] == 1 ? true : false;
-            int nm = DesignInfo.StandardNumbers[5];
-            int neA11 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int neA12 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            int ceA12 = DesignInfo.DesignInfoAfter.StandardNumbers[2];
-            int neA2 = DesignInfo.DesignInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = DesignInfo.DesignInfoAfter.StandardNumbers[4]==1? true:false;
-            int nmA = DesignInfo.DesignInfoAfter.StandardNumbers[5];
+            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+
+            int ne11 = designInfo.StandardNumbers[0];
+            int ne12 = designInfo.StandardNumbers[1];
+            int ce12 = designInfo.StandardNumbers[2];
+            int ne2 = designInfo.StandardNumbers[3];
+            bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
+            int nm = designInfo.StandardNumbers[5];
+            int neA11 = designInfoAfter.StandardNumbers[0];
+            int neA12 = designInfoAfter.StandardNumbers[1];
+            int ceA12 = designInfoAfter.StandardNumbers[2];
+            int neA2 = designInfoAfter.StandardNumbers[3];
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4]==1? true:false;
+            int nmA = designInfoAfter.StandardNumbers[5];
             
-            double spacE11 = DesignInfo.StandardSpacings[0];
-            double spacE12 = DesignInfo.StandardSpacings[1];
-            double spacE2 = DesignInfo.StandardSpacings[2];
-            double spacM = DesignInfo.StandardSpacings[3];
-            double spacEA11 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacEA12 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
-            double spacEA2 = DesignInfo.DesignInfoAfter.StandardSpacings[2];
-            double spacMA = DesignInfo.DesignInfoAfter.StandardSpacings[3];
-            List<UV> pntE1s = PlaneInfo.StandardRebarPointLists[0];
-            List<UV> pntMs = PlaneInfo.StandardRebarPointLists[1];
-            List<UV> pntE2s = PlaneInfo.StandardRebarPointLists[2];
-            List<UV> pntE1As = PlaneInfo.PlaneInfoAfter.StandardRebarPointLists[0];
-            List<UV> pntMAs = PlaneInfo.PlaneInfoAfter.StandardRebarPointLists[1];
-            List<UV> pntE2As = PlaneInfo.PlaneInfoAfter.StandardRebarPointLists[2];
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
+            double spacE11 = designInfo.StandardSpacings[0];
+            double spacE12 = designInfo.StandardSpacings[1];
+            double spacE2 = designInfo.StandardSpacings[2];
+            double spacM = designInfo.StandardSpacings[3];
+            double spacEA11 = designInfoAfter.StandardSpacings[0];
+            double spacEA12 = designInfoAfter.StandardSpacings[1];
+            double spacEA2 = designInfoAfter.StandardSpacings[2];
+            double spacMA = designInfoAfter.StandardSpacings[3];
+            List<UV> pntE1s = planeInfo.StandardRebarPointLists[0];
+            List<UV> pntMs = planeInfo.StandardRebarPointLists[1];
+            List<UV> pntE2s = planeInfo.StandardRebarPointLists[2];
+            List<UV> pntE1As = planeInfoAfter.StandardRebarPointLists[0];
+            List<UV> pntMAs = planeInfoAfter.StandardRebarPointLists[1];
+            List<UV> pntE2As = planeInfoAfter.StandardRebarPointLists[2];
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
 
             XYZ vecExpBigU1 = -vecY, vecExpBigU2 = vecY;
             XYZ vecExpBigV1 = -vecX, vecExpBigV2 = vecX;

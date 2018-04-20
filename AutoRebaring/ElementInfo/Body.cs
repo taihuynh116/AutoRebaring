@@ -14,12 +14,8 @@ namespace AutoRebaring.ElementInfo
 {
     public interface IElementInfo
     {
-        int LocationCount { get; set; }
-        int Index { get; set; }
-        IPlaneInfo PlaneInfo { get; set; }
-        IVerticalInfo VerticalInfo { get; set; }
-        IDesignInfo DesignInfo { get; set; }
-        IRevitInfo RevitInfo { get; set; }
+        int ID { get; set; }
+        int IDElementTypeInfo { get; set; }
         void GetPlaneInfo(ARElementType elemType, ARWallParameter wp);
         void GetDesignInfo(List<IDesignInfo> designInfos);
         void GetVerticalInfo(ARElementType elemType);
@@ -30,42 +26,17 @@ namespace AutoRebaring.ElementInfo
         void GetShortenType(IPlaneInfo planeInfo, ARLockheadParameter lp);
         void GetDesignInfoAB(IDesignInfo diA, IDesignInfo diB);
     }
-
-    public interface IDesignInfo
+    public interface IRevitInfo
     {
+        int ID { get; set; }
+        Document Document { get; set; }
+        Element Element { get; set; }
+        double Elevation { get; set; }
         Level Level { get; set; }
-        List<RebarBarType> StandardTypes { get; set; }
-        List<double> StandardDiameters { get; set; }
-        List<RebarHookType> StandardHookTypes { get; set; }
-        List<int> StandardNumbers { get; set; }
-        List<double> StandardSpacings { get; set; }
-        List<RebarBarType> StirrupTypes { get; set; }
-        List<double> StirrupDiameters { get; set; }
-        List<double> BotTopSpacings { get; set; }
-        List<double> MiddleSpacings { get; set; }
-        IDesignInfo DesignInfoAfter { get; set; }
-        IDesignInfo DesignInfoBefore { get; set; }
-        void GetStandardSpacing(IPlaneInfo pi, ARCoverParameter cp);
-        void GetDesignInfo(IDesignInfo diA, IDesignInfo diB);
-    }
-    public enum ShortenEnum
-    {
-        None, Small, Big
-    }
-
-    public interface IShortenType
-    {
-        ShortenEnum ShortenU1 { get; set; }
-        ShortenEnum ShortenU2 { get; set; }
-        ShortenEnum ShortenV1 { get; set; }
-        ShortenEnum ShortenV2 { get; set; }
-        double DeltaU1 { get; set; }
-        double DeltaU2 { get; set; }
-        double DeltaV1 { get; set; }
-        double DeltaV2 { get; set; }
     }
     public interface IPlaneInfo
     {
+        int ID { get; set; }
         List<double> B1s { get; }
         List<double> B2s { get; }
         UV VectorU { get; }
@@ -76,19 +47,12 @@ namespace AutoRebaring.ElementInfo
         List<ShortenType> ShortenTypes { get; }
         List<List<UV>> StandardRebarPointLists { get; }
         List<List<UV>> StirrupRebarPointLists { get; }
-        IPlaneInfo PlaneInfoAfter { get; set; }
-        void GetRebarLocation(IDesignInfo di, ARCoverParameter cp);
-        void GetShortenType(IPlaneInfo pia, ARLockheadParameter lp);
-    }
-    public interface IRevitInfo
-    {
-        Document Document { get; set; }
-        Element Element { get; set; }
-        double Elevation { get; set; }
-        Level Level { get; set; }
+        void GetRebarLocation();
+        void GetShortenType();
     }
     public interface IVerticalInfo
     {
+        int ID { get; set; }
         Level StartLevel { get; set; }
         Level EndLevel { get; set; }
         double Top { get; }
@@ -115,9 +79,42 @@ namespace AutoRebaring.ElementInfo
         List<double> RebarDevelopmentLengths { get; set; }
         List<bool> SmallStandardChosens { get; set; }
         List<StirrupDistribution> StirrupDistributions { get; set; }
-        void GetInformation(ARRebarVerticalParameter rvpStand, ARRebarVerticalParameter rvpStirr, ARLockheadParameter lpp);
-        void GetRebarInformation(IDesignInfo di, ARAnchorParameter ap, ARDevelopmentParameter dp);
+        void GetInformation();
+        void GetRebarInformation();
     }
+    public interface IDesignInfo
+    {
+        int ID { get; set; }
+        Level Level { get; set; }
+        List<RebarBarType> StandardTypes { get; set; }
+        List<double> StandardDiameters { get; set; }
+        List<RebarHookType> StandardHookTypes { get; set; }
+        List<int> StandardNumbers { get; set; }
+        List<double> StandardSpacings { get; set; }
+        List<RebarBarType> StirrupTypes { get; set; }
+        List<double> StirrupDiameters { get; set; }
+        List<double> BotTopSpacings { get; set; }
+        List<double> MiddleSpacings { get; set; }
+        void GetStandardSpacing();
+    }
+    public enum ShortenEnum
+    {
+        None, Small, Big
+    }
+
+    public interface IShortenType
+    {
+        ShortenEnum ShortenU1 { get; set; }
+        ShortenEnum ShortenU2 { get; set; }
+        ShortenEnum ShortenV1 { get; set; }
+        ShortenEnum ShortenV2 { get; set; }
+        double DeltaU1 { get; set; }
+        double DeltaU2 { get; set; }
+        double DeltaV1 { get; set; }
+        double DeltaV2 { get; set; }
+    }
+    
+    
     public enum RebarLocation
     {
         L1, L2
@@ -128,6 +125,7 @@ namespace AutoRebaring.ElementInfo
     }
     public interface IStandardPlaneSingleInfo
     {
+        int ID { get; set; }
         XYZ Normal { get; set; }
         int Number { get; set; }
         double Spacing { get; set; }
@@ -146,30 +144,16 @@ namespace AutoRebaring.ElementInfo
     }
     public interface IStandardPlaneInfo
     {
+        int ID { get; set; }
         List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
         List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
     }
-    public interface IInputForm
+    public interface IElementTypeInfo
     {
-        Document Document { get; set; }
-        Element Element { get; set; }
-        ARElementType ElementType { get; set; }
-        ARWallParameter WallParameter { get; set; }
-        ARCoverParameter CoverParameter { get; set; }
-        ARAnchorParameter AnchorParameter { get; set; }
-        ARDevelopmentParameter DevelopmentParameter { get; set; }
-        ARLockheadParameter LockheadParameter { get; set; }
-        List<IDesignInfo> DesignInfos { get; set; }
-        ARLevel StartLevel { get; set; }
-        ARLevel EndLevel { get; set; }
-        ARStandardChosen StandardChosen { get; set; }
-        List<double> FitStandards { get; set; }
-        List<double> PairFitStandards { get; set; }
-        List<double> TripFitStandards { get; set; }
-        List<double> FitImplants { get; set; }
-        List<double> PairFitImplants { get; set; }
-        List<double> RebarZ1s { get; set; }
-        List<double> RebarZ2s { get; set; }
+        int ID { get; set; }
+        ElementTypeEnum Type { get; set; }
+        int LocationCount { get; set; }
+
     }
 }

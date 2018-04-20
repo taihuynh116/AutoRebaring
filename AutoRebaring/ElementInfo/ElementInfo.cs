@@ -13,15 +13,13 @@ namespace AutoRebaring.ElementInfo
 {
     public class ElementInfo : IElementInfo
     {
-        public int LocationCount { get; set; }
-        public int Index { get; set; }
-        public IPlaneInfo PlaneInfo { get; set; }
-        public IVerticalInfo VerticalInfo { get; set; }
-        public IDesignInfo DesignInfo { get; set; }
-        public IRevitInfo RevitInfo { get; set; }
-        public IStandardPlaneInfo StandardPlaneInfo { get; set; }
-
-        public ElementInfo() { }
+        public int ID { get; set; }
+        int IDElementTypeInfo { get; set; }
+        public ElementInfo(int id, int idElemTypeInfo)
+        {
+            ID = id;
+            IDElementTypeInfo = idElemTypeInfo;
+        }
         public void GetPlaneInfo(ARElementType elemType, ARWallParameter wp)
         {
             switch (elemType.Type)
