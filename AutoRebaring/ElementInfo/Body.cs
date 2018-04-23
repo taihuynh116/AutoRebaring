@@ -12,20 +12,6 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.ElementInfo
 {
-    public interface IElementInfo
-    {
-        int ID { get; set; }
-        int IDElementTypeInfo { get; set; }
-        void GetPlaneInfo(ARElementType elemType, ARWallParameter wp);
-        void GetDesignInfo(List<IDesignInfo> designInfos);
-        void GetVerticalInfo(ARElementType elemType);
-        void GetStandardSpacing(ARCoverParameter cp);
-        void GetRebarLocation(ARCoverParameter cp);
-        void GetRebarInformation(ARAnchorParameter ap, ARDevelopmentParameter dp);
-        void GetStandardPlaneInfo(ARElementType elemType, ARLockheadParameter lp);
-        void GetShortenType(IPlaneInfo planeInfo, ARLockheadParameter lp);
-        void GetDesignInfoAB(IDesignInfo diA, IDesignInfo diB);
-    }
     public interface IRevitInfo
     {
         int ID { get; set; }

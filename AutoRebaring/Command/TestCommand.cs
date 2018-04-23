@@ -32,8 +32,8 @@ namespace AutoRebaring.Command
 
             Element e = doc.GetElement(sel.PickObject(ObjectType.Element, new WallAndColumnSelection()));
 
-            IRevitInfo revitInfo = new RevitInfo(doc, e);
-            IVerticalInfo  verticalInfo= new VerticalInfo(revitInfo);
+            //IRevitInfo revitInfo = new RevitInfo(doc, e);
+            //IVerticalInfo  verticalInfo= new VerticalInfo(revitInfo);
 
 
             tx.Commit();

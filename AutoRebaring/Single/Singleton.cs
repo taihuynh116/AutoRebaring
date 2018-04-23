@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoRebaring.Singleton
+namespace AutoRebaring.Single
 {
     public class Singleton
     {
@@ -27,7 +27,6 @@ namespace AutoRebaring.Singleton
 
         #region Data
         private List<IElementTypeInfo> elemTypeInfos = new List<IElementTypeInfo>();
-        private List<IElementInfo> elemInfos = new List<IElementInfo>();
         private List<IRevitInfo> revitInfos = new List<IRevitInfo>();
         private List<IPlaneInfo> planeInfos = new List<IPlaneInfo>();
         private List<IVerticalInfo> verticalInfos = new List<IVerticalInfo>();
@@ -63,8 +62,7 @@ namespace AutoRebaring.Singleton
         {
             elemTypeInfoID = elemTypeInfos.First(x => x.Type == elemTypeEnum).ID;
         }
-        public void AddElementTypeInfo(IElementTypeInfo elemTypeInfo) { elemTypeInfos.Equals(elemTypeInfo); }
-        public void AddElementInfo(IElementInfo elemInfo) { elemInfos.Add(elemInfo); }
+        public void AddElementTypeInfo(IElementTypeInfo elemTypeInfo) { elemTypeInfos.Add(elemTypeInfo); }
         public void AddRevitInfo(IRevitInfo revitInfo) { revitInfos.Add(revitInfo); }
         public void AddPlaneInfo(IPlaneInfo planeInfo) { planeInfos.Add(planeInfo); }
         public void AddVerticalInfo(IVerticalInfo verticalInfo) { verticalInfos.Add(verticalInfo); }
@@ -73,21 +71,38 @@ namespace AutoRebaring.Singleton
         public void AddStandardPlaneSingleInfo(IStandardPlaneSingleInfo standPlaneSingleInfo) { standPlaneSingleInfos.Add(standPlaneSingleInfo); }
         #endregion
 
+        #region Update Date
+        public void UpdateRevitInfo(int id, IRevitInfo revitInfo) { revitInfos[id] = revitInfo; }
+        public void UpdatePlaneInfo(int id, IPlaneInfo planeInfo) { planeInfos[id] = planeInfo; }
+        public void UpdateVerticalInfo(int id, IVerticalInfo verticalInfo) { verticalInfos[id] = verticalInfo; }
+        public void UpdateDesignInfo(int id, IDesignInfo designInfo) { designInfos[id] = designInfo; }
+        public void UpdateStandardPlaneInfo(int id, IStandardPlaneInfo standPlaneInfo) { standPlaneInfos[id] = standPlaneInfo; }
+        #endregion
+
         #region Inquire Data
         public IElementTypeInfo GetElementTypeInfo() { return elemTypeInfos.First(x => x.ID == elemTypeInfoID); }
         public int GetElementTypeInfoID() { return elemTypeInfos.First(x => x.ID == elemTypeInfoID).ID; }
         public ElementTypeEnum GetElementTypeEnum() { return elemTypeInfos.First(x => x.ID == elemTypeInfoID).Type; }
         public int GetElementCount() { return revitInfos.Count; }
-        public IElementInfo GetElementInfo(int id) { return elemInfos.First(x => x.ID == id); }
         public IRevitInfo GetRevitInfo(int id) { return revitInfos.First(x => x.ID == id); }
         public IPlaneInfo GetPlaneInfo(int id) { return planeInfos.First(x => x.ID == id); }
         public IPlaneInfo GetPlaneInfoAfter(int id)
         {
-            int idAfter = id+1 < planeInfos.Count ? id+1 : planeInfos.Count - 1;
+            int idAfter = id + 1 < planeInfos.Count ? id + 1 : planeInfos.Count - 1;
             return GetPlaneInfo(idAfter);
         }
         public IVerticalInfo GetVerticalInfo(int id) { return verticalInfos.First(x => x.ID == id); }
-        public IDesignInfo GetDesignInfo (int id) { return designInfos.First(x => x.ID == id); }
+        public IVerticalInfo GetVerticalInfoAfter(int id)
+        {
+            int idAfter = id + 1 < designInfos.Count ? id + 1 : verticalInfos.Count - 1;
+            return verticalInfos.First(x => x.ID == id);
+        }
+        public IVerticalInfo GetVerticalInfo2After(int id)
+        {
+            int idAfter = id + 2 < designInfos.Count ? id + 2 : verticalInfos.Count - 1;
+            return verticalInfos.First(x => x.ID == id);
+        }
+        public IDesignInfo GetDesignInfo(int id) { return designInfos.First(x => x.ID == id); }
         public IDesignInfo GetDesignInfoAfter(int id)
         {
             int idAfter = id + 1 < designInfos.Count ? id + 1 : designInfos.Count - 1;

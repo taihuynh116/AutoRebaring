@@ -21,13 +21,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AutoRebaring.Single;
 
 namespace AutoRebaring.Form
 {
     /// <summary>
     /// Interaction logic for InputForm.xaml
     /// </summary>
-    public partial class InputForm : UserControl, IInputForm
+    public partial class InputForm : UserControl
     {
         #region DatabaseDao
         public MacAddressDao MacAddressDao { get; set; } = new MacAddressDao();
@@ -177,7 +178,7 @@ namespace AutoRebaring.Form
                 ProjectDao.Update(item.SYS_ID, item.Code + "_" + item.Value);
             }
 
-            lblProject.Content = Document.ProjectInformation.Name;
+            lblProject.Content = Singleton.Instance.Document.ProjectInformation.Name;
             IDProject = ProjectDao.GetId((string)lblProject.Content);
         }
         private void FirstAddMacAddress()
@@ -355,7 +356,7 @@ namespace AutoRebaring.Form
         private void FirstAddFamilyStirrup()
         {
             rbtColumn.IsChecked = true;
-            List<RebarShape> rebarShapes = new FilteredElementCollector(Singleton.Singleton.Instance.Document).OfClass(typeof(RebarShape)).Where(x => x != null).Cast<RebarShape>().ToList();
+            List<RebarShape> rebarShapes = new FilteredElementCollector(Singleton.Instance.Document).OfClass(typeof(RebarShape)).Where(x => x != null).Cast<RebarShape>().ToList();
             foreach (var item in rebarShapes)
             {
                 StirrupFamilyNameDao.Update(item.Name);
@@ -369,9 +370,9 @@ namespace AutoRebaring.Form
         }
         private void FirstAddCheckLevel()
         {
-            Element elem = Singleton.Singleton.Instance.Element;
+            Element elem = Singleton.Instance.Element;
             lblCheckLevel.Content = elem.LookupParameter(elem is Wall ? ConstantValue.StartLevelWall : ConstantValue.StartLevelColumn).AsValueString();
-            Element elemType = Singleton.Singleton.Instance.Document.GetElement(elem.GetTypeId());
+            Element elemType = Singleton.Instance.Document.GetElement(elem.GetTypeId());
             if (elem is Wall)
             {
                 lblCheckb1.Content = elem.LookupParameter(ConstantValue.B1Param_Wall).AsDouble() * ConstantValue.feet2MiliMeter;
@@ -387,7 +388,7 @@ namespace AutoRebaring.Form
         {
             chkView3d.IsChecked = true; chkView3d.IsChecked = false;
 
-            List<View3D> view3ds = new FilteredElementCollector(Singleton.Singleton.Instance.Document).OfClass(typeof(View3D)).Where(x => x != null).Cast<View3D>().ToList();
+            List<View3D> view3ds = new FilteredElementCollector(Singleton.Instance.Document).OfClass(typeof(View3D)).Where(x => x != null).Cast<View3D>().ToList();
             foreach (var item in view3ds)
             {
                 View3dDao.Update(IDProject, item.Name);
@@ -397,7 +398,7 @@ namespace AutoRebaring.Form
         }
         private void FirstAddLevel()
         {
-            Levels = new FilteredElementCollector(Singleton.Singleton.Instance.Document).OfClass(typeof(Level)).Where(x => x != null).Cast<Level>().ToList();
+            Levels = new FilteredElementCollector(Singleton.Instance.Document).OfClass(typeof(Level)).Where(x => x != null).Cast<Level>().ToList();
 
             txtMetaLevels = new List<TextBox>();
             lblLevels = new List<Label>();
@@ -446,7 +447,7 @@ namespace AutoRebaring.Form
             cbbDesStirType1s = new List<ComboBox> { cbbDesStirType10, cbbDesStirType11, cbbDesStirType12, cbbDesStirType13, cbbDesStirType14, cbbDesStirType15, cbbDesStirType16, cbbDesStirType17 };
             cbbDesStirType2s = new List<ComboBox> { cbbDesStirType20, cbbDesStirType21, cbbDesStirType22, cbbDesStirType23, cbbDesStirType24, cbbDesStirType25, cbbDesStirType26, cbbDesStirType27 };
             cbbDesStirType3s = new List<ComboBox> { cbbDesStirType30, cbbDesStirType31, cbbDesStirType32, cbbDesStirType33, cbbDesStirType34, cbbDesStirType35, cbbDesStirType36, cbbDesStirType37 };
-            RebarBarTypes = new FilteredElementCollector(Singleton.Singleton.Instance.Document).OfClass(typeof(RebarBarType)).Where(x => x != null).Cast<RebarBarType>().ToList();
+            RebarBarTypes = new FilteredElementCollector(Singleton.Instance.Document).OfClass(typeof(RebarBarType)).Where(x => x != null).Cast<RebarBarType>().ToList();
             for (int i = 0; i < cbbDesStandType1s.Count; i++)
             {
                 foreach (var item in RebarBarTypes)
@@ -1953,18 +1954,18 @@ namespace AutoRebaring.Form
         {
             if (IDElementType == ElementTypeDao.GetId(ConstantValue.Column))
             {
-                Singleton.Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Column);
+                Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Column);
             }
             else
             {
-                Singleton.Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Wall);
+                Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Wall);
             }
 
-            Singleton.Singleton.Instance.WallParameter = WallParameterDao.GetWallParameter(IDWallParameter);
-            Singleton.Singleton.Instance.CoverParameter = CoverParametersDao.GetCoverParameter(IDCoverParameter);
-            Singleton.Singleton.Instance.AnchorParameter = AnchorParametersDao.GetAnchorParameter(IDAnchorParameter);
-            Singleton.Singleton.Instance.DevelopmentParameter = DevelopmentParametersDao.GetDevelopmentParameter(IDDevelopmentParamter);
-            Singleton.Singleton.Instance.LockheadParameter = LockheadParametersDao.GetLockheadParameter(IDLockheadParameter);
+            Singleton.Instance.WallParameter = WallParameterDao.GetWallParameter(IDWallParameter);
+            Singleton.Instance.CoverParameter = CoverParametersDao.GetCoverParameter(IDCoverParameter);
+            Singleton.Instance.AnchorParameter = AnchorParametersDao.GetAnchorParameter(IDAnchorParameter);
+            Singleton.Instance.DevelopmentParameter = DevelopmentParametersDao.GetDevelopmentParameter(IDDevelopmentParamter);
+            Singleton.Instance.LockheadParameter = LockheadParametersDao.GetLockheadParameter(IDLockheadParameter);
 
             List<double> fitStandards = new List<double>();
             long idStandFitLLim = StandardFitLimitDao.GetId(IDProject, IDStandardFitL);
@@ -1976,7 +1977,7 @@ namespace AutoRebaring.Form
                     fitStandards.Add(double.Parse(txtFitLs[i].Text) * ConstantValue.milimeter2Feet);
                 }
             }
-            Singleton.Singleton.Instance.FitStandards = fitStandards;
+            Singleton.Instance.FitStandards = fitStandards;
 
             List<double> pairFitStandards = new List<double>();
             long idStandFitL2Lim = StandardFitLimitDao.GetId(IDProject, IDStandardFitL2);
@@ -1988,7 +1989,7 @@ namespace AutoRebaring.Form
                     pairFitStandards.Add(double.Parse(txtFitL2s[i].Text) * ConstantValue.milimeter2Feet);
                 }
             }
-            Singleton.Singleton.Instance.PairFitStandards = pairFitStandards;
+            Singleton.Instance.PairFitStandards = pairFitStandards;
 
             List<double> tripFitStandards = new List<double>();
             long idStandFitL3Lim = StandardFitLimitDao.GetId(IDProject, IDStandardFitL3);
@@ -2000,7 +2001,7 @@ namespace AutoRebaring.Form
                     tripFitStandards.Add(double.Parse(txtFitL3s[i].Text) * ConstantValue.milimeter2Feet);
                 }
             }
-            Singleton.Singleton.Instance.TripFitStandards = tripFitStandards;
+            Singleton.Instance.TripFitStandards = tripFitStandards;
 
             List<double> fitImplants = new List<double>();
             long idImplantFitLLim = StandardFitLimitDao.GetId(IDProject, IDImplantL);
@@ -2012,7 +2013,7 @@ namespace AutoRebaring.Form
                     fitImplants.Add(double.Parse(txtImplantLs[i].Text) * ConstantValue.milimeter2Feet);
                 }
             }
-            Singleton.Singleton.Instance.FitImplants = fitImplants;
+            Singleton.Instance.FitImplants = fitImplants;
 
             List<double> pairFitImplants = new List<double>();
             long idImplantFitL2Lim = StandardFitLimitDao.GetId(IDProject, IDImplantL2);
@@ -2024,49 +2025,49 @@ namespace AutoRebaring.Form
                     pairFitImplants.Add(double.Parse(txtImplantL2s[i].Text) * ConstantValue.milimeter2Feet);
                 }
             }
-            Singleton.Singleton.Instance.PairFitImplants = pairFitImplants;
+            Singleton.Instance.PairFitImplants = pairFitImplants;
 
             
-            RebarHookType hookType = new FilteredElementCollector(Singleton.Singleton.Instance.Document).OfClass(typeof(RebarHookType)).Where(x => x != null).Cast<RebarHookType>().First();
+            RebarHookType hookType = new FilteredElementCollector(Singleton.Instance.Document).OfClass(typeof(RebarHookType)).Where(x => x != null).Cast<RebarHookType>().First();
 
             long idStartLevel = LevelDao.GetId(IDProject, cbbStartLevel.Text);
-            Singleton.Singleton.Instance.StartLevel = LevelDao.GetLevel(idStartLevel);
+            Singleton.Instance.StartLevel = LevelDao.GetLevel(idStartLevel);
             long idEndLevel = LevelDao.GetId(IDProject, cbbEndLevel.Text);
-            Singleton.Singleton.Instance.EndLevel = LevelDao.GetLevel(idEndLevel);
+            Singleton.Instance.EndLevel = LevelDao.GetLevel(idEndLevel);
 
-            double z11 = Singleton.Singleton.Instance.StartLevel.Elevation;
+            double z11 = Singleton.Instance.StartLevel.Elevation;
             try
             {
                 z11 += double.Parse(txtRebarZ11.Text);
             }
             catch { }
 
-            double z12 = Singleton.Singleton.Instance.StartLevel.Elevation;
+            double z12 = Singleton.Instance.StartLevel.Elevation;
             try
             {
                 z12 += double.Parse(txtRebarZ12.Text);
             }
             catch { }
 
-            double z21 = Singleton.Singleton.Instance.StartLevel.Elevation;
+            double z21 = Singleton.Instance.StartLevel.Elevation;
             try
             {
                 z21 += double.Parse(txtRebarZ21.Text);
             }
             catch { }
 
-            double z22 = Singleton.Singleton.Instance.StartLevel.Elevation;
+            double z22 = Singleton.Instance.StartLevel.Elevation;
             try
             {
                 z22 += double.Parse(txtRebarZ22.Text);
             }
             catch { }
 
-            Singleton.Singleton.Instance.RebarZ1s = new List<double> { z11 * ConstantValue.milimeter2Feet, z21 * ConstantValue.milimeter2Feet };
-            Singleton.Singleton.Instance.RebarZ2s = new List<double> { z21 * ConstantValue.milimeter2Feet, z22 * ConstantValue.milimeter2Feet };
+            Singleton.Instance.RebarZ1s = new List<double> { z11 * ConstantValue.milimeter2Feet, z21 * ConstantValue.milimeter2Feet };
+            Singleton.Instance.RebarZ2s = new List<double> { z21 * ConstantValue.milimeter2Feet, z22 * ConstantValue.milimeter2Feet };
 
             long idStandChosen = StandardChosenDao.GetId(IDProject);
-            Singleton.Singleton.Instance.StandardChosen = StandardChosenDao.GetStandardChosen(idStandChosen);
+            Singleton.Instance.StandardChosen = StandardChosenDao.GetStandardChosen(idStandChosen);
 
             List<IDesignInfo> designInfos = new List<IDesignInfo>();
             var res = DesignLevelLimitDao.GetDesignLevelLimit(IDDesignLevelLimit);
@@ -2083,7 +2084,7 @@ namespace AutoRebaring.Form
                     List<RebarBarType> stirrTypes;
                     List<double> stirrTBs;
                     List<double> stirrMs;
-                    if (Singleton.Singleton.Instance.GetElementTypeInfo().Type== ElementTypeEnum.Column)
+                    if (Singleton.Instance.GetElementTypeInfo().Type== ElementTypeEnum.Column)
                     {
                         level = cbbDesLevels[i].SelectedItem as Level;
                         standTypes = new List<RebarBarType> { cbbDesStandType1s[i].SelectedItem as RebarBarType };
@@ -2108,7 +2109,7 @@ namespace AutoRebaring.Form
                     designInfos.Add(desInfo);
                 }
             }
-            Singleton.Singleton.Instance.DesignInfos = designInfos;
+            Singleton.Instance.DesignInfos = designInfos;
         }
         private void chkDevErrorInclude_Checked(object sender, RoutedEventArgs e)
         {

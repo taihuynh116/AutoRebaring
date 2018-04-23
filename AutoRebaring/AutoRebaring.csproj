@@ -212,7 +212,6 @@
     <Compile Include="Database\BIM_PORTAL\Projects.cs" />
     <Compile Include="ElementInfo\Body.cs" />
     <Compile Include="ElementInfo\DesignInfo.cs" />
-    <Compile Include="ElementInfo\ElementInfo.cs" />
     <Compile Include="ElementInfo\ElementInfoUtils.cs" />
     <Compile Include="ElementInfo\ElementTypeInfo.cs" />
     <Compile Include="ElementInfo\PlaneInfo.cs" />
@@ -234,7 +233,7 @@
     <Compile Include="RebarLogistic\StandardTurn.cs" />
     <Compile Include="RebarLogistic\StirrupLogistic.cs" />
     <Compile Include="RebarLogistic\Variable.cs" />
-    <Compile Include="Singleton\Singleton.cs" />
+    <Compile Include="Single\Singleton.cs" />
     <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\CheckGeometry.cs">
       <Link>Library\CheckGeometry.cs</Link>
     </Compile>
@@ -258,7 +257,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AutoRebaring.addin" />
+    <Content Include="AutoRebaring.addin">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

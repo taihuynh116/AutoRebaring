@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoRebaring.Single;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 {
@@ -25,13 +26,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             GetNormalStandardPlaneInfos();
             GetShortenStandardPlaneInfos();
             GetImplantStandardPlaneInfos();
-
-            Singleton.Singleton.Instance.AddStandardPlaneInfo(this);
         }
         private void GetNormalStandardPlaneInfos()
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
 
             int n1 = designInfo.StandardNumbers[0];
             int n2 = designInfo.StandardNumbers[1];
@@ -135,7 +134,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenStandardPlaneInfos()
         {
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
 
             IShortenType shortenType = planeInfo.ShortenTypes[0];
             ShortenStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
@@ -146,11 +145,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenV(int index, ShortenEnum shorten)
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
-            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Instance.LockheadParameter;
 
             int n1 = designInfo.StandardNumbers[0];
             int n2 = designInfo.StandardNumbers[1];
@@ -161,7 +160,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             double spacA1 = designInfoAfter.StandardSpacings[0];
             double spacA2 = designInfoAfter.StandardSpacings[1];
             List<UV> pnts = planeInfo.StandardRebarPointLists[0];
-            List<UV> pntAs = planeInfo.PlaneInfoAfter.StandardRebarPointLists[0];
+            List<UV> pntAs = planeInfoAfter.StandardRebarPointLists[0];
             XYZ vecX = planeInfo.VectorX;
             XYZ vecY = planeInfo.VectorY;
             UV vecU = planeInfo.VectorU;
@@ -596,11 +595,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenU(int index, ShortenEnum shorten)
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
-            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Instance.LockheadParameter;
 
             int n1 = designInfo.StandardNumbers[0];
             int n2 = designInfo.StandardNumbers[1];
@@ -1048,20 +1047,25 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetImplantStandardPlaneInfos()
         {
-            XYZ vecX = PlaneInfo.VectorX;
-            XYZ vecY = PlaneInfo.VectorY;
-            UV vecU = PlaneInfo.VectorU;
-            UV vecV = PlaneInfo.VectorV;
-            List<UV> pnts = PlaneInfo.StandardRebarPointLists[0];
-            List<UV> pntAs = PlaneInfo.PlaneInfoAfter.StandardRebarPointLists[0];
-            int n1 = DesignInfo.StandardNumbers[0];
-            int n2 = DesignInfo.StandardNumbers[1];
-            int nA1 = DesignInfo.DesignInfoAfter.StandardNumbers[0];
-            int nA2 = DesignInfo.DesignInfoAfter.StandardNumbers[1];
-            double spac1 = DesignInfo.StandardSpacings[0];
-            double spac2 = DesignInfo.StandardSpacings[1];
-            double spacA1 = DesignInfo.DesignInfoAfter.StandardSpacings[0];
-            double spacA2 = DesignInfo.DesignInfoAfter.StandardSpacings[1];
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
+
+            XYZ vecX = planeInfo.VectorX;
+            XYZ vecY = planeInfo.VectorY;
+            UV vecU = planeInfo.VectorU;
+            UV vecV = planeInfo.VectorV;
+            List<UV> pnts = planeInfo.StandardRebarPointLists[0];
+            List<UV> pntAs = planeInfoAfter.StandardRebarPointLists[0];
+            int n1 = designInfo.StandardNumbers[0];
+            int n2 = designInfo.StandardNumbers[1];
+            int nA1 = designInfoAfter.StandardNumbers[0];
+            int nA2 = designInfoAfter.StandardNumbers[1];
+            double spac1 = designInfo.StandardSpacings[0];
+            double spac2 = designInfo.StandardSpacings[1];
+            double spacA1 = designInfoAfter.StandardSpacings[0];
+            double spacA2 = designInfoAfter.StandardSpacings[1];
 
             XYZ vecExpBigU1 = -vecY, vecExpBigU2 = vecY;
             XYZ vecExpBigV1 = -vecX, vecExpBigV2 = vecX;
@@ -1277,13 +1281,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             GetNormalStandardPlaneInfos();
             GetShortenStandardPlaneInfos();
             GetImplantStandardPlaneInfos();
-
-            Singleton.Singleton.Instance.AddStandardPlaneInfo(this);
         }
         private void GetNormalStandardPlaneInfos()
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
 
             int ne11 = designInfo.StandardNumbers[0];
             int ne12 = designInfo.StandardNumbers[1];
@@ -1609,8 +1611,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenStandardPlaneInfos()
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
 
             int ne11 = designInfo.StandardNumbers[0];
             int ne12 = designInfo.StandardNumbers[1];
@@ -1655,11 +1657,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenVEdge(int locIndex, int index, ShortenEnum shorten)
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
-            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Instance.LockheadParameter;
 
             XYZ vecX = planeInfo.VectorX;
             XYZ vecY = planeInfo.VectorY;
@@ -2065,11 +2067,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenUEdge(int locIndex, int index, ShortenEnum shorten)
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
-            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Instance.LockheadParameter;
 
             XYZ vecX = planeInfo.VectorX;
             XYZ vecY = planeInfo.VectorY;
@@ -2479,11 +2481,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenVInside(int locIndex, int index12)
         {
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Instance.LockheadParameter;
 
             XYZ vecX = planeInfo.VectorX;
             XYZ vecY = planeInfo.VectorY;
@@ -2673,11 +2675,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetShortenVMiddle(int index, ShortenEnum shorten)
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
-            ARLockheadParameter lockheadParameter = Singleton.Singleton.Instance.LockheadParameter;
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
+            ARLockheadParameter lockheadParameter = Singleton.Instance.LockheadParameter;
 
             XYZ vecX = planeInfo.VectorX;
             XYZ vecY = planeInfo.VectorY;
@@ -3083,10 +3085,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
         }
         private void GetImplantStandardPlaneInfos()
         {
-            IDesignInfo designInfo = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo designInfoAfter = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            IPlaneInfo planeInfo = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            IPlaneInfo planeInfoAfter = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID);
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            IPlaneInfo planeInfoAfter = Singleton.Instance.GetPlaneInfoAfter(ID);
 
             int ne11 = designInfo.StandardNumbers[0];
             int ne12 = designInfo.StandardNumbers[1];

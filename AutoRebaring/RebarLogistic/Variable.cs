@@ -1,6 +1,7 @@
 ﻿using AutoRebaring.Constant;
 using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo;
+using AutoRebaring.Single;
 using Geometry;
 using System;
 using System.Collections.Generic;
@@ -57,11 +58,17 @@ namespace AutoRebaring.RebarLogistic
         public int CountResidualImplant { get { return L1ResidualImplants.Count; } }
         public int CountImplant12 { get { return L1Implants.Count; } }
         public int CountImplantEqualZero { get { return LImplants.Count; } }
-        public Variable(ARStandardChosen sc, List<double> lstandards, List<double> lplusStandards, List<double> ltripStandards)
-            : this(sc.Lmax * ConstantValue.milimeter2Feet, sc.Lmin * ConstantValue.milimeter2Feet, sc.Step * ConstantValue.milimeter2Feet, lstandards, lplusStandards, ltripStandards)
-        { }
-        public Variable(double Lmax, double Lmin, double step, List<double> lstandards, List<double> lplusStandards, List<double> ltripStandards)
+        public Variable()
         {
+            ARStandardChosen sc = Singleton.Instance.StandardChosen;
+            double Lmax = sc.Lmax * ConstantValue.milimeter2Feet;
+            double Lmin = sc.Lmin * ConstantValue.milimeter2Feet;
+            double step = sc.Step * ConstantValue.milimeter2Feet;
+
+            List<double> lstandards = Singleton.Instance.FitStandards;
+            List<double> lplusStandards = Singleton.Instance.PairFitImplants;
+            List<double> ltripStandards = Singleton.Instance.TripFitStandards;
+
             this.Lmax = Lmax; this.Lmin = Lmin; this.Step = step;
             L1Standards = new List<double>();
             L2Standards = new List<double>();
@@ -158,12 +165,20 @@ namespace AutoRebaring.RebarLogistic
                 }
             }
         }
-        public void SetImplant(List<double> lImplants, List<double> lPlusImplants, ARAnchorParameter ap, ARDevelopmentParameter dp, IElementInfo ei, int locIndex)
+        public void SetImplant(int idElem, int locIndex)
         {
-            SetImplant(lImplants, lPlusImplants, ap.AnchorMultiply, dp.DevelopmentMultiply, ei.VerticalInfo.BottomOffsetValue, ei.VerticalInfo.TopOffset - ei.VerticalInfo.Bottom, ei.DesignInfo.DesignInfoAfter.StandardDiameters[locIndex]);
-        }
-        public void SetImplant(List<double> lImplants, List<double> lPlusImplants, int anchorMulti, int devMulti, double botOff, double lenFromTop, double diameter)
-        {
+            List<double> lImplants = Singleton.Instance.FitImplants;
+            List<double> lPlusImplants = Singleton.Instance.PairFitImplants;
+            int anchorMulti = Singleton.Instance.AnchorParameter.AnchorMultiply;
+            int devMulti = Singleton.Instance.DevelopmentParameter.DevelopmentMultiply;
+
+            IVerticalInfo verInfo = Singleton.Instance.GetVerticalInfo(idElem);
+            double botOff = verInfo.BottomOffsetValue;
+            double lenFromTop = verInfo.TopOffset - verInfo.Bottom;
+
+            IDesignInfo desInfo = Singleton.Instance.GetDesignInfo(idElem);
+            double diameter = desInfo.StandardDiameters[locIndex];
+
             double lenBot1 = botOff + (devMulti * 2 + anchorMulti) * diameter;
             double lenBot2 = botOff + (devMulti + anchorMulti) * diameter;
             double lenTop1 = lenFromTop + anchorMulti * diameter;

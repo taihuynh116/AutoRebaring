@@ -28,6 +28,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public int Numeric { get; set; }
 
+        public DateTime LastUpdate { get; set; }
+
         public virtual ARLevel ARLevel { get; set; }
 
         public virtual ARMark ARMark { get; set; }

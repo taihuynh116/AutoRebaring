@@ -21,7 +21,8 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                     IDMark = idmark,
                     Numeric = numeric,
                     IDDesignLevel = idDesignLevel,
-                    CreateDate = DateTime.Now
+                    CreateDate = DateTime.Now,
+                    LastUpdate = DateTime.Now
                 };
                 db.ARDesignLevels.Add(obj);
             }
@@ -29,6 +30,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             {
                 var obj = new ARDesignLevel();
                 obj.IDDesignLevel = idDesignLevel;
+                obj.LastUpdate = DateTime.Now;
             }
             db.SaveChanges();
         }
@@ -39,7 +41,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             {
                 return -1;
             }
-            return res.First().ID;
+            return res.OrderByDescending(x => x.LastUpdate).First().ID;
         }
         public ARDesignLevel GetDesignLevel(long id)
         {

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoRebaring.Single;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -51,10 +52,22 @@ namespace AutoRebaring.ElementInfo
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
             StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
+        public ColumnDesignInfo(IDesignInfo designInfo, Level level)
+        {
+            Level = level;
+            StandardTypes = designInfo.StandardTypes;
+            StandardHookTypes = designInfo.StandardHookTypes;
+            StandardNumbers = designInfo.StandardNumbers;
+            StirrupTypes = designInfo.StirrupTypes;
+            BotTopSpacings = designInfo.BotTopSpacings;
+            MiddleSpacings = designInfo.MiddleSpacings;
+            StandardDiameters = designInfo.StandardDiameters;
+            StirrupDiameters = designInfo.StirrupDiameters;
+        }
         public void GetStandardSpacing()
         {
-            IPlaneInfo pi = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
+            IPlaneInfo pi = Singleton.Instance.GetPlaneInfo(ID);
+            ARCoverParameter cp = Singleton.Instance.CoverParameter;
 
             double standDia = StandardTypes[0].BarDiameter;
             double stirrDia = StirrupTypes[0].BarDiameter;
@@ -107,10 +120,22 @@ namespace AutoRebaring.ElementInfo
             StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
             StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
+        public WallDesignInfo(IDesignInfo designInfo, Level level)
+        {
+            Level = level;
+            StandardTypes = designInfo.StandardTypes;
+            StandardHookTypes = designInfo.StandardHookTypes;
+            StandardNumbers = designInfo.StandardNumbers;
+            StirrupTypes = designInfo.StirrupTypes;
+            BotTopSpacings = designInfo.BotTopSpacings;
+            MiddleSpacings = designInfo.MiddleSpacings;
+            StandardDiameters = designInfo.StandardDiameters;
+            StirrupDiameters = designInfo.StirrupDiameters;
+        }
         public void GetStandardSpacing()
         {
-            IPlaneInfo pi = Singleton.Singleton.Instance.GetPlaneInfo(ID);
-            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
+            IPlaneInfo pi = Singleton.Instance.GetPlaneInfo(ID);
+            ARCoverParameter cp = Singleton.Instance.CoverParameter;
 
             double edgeStandDia = StandardTypes[0].BarDiameter;
             double middleStandDia = StandardTypes[1].BarDiameter;

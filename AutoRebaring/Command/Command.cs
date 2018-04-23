@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoRebaring.Single;
 
 namespace AutoRebaring.Command
 {
@@ -39,17 +40,16 @@ namespace AutoRebaring.Command
             Window.Form = new InputForm();
             Window.ShowDialog();
 
-            InputForm inputForm = Window.Form;
-            ElementInfoCollection elemInfoCol = new ElementInfoCollection(inputForm);
+            ElementInfoUtils.GetRelatedElements();
+            ElementInfoUtils.GetAllParameters();
 
             List<StandardLogistic> stanLogs = new List<StandardLogistic>();
-            for (int i = 0; i < elemInfoCol[0].LocationCount; i++)
+            for (int i = 0; i < Singleton.Instance.GetElementTypeInfo().LocationCount; i++)
             {
-                StandardLogistic stanLog = new StandardLogistic(elemInfoCol, inputForm, i);
+                StandardLogistic stanLog = new StandardLogistic(i);
                 stanLog.RunLogistic();
                 stanLogs.Add(stanLog);
             }
-
 
             tx.Commit();
             return Result.Succeeded;

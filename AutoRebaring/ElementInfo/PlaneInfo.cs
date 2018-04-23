@@ -11,6 +11,7 @@ using AutoRebaring.Constant;
 using AutoRebaring.ElementInfo;
 using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
 using AutoRebaring.Database.AutoRebaring.EF;
+using AutoRebaring.Single;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -27,7 +28,7 @@ namespace AutoRebaring.ElementInfo
         public PlaneInfo(int id)
         {
             ID = id;
-            IRevitInfo revitInfo = Singleton.Singleton.Instance.GetRevitInfo(id);
+            IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(id);
             Document doc = revitInfo.Document;
             Element e = revitInfo.Element;
             GetPlaneInfo(doc, e);
@@ -100,8 +101,6 @@ namespace AutoRebaring.ElementInfo
         public ColumnPlaneInfo(int id) : base(id)
         {
             GetFullPlaneInfo();
-
-            Singleton.Singleton.Instance.AddPlaneInfo(this);
         }
         public void GetFullPlaneInfo()
         {
@@ -128,7 +127,7 @@ namespace AutoRebaring.ElementInfo
         {
             double d = 0;
             List<UV> pnts = BoundaryPointLists[0];
-            List<UV> pntAs = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID).BoundaryPointLists[0];
+            List<UV> pntAs = Singleton.Instance.GetPlaneInfoAfter(ID).BoundaryPointLists[0];
 
             return new ShortenType()
             {
@@ -144,7 +143,7 @@ namespace AutoRebaring.ElementInfo
         }
         private ShortenEnum GetShorten(double u, double uAfter, out double d)
         {
-            ARLockheadParameter lp = Singleton.Singleton.Instance.LockheadParameter;
+            ARLockheadParameter lp = Singleton.Instance.LockheadParameter;
             d = Math.Abs(u - uAfter);
             double shorten = ConstantValue.milimeter2Feet * lp.ShortenLimit;
             if (GeomUtil.IsEqual(shorten, d) || d > shorten)
@@ -155,8 +154,8 @@ namespace AutoRebaring.ElementInfo
         }
         public void GetRebarLocation()
         {
-            IDesignInfo di = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
+            IDesignInfo di = Singleton.Instance.GetDesignInfo(ID);
+            ARCoverParameter cp = Singleton.Instance.CoverParameter;
             double offset = cp.ConcreteCover*ConstantValue.milimeter2Feet + di.StandardDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
             List<UV> boundPnts = BoundaryPointLists[0];
 
@@ -203,12 +202,10 @@ namespace AutoRebaring.ElementInfo
         public WallPlaneInfo(int id):base(id)
         {
             GetFullPlaneInfo();
-
-            Singleton.Singleton.Instance.AddPlaneInfo(this);
         }
         public void GetFullPlaneInfo()
         {
-            ARWallParameter wp = Singleton.Singleton.Instance.WallParameter;
+            ARWallParameter wp = Singleton.Instance.WallParameter;
             double edge = 0;
             if (wp.EdgeWidthInclude) edge = wp.EdgeWidth * ConstantValue.milimeter2Feet;
             if (wp.EdgeRatioInclude) edge = Math.Max(edge, wp.EdgeRatio * B1);
@@ -246,7 +243,7 @@ namespace AutoRebaring.ElementInfo
         {
             double d = 0;
             List<UV> pnts = BoundaryPointLists[index];
-            List<UV> pntAs = Singleton.Singleton.Instance.GetPlaneInfoAfter(ID).BoundaryPointLists[index];
+            List<UV> pntAs = Singleton.Instance.GetPlaneInfoAfter(ID).BoundaryPointLists[index];
 
             return new ShortenType()
             {
@@ -263,7 +260,7 @@ namespace AutoRebaring.ElementInfo
 
         private ShortenEnum GetShorten(double u, double uAfter, out double d)
         {
-            ARLockheadParameter lp = Singleton.Singleton.Instance.LockheadParameter;
+            ARLockheadParameter lp = Singleton.Instance.LockheadParameter;
             d = Math.Abs(u - uAfter);
             double shorten = ConstantValue.milimeter2Feet * lp.ShortenLimit;
             if (GeomUtil.IsEqual(shorten, d) || d > shorten)
@@ -275,8 +272,8 @@ namespace AutoRebaring.ElementInfo
 
         public void GetRebarLocation()
         {
-            IDesignInfo di = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            ARCoverParameter cp = Singleton.Singleton.Instance.CoverParameter;
+            IDesignInfo di = Singleton.Instance.GetDesignInfo(ID);
+            ARCoverParameter cp = Singleton.Instance.CoverParameter;
 
             StandardRebarPointLists = new List<List<UV>>();
             StirrupRebarPointLists = new List<List<UV>>();

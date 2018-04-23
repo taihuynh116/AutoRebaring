@@ -10,6 +10,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 {
     public class StraightStandardPlaneSingleInfo: IStandardPlaneSingleInfo
     {
+        public int ID { get; set; } = 0;
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }
@@ -23,6 +24,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     }
     public class ImplantStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
+        public int ID { get; set; } = 0;
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }
@@ -36,6 +38,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     }
     public class LockheadStandardPlaneSingleInfo:IStandardPlaneSingleInfo
     {
+        public int ID { get; set; } = 0;
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }
@@ -50,6 +53,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     }
     public class CrackingStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
+        public int ID { get; set; } = 0;
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }

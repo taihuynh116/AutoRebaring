@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoRebaring.Single;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -46,7 +47,7 @@ namespace AutoRebaring.ElementInfo
         public VerticalInfo(int id)
         {
             ID = id;
-            IRevitInfo revitInfo = Singleton.Singleton.Instance.GetRevitInfo(id);
+            IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(id);
             GetGeometry(revitInfo.Document, revitInfo.Element);
         }
         public void GetGeometry(Document doc, Element e)
@@ -181,9 +182,9 @@ namespace AutoRebaring.ElementInfo
         }
         public void GetInformation()
         {
-            ARRebarVerticalParameter rvpStand = Singleton.Singleton.Instance.StandardVeticalParameter;
-            ARRebarVerticalParameter rvpStirr = Singleton.Singleton.Instance.StirrupVerticalParameter;
-            ARLockheadParameter lp = Singleton.Singleton.Instance.LockheadParameter;
+            ARRebarVerticalParameter rvpStand = Singleton.Instance.StandardVeticalParameter;
+            ARRebarVerticalParameter rvpStirr = Singleton.Instance.StirrupVerticalParameter;
+            ARLockheadParameter lp = Singleton.Instance.LockheadParameter;
 
             Top = rvpStand.IsInsideBeam ? TopFloor : TopBeam;
 
@@ -212,10 +213,10 @@ namespace AutoRebaring.ElementInfo
         }
         public void GetRebarInformation()
         {
-            IDesignInfo di = Singleton.Singleton.Instance.GetDesignInfo(ID);
-            IDesignInfo diA = Singleton.Singleton.Instance.GetDesignInfoAfter(ID);
-            ARAnchorParameter ap = Singleton.Singleton.Instance.AnchorParameter;
-            ARDevelopmentParameter dp = Singleton.Singleton.Instance.DevelopmentParameter;
+            IDesignInfo di = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo diA = Singleton.Instance.GetDesignInfoAfter(ID);
+            ARAnchorParameter ap = Singleton.Instance.AnchorParameter;
+            ARDevelopmentParameter dp = Singleton.Instance.DevelopmentParameter;
 
             TopAnchorAfters = diA.StandardDiameters.
                 Select(x => ap.AnchorMultiply * x).ToList();
@@ -223,7 +224,7 @@ namespace AutoRebaring.ElementInfo
                 Select(x => dp.DevelopmentMultiply * x).ToList();
             for (int i = 0; i < di.StandardDiameters.Count; i++)
             {
-                SmallStandardChosens.Add(GeomUtil.IsBigger(di.StandardDiameters[i], di.DesignInfoAfter.StandardDiameters[i]));
+                SmallStandardChosens.Add(GeomUtil.IsBigger(di.StandardDiameters[i], diA.StandardDiameters[i]));
             }
         }
     }
@@ -231,14 +232,12 @@ namespace AutoRebaring.ElementInfo
     {
         public ColumnVerticalInfo(int id) : base(id)
         {
-            Singleton.Singleton.Instance.AddVerticalInfo(this);
         }
     }
     public class WallVerticalInfo : VerticalInfo
     {
         public WallVerticalInfo(int id) : base(id)
         {
-            Singleton.Singleton.Instance.AddVerticalInfo(this);
         }
     }
 }
