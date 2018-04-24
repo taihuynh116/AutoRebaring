@@ -28,7 +28,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             }
             else
             {
-                var obj = new ARDesignLevel();
+                var obj = res.First();
                 obj.IDDesignLevel = idDesignLevel;
                 obj.LastUpdate = DateTime.Now;
             }

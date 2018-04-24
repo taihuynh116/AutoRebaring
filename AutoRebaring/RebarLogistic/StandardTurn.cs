@@ -20,10 +20,10 @@ namespace AutoRebaring.RebarLogistic
         public StandardTurn(StandardTurn turn)
         {
             LocationIndex = turn.LocationIndex;
+            IDElement = turn.IDElement;
             Variable = turn.Variable;
             VariableIndex = turn.VariableIndex;
             Swap = turn.Swap;
-            VariableIndex = turn.VariableIndex;
             Start1 = turn.Start1;
             Start2 = turn.Start2;
 
@@ -37,8 +37,6 @@ namespace AutoRebaring.RebarLogistic
             EqualZero2 = turn.EqualZero2;
             IsImplanted = turn.IsImplanted;
             FirstPass = turn.FirstPass;
-
-            GetL1L2();
         }
         public int LocationIndex { get; set; }
         public int IDElement { get; set; }
@@ -106,8 +104,122 @@ namespace AutoRebaring.RebarLogistic
         {
             get { return Start2 + L2; }
         }
-        public double L1 { get; set; }
-        public double L2 { get; set; }
+        public double L1
+        {
+            get
+            {
+                if (Finish1)
+                    return l1Finish;
+                if (EqualZero1)
+                    return 0;
+                if (Implant1)
+                {
+                    double l = 0;
+                    if (Implant2)
+                        l = Variable.L1Implants[Index];
+                    else if (EqualZero2)
+                        l = Variable.LImplants[Index];
+                    else switch (ChosenType)
+                        {
+                            case TurnChosenType.Fit: l = Variable.L1ImplantStandards[Index]; break;
+                            case TurnChosenType.Residual: l = Variable.L1ImplantResiduals[Index]; break;
+                        }
+                    return (Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] + l) - Start1;
+                }
+                if (Implant2)
+                {
+                    switch (ChosenType)
+                    {
+                        case  TurnChosenType.Fit: return Variable.L1StandardImplants[Index];
+                        case TurnChosenType.Residual: return Variable.L1ResidualImplants[Index];
+                    }
+                }
+                if (EqualZero2)
+                {
+                    switch (ChosenType)
+                    {
+                        case TurnChosenType.Fit:
+                            return Variable.LStandards[Index];
+                        case TurnChosenType.Residual:
+                            return Variable.LResiduals[Index];
+                    }
+                }
+                if (ChosenType == TurnChosenType.Fit)
+                {
+                    if (!Swap)
+                    {
+                        return Variable.L1Standards[Index];
+                    }
+                    return Variable.L2Standards[Index];
+                }
+                else
+                {
+                    if (!Swap)
+                    {
+                        return Variable.L1Residuals[Index];
+                    }
+                    return Variable.L2Residuals[Index];
+                }
+            }
+        }
+        public double L2
+        {
+            get
+            {
+                if (Finish2)
+                    return l2Finish;
+                if (EqualZero2)
+                    return 0;
+                if (Implant2)
+                {
+                    double l = 0;
+                    if (Implant1)
+                        l = Variable.L2Implants[Index];
+                    else if (EqualZero1)
+                        l = Variable.LImplants[Index];
+                    else switch (ChosenType)
+                        {
+                            case TurnChosenType.Fit: l = Variable.L2StandardImplants[Index]; break;
+                            case TurnChosenType.Residual: l = Variable.L2ResidualImplants[Index]; break;
+                        }
+                    return (Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] + l) - Start2;
+                }
+                if (Implant1)
+                {
+                    switch (ChosenType)
+                    {
+                        case TurnChosenType.Fit: return Variable.L2ImplantStandards[Index];
+                        case TurnChosenType.Residual: return Variable.L2ImplantResiduals[Index];
+                    }
+                }
+                if (EqualZero1)
+                {
+                    switch (ChosenType)
+                    {
+                        case TurnChosenType.Fit:
+                            return Variable.LStandards[Index];
+                        case TurnChosenType.Residual:
+                            return Variable.LResiduals[Index];
+                    }
+                }
+                if (ChosenType == TurnChosenType.Fit)
+                {
+                    if (!Swap)
+                    {
+                        return Variable.L2Standards[Index];
+                    }
+                    return Variable.L1Standards[Index];
+                }
+                else
+                {
+                    if (!Swap)
+                    {
+                        return Variable.L2Residuals[Index];
+                    }
+                    return Variable.L1Residuals[Index];
+                }
+            }
+        }
         public bool Finish1 { get; set; } = false;
         public bool Finish2 { get; set; } = false;
         public bool Implant1 { get; set; } = false;
@@ -313,115 +425,15 @@ namespace AutoRebaring.RebarLogistic
             if (!Swap && CanSwap)
             {
                 Swap = true;
-                GetL1L2();
                 return true;
             }
             if (VariableIndex < VariableCount - 1)
             {
                 VariableIndex++;
-                GetL1L2();
                 Swap = false;
                 return true;
             }
             return false;
-        }
-        public void GetL1L2()
-        {
-            if (Implant1 && Implant2)
-            {
-                double li1 = Variable.L1Implants[VariableIndex];
-                double li2 = Variable.L2Implants[VariableIndex];
-                L1 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li1 - Start1;
-                L2 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li2 - Start2;
-            }
-            else if (Implant1 && EqualZero2)
-            {
-                double li1 = Variable.LImplants[VariableIndex];
-                L1 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li1 - Start1;
-                L2 = 0;
-            }
-            else if (Implant2 && EqualZero1)
-            {
-                double li2 = Variable.LImplants[VariableIndex];
-                L1 = 0;
-                L2 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li2 - Start2;
-            }
-            else if (Implant1)
-            {
-                double li1 = -1;
-                switch (ChosenType)
-                {
-                    case TurnChosenType.Fit:
-                        li1 = Variable.L1ImplantStandards[VariableIndex];
-                        L1 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li1 - Start1;
-                        L2 = Variable.L2ImplantStandards[VariableIndex];
-                        break;
-                    case TurnChosenType.Residual:
-                        li1 = Variable.L1ImplantResiduals[VariableIndex];
-                        L1 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li1 - Start1;
-                        L2 = Variable.L2ImplantResiduals[VariableIndex];
-                        break;
-                }
-            }
-            else if (Implant2)
-            {
-                double li2 = -1;
-                switch (ChosenType)
-                {
-                    case TurnChosenType.Fit:
-                        li2 = Variable.L2StandardImplants[VariableIndex];
-                        L2 = Variable.L1StandardImplants[VariableIndex];
-                        L2 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li2 - Start2;
-                        break;
-                    case TurnChosenType.Residual:
-                        li2 = Variable.L2ResidualImplants[VariableIndex];
-                        L2 = Variable.L1ResidualImplants[VariableIndex];
-                        L2 = Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] - li2 - Start2;
-                        break;
-                }
-            }
-            else if (EqualZero1)
-            {
-                switch (ChosenType)
-                {
-                    case TurnChosenType.Fit:
-                        L1 = 0;
-                        L2 = Variable.LStandards[VariableIndex];
-                        break;
-                    case TurnChosenType.Residual:
-                        L1 = 0;
-                        L2 = Variable.LResiduals[VariableIndex];
-                        break;
-                }
-            }
-            else if (EqualZero2)
-            {
-                switch (ChosenType)
-                {
-                    case TurnChosenType.Fit:
-                        L1 = Variable.LStandards[VariableIndex];
-                        L2 = 0;
-                        break;
-                    case TurnChosenType.Residual:
-                        L1 = Variable.LResiduals[VariableIndex];
-                        L2 = 0;
-                        break;
-                }
-            }
-            else
-            {
-                switch (ChosenType)
-                {
-                    case TurnChosenType.Fit:
-                        L1 = Variable.L1Standards[VariableIndex];
-                        L2 = Variable.L2Standards[VariableIndex];
-                        break;
-                    case TurnChosenType.Residual:
-                        L1 = Variable.L1Residuals[VariableIndex];
-                        L2 = Variable.L2Residuals[VariableIndex];
-                        break;
-                }
-            }
         }
     }
     public enum Position

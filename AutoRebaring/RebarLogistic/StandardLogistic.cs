@@ -40,7 +40,6 @@ namespace AutoRebaring.RebarLogistic
                     LocationIndex = locIndex,
                     Variable = new Variable()
                 };
-                //st.GetL1L2();
                 ProgressTurns.Add(st);
             }
 

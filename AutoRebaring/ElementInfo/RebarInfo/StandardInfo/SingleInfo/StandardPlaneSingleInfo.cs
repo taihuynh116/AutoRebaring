@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoRebaring.Single;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 {
@@ -21,6 +22,14 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarBarType BarType { get; set; }
         public RebarLocation RebarLocation { get; set; }
         public StandardLocationRegion LocationRegion { get; set; }
+        public Rebar CreateRebar(double start, double end, Element hostElem)
+        {
+            XYZ p1 = new XYZ(StartPoint.U, StartPoint.V, start);
+            XYZ p2 = new XYZ(StartPoint.U, StartPoint.V, end);
+            List<Curve> curves = new List<Curve> { Line.CreateBound(p1, p2) };
+            Rebar rb = Rebar.CreateFromCurves(Singleton.Instance.Document, RebarStyle.Standard, BarType, HookType, HookType, hostElem, Normal, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
+            return rb;
+        }
     }
     public class ImplantStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
@@ -35,6 +44,14 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarBarType BarType { get; set; }
         public RebarLocation RebarLocation { get; set; }
         public StandardLocationRegion LocationRegion { get; set; }
+        public Rebar CreateRebar(double start, double end, Element hostElem)
+        {
+            XYZ p1 = new XYZ(StartPoint.U, StartPoint.V, start);
+            XYZ p2 = new XYZ(StartPoint.U, StartPoint.V, end);
+            List<Curve> curves = new List<Curve> { Line.CreateBound(p1, p2) };
+            Rebar rb = Rebar.CreateFromCurves(Singleton.Instance.Document, RebarStyle.Standard, BarType, HookType, HookType, hostElem, Normal, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
+            return rb;
+        }
     }
     public class LockheadStandardPlaneSingleInfo:IStandardPlaneSingleInfo
     {
@@ -50,6 +67,14 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarLocation RebarLocation { get; set; }
         public XYZ LockheadDirection { get; set; }
         public StandardLocationRegion LocationRegion { get; set; }
+        public Rebar CreateRebar()
+        {
+            XYZ p1 = new XYZ(StartPoint.U, StartPoint.V, start);
+            XYZ p2 = new XYZ(StartPoint.U, StartPoint.V, end);
+            List<Curve> curves = new List<Curve> { Line.CreateBound(p1, p2) };
+            Rebar rb = Rebar.CreateFromCurves(Singleton.Instance.Document, RebarStyle.Standard, BarType, HookType, HookType, hostElem, Normal, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
+            return rb;
+        }
     }
     public class CrackingStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
