@@ -15,10 +15,10 @@ namespace AutoRebaring.RebarLogistic
     {
         public StandardTurn()
         {
-
         }
         public StandardTurn(StandardTurn turn)
         {
+            ID = turn.ID;
             LocationIndex = turn.LocationIndex;
             IDElement = turn.IDElement;
             Variable = turn.Variable;
@@ -38,6 +38,7 @@ namespace AutoRebaring.RebarLogistic
             IsImplanted = turn.IsImplanted;
             FirstPass = turn.FirstPass;
         }
+        public int ID { get; set; }
         public int LocationIndex { get; set; }
         public int IDElement { get; set; }
         public Variable Variable { get; set; }

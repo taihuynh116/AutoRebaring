@@ -122,7 +122,7 @@ namespace AutoRebaring.ElementInfo
         RebarBarType BarType { get; set; }
         RebarLocation RebarLocation { get; set; }
         StandardLocationRegion LocationRegion { get; set; }
-        Rebar CreateRebar();
+        //Rebar CreateRebar();
     }
     public interface IStandardParameter
     {

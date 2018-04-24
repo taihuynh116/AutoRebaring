@@ -15,8 +15,6 @@ namespace AutoRebaring.RebarLogistic
         public int Count;
         public int LocationIndex { get; set; }
         public int LoopCount { get { return TrackingTopIndex - TrackingBottomIndex; } }
-        public List<StandardTurn> ProgressTurns = new List<StandardTurn>();
-        public List<StandardTurn> TrackingTurns = new List<StandardTurn>();
         public int TrackingTopIndex;
         public int TrackingBottomIndex
         {
@@ -30,6 +28,8 @@ namespace AutoRebaring.RebarLogistic
         }
         public int TrackingBottomLimit = 0;
         public int ElementCount;
+        public List<StandardTurn> TrackingTurns;
+        public List<StandardTurn> ProgressTurns = new List<StandardTurn>();
         public StandardLogistic(int locIndex)
         {
             for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
@@ -86,7 +86,7 @@ namespace AutoRebaring.RebarLogistic
                         {
                             for (int k = 0; k <= i; k++)
                             {
-                                ProgressTurns[i].FirstPass = true;
+                                ProgressTurns[k].FirstPass = true;
                             }
                             TrackingTopIndex = i;
                             TrackingTurns = new List<StandardTurn>();
@@ -107,7 +107,7 @@ namespace AutoRebaring.RebarLogistic
                             int j = 0;
                             for (int k = i - LoopCount; k <= i; k++)
                             {
-                                ProgressTurns[k] = TrackingTurns[j]; j++;
+                                ProgressTurns[k] = ProgressTurns[i];
                             }
                             ProgressTurns[i].ChosenType = TurnChosenType.Residual;
                             ProgressTurns[i].VariableIndex = 0;
@@ -136,7 +136,7 @@ namespace AutoRebaring.RebarLogistic
                 }
             }
 
-            return ProgressTurns[i].CheckValidNextTurn(ProgressTurns[i + 1]);
+            return ProgressTurns[i].CheckValidNextTurn(ProgressTurns[i+1]);
         }
     }
 }
