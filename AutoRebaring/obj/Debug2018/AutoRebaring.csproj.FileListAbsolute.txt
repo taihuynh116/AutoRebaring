@@ -31,3 +31,20 @@ D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringG
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.dll
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csprojResolveAssemblyReference.cache
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csprojResolveAssemblyReference.cache
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\Form\InputForm.g.cs
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring_MarkupCompile.cache
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring_MarkupCompile.lref
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.dll
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.dll.config
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.dll
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.pdb
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.dll
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.dll
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.xml
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.xml
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\Form\InputForm.baml
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.g.resources
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.CoreCompileInputs.cache
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.CopyComplete

@@ -59,7 +59,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             {
                 return null;
             }
-            return res.First();
+            return res.OrderByDescending(x=>x.LastUpdate).First();
         }
     }
 }

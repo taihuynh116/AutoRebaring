@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo;
+using AutoRebaring.RebarLogistic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,10 @@ namespace AutoRebaring.Single
         private List<IDesignInfo> designInfos = new List<IDesignInfo>();
         private List<IStandardPlaneInfo> standPlaneInfos = new List<IStandardPlaneInfo>();
         private List<IStandardPlaneSingleInfo> standPlaneSingleInfos = new List<IStandardPlaneSingleInfo>();
+        private List<List<StandardTurn>> standTurnsList = new List<List<StandardTurn>>();
+        private List<List<VariableImplant>> variableImplantsList = new List<List<VariableImplant>>();
         private int elemTypeInfoID;
+        public VariableStandard VariableStandard { get; set; }
         public ARWallParameter WallParameter { get; set; }
         public ARCoverParameter CoverParameter { get; set; }
         public ARAnchorParameter AnchorParameter { get; set; }
@@ -58,10 +62,7 @@ namespace AutoRebaring.Single
         #endregion
 
         #region Add Data
-        public void SetElementTypeInfoID(ElementTypeEnum elemTypeEnum)
-        {
-            elemTypeInfoID = elemTypeInfos.First(x => x.Type == elemTypeEnum).ID;
-        }
+        public void SetElementTypeInfoID(ElementTypeEnum elemTypeEnum){elemTypeInfoID = elemTypeInfos.First(x => x.Type == elemTypeEnum).ID;}
         public void AddElementTypeInfo(IElementTypeInfo elemTypeInfo) { elemTypeInfos.Add(elemTypeInfo); }
         public void AddRevitInfo(IRevitInfo revitInfo) { revitInfos.Add(revitInfo); }
         public void AddPlaneInfo(IPlaneInfo planeInfo) { planeInfos.Add(planeInfo); }
@@ -69,6 +70,22 @@ namespace AutoRebaring.Single
         public void AddDesignInfo(IDesignInfo designInfo) { designInfos.Add(designInfo); }
         public void AddStandardPlaneInfo(IStandardPlaneInfo standPlaneInfo) { standPlaneInfos.Add(standPlaneInfo); }
         public void AddStandardPlaneSingleInfo(IStandardPlaneSingleInfo standPlaneSingleInfo) { standPlaneSingleInfos.Add(standPlaneSingleInfo); }
+        public void AddStandardTurn(StandardTurn st)
+        {
+            if (standTurnsList.Count - 1 < st.LocationIndex)
+            {
+                standTurnsList.Add(new List<StandardTurn>());
+            }
+            standTurnsList[st.LocationIndex].Add(st);
+        }
+        public void AddVariableImplant(VariableImplant vi)
+        {
+            if (variableImplantsList.Count - 1 < vi.LocationIndex)
+            {
+                variableImplantsList.Add(new List<VariableImplant>());
+            }
+            variableImplantsList[vi.LocationIndex].Add(vi);
+        }
         #endregion
 
         #region Update Date
@@ -77,6 +94,8 @@ namespace AutoRebaring.Single
         public void UpdateVerticalInfo(int id, IVerticalInfo verticalInfo) { verticalInfos[id] = verticalInfo; }
         public void UpdateDesignInfo(int id, IDesignInfo designInfo) { designInfos[id] = designInfo; }
         public void UpdateStandardPlaneInfo(int id, IStandardPlaneInfo standPlaneInfo) { standPlaneInfos[id] = standPlaneInfo; }
+        public void UpdateStandardTurn(StandardTurn st) { standTurnsList[st.LocationIndex][st.ID] = st; }
+        public void UpdateVaribleImplant(VariableImplant vi) { variableImplantsList[vi.LocationIndex][vi.ID] = vi; }
         #endregion
 
         #region Inquire Data
@@ -84,32 +103,34 @@ namespace AutoRebaring.Single
         public int GetElementTypeInfoID() { return elemTypeInfos.First(x => x.ID == elemTypeInfoID).ID; }
         public ElementTypeEnum GetElementTypeEnum() { return elemTypeInfos.First(x => x.ID == elemTypeInfoID).Type; }
         public int GetElementCount() { return revitInfos.Count; }
-        public IRevitInfo GetRevitInfo(int id) { return revitInfos.First(x => x.ID == id); }
-        public IPlaneInfo GetPlaneInfo(int id) { return planeInfos.First(x => x.ID == id); }
+        public IRevitInfo GetRevitInfo(int id) { return revitInfos[id]; }
+        public IPlaneInfo GetPlaneInfo(int id) { return planeInfos[id]; }
         public IPlaneInfo GetPlaneInfoAfter(int id)
         {
             int idAfter = id + 1 < planeInfos.Count ? id + 1 : planeInfos.Count - 1;
             return GetPlaneInfo(idAfter);
         }
-        public IVerticalInfo GetVerticalInfo(int id) { return verticalInfos.First(x => x.ID == id); }
+        public IVerticalInfo GetVerticalInfo(int id) { return verticalInfos[id]; }
         public IVerticalInfo GetVerticalInfoAfter(int id)
         {
             int idAfter = id + 1 < designInfos.Count ? id + 1 : verticalInfos.Count - 1;
-            return verticalInfos.First(x => x.ID == id);
+            return GetVerticalInfo(idAfter);
         }
         public IVerticalInfo GetVerticalInfo2After(int id)
         {
             int idAfter = id + 2 < designInfos.Count ? id + 2 : verticalInfos.Count - 1;
-            return verticalInfos.First(x => x.ID == id);
+            return GetVerticalInfo(idAfter);
         }
-        public IDesignInfo GetDesignInfo(int id) { return designInfos.First(x => x.ID == id); }
+        public IDesignInfo GetDesignInfo(int id) { return designInfos[id]; }
         public IDesignInfo GetDesignInfoAfter(int id)
         {
             int idAfter = id + 1 < designInfos.Count ? id + 1 : designInfos.Count - 1;
             return GetDesignInfo(idAfter);
         }
-        public IStandardPlaneInfo GetStandardPlaneInfo(int id) { return standPlaneInfos.First(x => x.ID == id); }
-        public IStandardPlaneSingleInfo GetStandardPlaneSingleInfo(int id) { return standPlaneSingleInfos.First(x => x.ID == id); }
+        public IStandardPlaneInfo GetStandardPlaneInfo(int id) { return standPlaneInfos[id]; }
+        public IStandardPlaneSingleInfo GetStandardPlaneSingleInfo(int id) { return standPlaneSingleInfos[id]; }
+        public StandardTurn GetStandardTurn(int id, int locIndex) { return standTurnsList[locIndex][id]; }
+        public VariableImplant GetVariableImplant(int id, int locIndex) { return variableImplantsList[locIndex][id]; }
         #endregion
     }
 }

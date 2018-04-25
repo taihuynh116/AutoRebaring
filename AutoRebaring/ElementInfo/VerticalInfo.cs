@@ -47,11 +47,15 @@ namespace AutoRebaring.ElementInfo
         public VerticalInfo(int id)
         {
             ID = id;
-            IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(id);
-            GetGeometry(revitInfo.Document, revitInfo.Element);
+            GetGeometry();
+            GetInformation();
         }
-        public void GetGeometry(Document doc, Element e)
+        public void GetGeometry()
         {
+            IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(ID);
+            Document doc = revitInfo.Document;
+            Element e = revitInfo.Element;
+
             BoundingBoxXYZ bb = e.get_BoundingBox(null);
             Outline ol = new Outline(bb.Min, bb.Max);
             XYZ midPnt = new XYZ((bb.Min.X + bb.Max.X) / 2, (bb.Min.Y + bb.Max.Y) / 2, (bb.Min.Z + bb.Max.Z) / 2);

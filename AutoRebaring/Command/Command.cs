@@ -42,6 +42,7 @@ namespace AutoRebaring.Command
 
             ElementInfoUtils.GetRelatedElements();
             ElementInfoUtils.GetAllParameters();
+            ElementInfoUtils.GetVariable();
 
             List<StandardLogistic> stanLogs = new List<StandardLogistic>();
             for (int i = 0; i < Singleton.Instance.GetElementTypeInfo().LocationCount; i++)

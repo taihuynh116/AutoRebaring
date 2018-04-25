@@ -1269,7 +1269,7 @@ namespace AutoRebaring.Form
                     {
 
                         string s = (cbbView3d.Items[i] as View3D).Name;
-                        if (s == view3dRes.Name)
+                        if (s.ToUpper() == view3dRes.Name.ToUpper())
                         {
                             cbbView3d.SelectedIndex = i; break;
                         }
@@ -1293,7 +1293,7 @@ namespace AutoRebaring.Form
             {
                 foreach (var item in inquireLevels)
                 {
-                    if (Levels[i].Name == item.Name)
+                    if (Levels[i].Name.ToUpper() == item.Name.ToUpper())
                     {
                         txtMetaLevels[i].Text = item.Title;
                         break;
@@ -1329,11 +1329,11 @@ namespace AutoRebaring.Form
                 for (int i = 0; i < Levels.Count; i++)
                 {
                     string s = Levels[i].Name;
-                    if (s == startLevel)
+                    if (s.ToUpper() == startLevel.ToUpper())
                     {
                         cbbStartLevel.SelectedIndex = i;
                     }
-                    if (s == endLevel)
+                    if (s.ToUpper() == endLevel.ToUpper())
                     {
                         cbbEndLevel.SelectedIndex = i;
                     }
@@ -1469,7 +1469,7 @@ namespace AutoRebaring.Form
                             for (int j = 0; j < Levels.Count; j++)
                             {
                                 string s = Levels[j].Name;
-                                if (s == levelRes.Name)
+                                if (s.ToUpper() == levelRes.Name.ToUpper())
                                 {
                                     cbbDesLevels[i].SelectedIndex = j;
                                     break;
@@ -1966,6 +1966,8 @@ namespace AutoRebaring.Form
             Singleton.Instance.AnchorParameter = AnchorParametersDao.GetAnchorParameter(IDAnchorParameter);
             Singleton.Instance.DevelopmentParameter = DevelopmentParametersDao.GetDevelopmentParameter(IDDevelopmentParamter);
             Singleton.Instance.LockheadParameter = LockheadParametersDao.GetLockheadParameter(IDLockheadParameter);
+            Singleton.Instance.StandardVeticalParameter = RebarVericalParametersDao.GetRebarVerticalParameter(IDStandardVerticalParameter);
+            Singleton.Instance.StirrupVerticalParameter = RebarVericalParametersDao.GetRebarVerticalParameter(IDStirrupVerticalParameter);
 
             List<double> fitStandards = new List<double>();
             long idStandFitLLim = StandardFitLimitDao.GetId(IDProject, IDStandardFitL);

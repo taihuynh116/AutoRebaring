@@ -37,9 +37,10 @@ namespace AutoRebaring.Others
             foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
             {
                 // Only consider Ethernet network interfaces
-                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet &&
-                    nic.OperationalStatus == OperationalStatus.Up)
+                if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet
+                    /*&& nic.OperationalStatus == OperationalStatus.Up*/)
                 {
+                    //PhysicalAddress pa = nic.GetPhysicalAddress();
                     return nic.GetPhysicalAddress().ToString();
                 }
             }

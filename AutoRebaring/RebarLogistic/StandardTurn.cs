@@ -21,18 +21,13 @@ namespace AutoRebaring.RebarLogistic
             ID = turn.ID;
             LocationIndex = turn.LocationIndex;
             IDElement = turn.IDElement;
-            Variable = turn.Variable;
-            VariableIndex = turn.VariableIndex;
+            IDVariable = turn.IDVariable;
             Swap = turn.Swap;
             Start1 = turn.Start1;
             Start2 = turn.Start2;
 
-            Finish1 = turn.Finish1;
-            Finish2 = turn.Finish2;
             Implant1 = turn.Implant1;
             Implant2 = turn.Implant2;
-            l1Finish = turn.l1Finish;
-            l2Finish = turn.l2Finish;
             EqualZero1 = turn.EqualZero1;
             EqualZero2 = turn.EqualZero2;
             IsImplanted = turn.IsImplanted;
@@ -41,7 +36,6 @@ namespace AutoRebaring.RebarLogistic
         public int ID { get; set; }
         public int LocationIndex { get; set; }
         public int IDElement { get; set; }
-        public Variable Variable { get; set; }
         public bool Swap { get; set; } = false;
         public bool CanSwap
         {
@@ -52,21 +46,21 @@ namespace AutoRebaring.RebarLogistic
                 return true;
             }
         }
-        public int VariableIndex { get; set; } = 0;
+        public int IDVariable { get; set; } = 0;
         public int VariableCount
         {
             get
             {
-                if (Implant1 && Implant2) return Variable.CountImplant12;
-                if ((Implant1 && EqualZero2) || (Implant2 && EqualZero1)) return Variable.CountImplantEqualZero;
+                if (Implant1 && Implant2) return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).CountImplant12;
+                if ((Implant1 && EqualZero2) || (Implant2 && EqualZero1)) return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).CountImplantEqualZero;
                 if (Implant1 || Implant2)
                 {
                     switch (ChosenType)
                     {
                         case TurnChosenType.Fit:
-                            return Variable.CountStandardImplant;
+                            return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).CountStandardImplant;
                         case TurnChosenType.Residual:
-                            return Variable.CountResidualImplant;
+                            return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).CountResidualImplant;
                     }
                 }
                 if (EqualZero1 || EqualZero2)
@@ -74,27 +68,25 @@ namespace AutoRebaring.RebarLogistic
                     switch (ChosenType)
                     {
                         case TurnChosenType.Fit:
-                            return Variable.CountStandardEqualZero;
+                            return Singleton.Instance.VariableStandard.CountStandardEqualZero;
                         case TurnChosenType.Residual:
-                            return Variable.CountResidualEqualZero;
+                            return Singleton.Instance.VariableStandard.CountResidualEqualZero;
                     }
                 }
                 switch (ChosenType)
                 {
                     case TurnChosenType.Fit:
-                        return Variable.CountStandard12;
+                        return Singleton.Instance.VariableStandard.CountStandard12;
                     case TurnChosenType.PairFit:
-                        return Variable.CountStandard12;
+                        return Singleton.Instance.VariableStandard.CountStandard12;
                     case TurnChosenType.TripFit:
-                        return Variable.CountStandard12;
+                        return Singleton.Instance.VariableStandard.CountStandard12;
                     case TurnChosenType.Residual:
-                        return Variable.CountResidual12;
+                        return Singleton.Instance.VariableStandard.CountResidual12;
                 }
                 throw new Exception("This case have not benn checked yet!");
             }
         }
-        public int Index { get; set; }
-        private int elemIndex;
         public double Start1 { get; set; }
         public double Start2 { get; set; }
         public double End1
@@ -117,13 +109,13 @@ namespace AutoRebaring.RebarLogistic
                 {
                     double l = 0;
                     if (Implant2)
-                        l = Variable.L1Implants[Index];
+                        l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L1Implants[IDVariable];
                     else if (EqualZero2)
-                        l = Variable.LImplants[Index];
+                        l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).LImplants[IDVariable];
                     else switch (ChosenType)
                         {
-                            case TurnChosenType.Fit: l = Variable.L1ImplantStandards[Index]; break;
-                            case TurnChosenType.Residual: l = Variable.L1ImplantResiduals[Index]; break;
+                            case TurnChosenType.Fit: l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L1ImplantStandards[IDVariable]; break;
+                            case TurnChosenType.Residual: l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L1ImplantResiduals[IDVariable]; break;
                         }
                     return (Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] + l) - Start1;
                 }
@@ -131,8 +123,8 @@ namespace AutoRebaring.RebarLogistic
                 {
                     switch (ChosenType)
                     {
-                        case  TurnChosenType.Fit: return Variable.L1StandardImplants[Index];
-                        case TurnChosenType.Residual: return Variable.L1ResidualImplants[Index];
+                        case TurnChosenType.Fit: return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L1StandardImplants[IDVariable];
+                        case TurnChosenType.Residual: return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L1ResidualImplants[IDVariable];
                     }
                 }
                 if (EqualZero2)
@@ -140,26 +132,26 @@ namespace AutoRebaring.RebarLogistic
                     switch (ChosenType)
                     {
                         case TurnChosenType.Fit:
-                            return Variable.LStandards[Index];
+                            return Singleton.Instance.VariableStandard.LStandards[IDVariable];
                         case TurnChosenType.Residual:
-                            return Variable.LResiduals[Index];
+                            return Singleton.Instance.VariableStandard.LResiduals[IDVariable];
                     }
                 }
                 if (ChosenType == TurnChosenType.Fit)
                 {
                     if (!Swap)
                     {
-                        return Variable.L1Standards[Index];
+                        return Singleton.Instance.VariableStandard.L1Standards[IDVariable];
                     }
-                    return Variable.L2Standards[Index];
+                    return Singleton.Instance.VariableStandard.L2Standards[IDVariable];
                 }
                 else
                 {
                     if (!Swap)
                     {
-                        return Variable.L1Residuals[Index];
+                        return Singleton.Instance.VariableStandard.L1Residuals[IDVariable];
                     }
-                    return Variable.L2Residuals[Index];
+                    return Singleton.Instance.VariableStandard.L2Residuals[IDVariable];
                 }
             }
         }
@@ -175,13 +167,13 @@ namespace AutoRebaring.RebarLogistic
                 {
                     double l = 0;
                     if (Implant1)
-                        l = Variable.L2Implants[Index];
+                        l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L2Implants[IDVariable];
                     else if (EqualZero1)
-                        l = Variable.LImplants[Index];
+                        l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).LImplants[IDVariable];
                     else switch (ChosenType)
                         {
-                            case TurnChosenType.Fit: l = Variable.L2StandardImplants[Index]; break;
-                            case TurnChosenType.Residual: l = Variable.L2ResidualImplants[Index]; break;
+                            case TurnChosenType.Fit: l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L2StandardImplants[IDVariable]; break;
+                            case TurnChosenType.Residual: l = Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L2ResidualImplants[IDVariable]; break;
                         }
                     return (Singleton.Instance.GetVerticalInfo(IDElement).TopAnchorAfters[LocationIndex] + l) - Start2;
                 }
@@ -189,8 +181,8 @@ namespace AutoRebaring.RebarLogistic
                 {
                     switch (ChosenType)
                     {
-                        case TurnChosenType.Fit: return Variable.L2ImplantStandards[Index];
-                        case TurnChosenType.Residual: return Variable.L2ImplantResiduals[Index];
+                        case TurnChosenType.Fit: return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L2ImplantStandards[IDVariable];
+                        case TurnChosenType.Residual: return Singleton.Instance.GetVariableImplant(IDElement, LocationIndex).L2ImplantResiduals[IDVariable];
                     }
                 }
                 if (EqualZero1)
@@ -198,37 +190,76 @@ namespace AutoRebaring.RebarLogistic
                     switch (ChosenType)
                     {
                         case TurnChosenType.Fit:
-                            return Variable.LStandards[Index];
+                            return Singleton.Instance.VariableStandard.LStandards[IDVariable];
                         case TurnChosenType.Residual:
-                            return Variable.LResiduals[Index];
+                            return Singleton.Instance.VariableStandard.LResiduals[IDVariable];
                     }
                 }
                 if (ChosenType == TurnChosenType.Fit)
                 {
                     if (!Swap)
                     {
-                        return Variable.L2Standards[Index];
+                        return Singleton.Instance.VariableStandard.L2Standards[IDVariable];
                     }
-                    return Variable.L1Standards[Index];
+                    return Singleton.Instance.VariableStandard.L1Standards[IDVariable];
                 }
                 else
                 {
                     if (!Swap)
                     {
-                        return Variable.L2Residuals[Index];
+                        return Singleton.Instance.VariableStandard.L2Residuals[IDVariable];
                     }
-                    return Variable.L1Residuals[Index];
+                    return Singleton.Instance.VariableStandard.L1Residuals[IDVariable];
                 }
             }
         }
-        public bool Finish1 { get; set; } = false;
-        public bool Finish2 { get; set; } = false;
+        public double L1mm { get { return L1 * ConstantValue.feet2MiliMeter; } }
+        public double L2mm { get { return L2 * ConstantValue.feet2MiliMeter; } }
+        public bool Finish1
+        {
+            get
+            {
+                if (IDElement < Singleton.Instance.GetElementCount() - 1) return false;
+                return checkFinish(Start1);
+            }
+        }
+        public bool Finish2
+        {
+            get
+            {
+                if (IDElement < Singleton.Instance.GetElementCount() - 1) return false;
+                return checkFinish(Start2);
+            }
+        }
         public bool Implant1 { get; set; } = false;
         public bool Implant2 { get; set; } = false;
-        public double l1Finish { get; set; }
-        public double l2Finish { get; set; }
+        public double l1Finish
+        {
+            get
+            {
+                if (!Finish1) return 0;
+                return setLFinish(Start1);
+            }
+        }
+        public double l2Finish
+        {
+            get
+            {
+                if (!Finish2) return 0;
+                return setLFinish(Start2);
+            }
+        }
         public bool EqualZero1 { get; set; } = false;
         public bool EqualZero2 { get; set; } = false;
+        public bool DeltaOK
+        {
+            get
+            {
+                double delta = Math.Abs(End1 - End2) - Singleton.Instance.GetVerticalInfo(IDElement).RebarDevelopmentLengths[LocationIndex];
+                if (GeomUtil.IsSmaller(delta, 0)) return false;
+                return true;
+            }
+        }
         public bool IsImplanted { get; set; } = false;
         public Position Position1
         {
@@ -257,27 +288,13 @@ namespace AutoRebaring.RebarLogistic
         public bool FirstPass { get; set; } = false;
         public TurnChosenType ChosenType { get; set; }
 
-
-        public void SetFinish1(double lmax)
+        public double setLFinish(double start)
         {
-            setFinish(lmax, Start1, End1, Finish1, l1Finish);
+            IVerticalInfo verInfo = Singleton.Instance.GetVerticalInfo(IDElement);
+            double l = verInfo.TopLockHead - start;
+            return ConstantValue.milimeter2Feet * Math.Round(l * ConstantValue.feet2MiliMeter);
         }
-        public void SetFinish2(double lmax)
-        {
-            setFinish(lmax, Start2, End2, Finish2, l2Finish);
-        }
-        public void setFinish(double lmax, double start, double end, bool type, double len)
-        {
-            if (checkManual(start, end))
-            {
-                IVerticalInfo verInfo = Singleton.Instance.GetVerticalInfo(IDElement);
-                double topLimit = verInfo.TopLockHead;
-                double l = L1 - (end - topLimit);
-                type = true;
-                len = ConstantValue.milimeter2Feet * Math.Round(l * ConstantValue.feet2MiliMeter);
-            }
-        }
-        public bool checkManual(double start, double end)
+        public bool checkFinish(double start)
         {
             IVerticalInfo verInfo = Singleton.Instance.GetVerticalInfo(IDElement);
             double topLimit = verInfo.TopLockHead;
@@ -304,7 +321,6 @@ namespace AutoRebaring.RebarLogistic
         {
             if (!IsImplanted)
             {
-                Variable.SetImplant(IDElement, LocationIndex);
                 IsImplanted = true;
             }
         }
@@ -349,21 +365,21 @@ namespace AutoRebaring.RebarLogistic
                 return Position.Position3;
             return Position.Wrong3;
         }
-        public bool CheckValidNextTurn(StandardTurn nextTurn)
+        public bool CheckValidNextTurn()
         {
             if ((int)Position1 >= 3 || (int)Position2 >= 3) return false;
             if ((int)Position1 == 0 || (int)Position2 == 0) return false;
             if (Position1 == Position2)
             {
-                return EqualPositionCheck(nextTurn);
+                return EqualPositionCheck();
             }
             else if (Position1 < Position2)
             {
-                return Position1LowerCheck(nextTurn);
+                return Position1LowerCheck();
             }
-            return Position2LowerCheck(nextTurn);
+            return Position2LowerCheck();
         }
-        public bool EqualPositionCheck(StandardTurn nextTurn)
+        public bool EqualPositionCheck()
         {
             int elemIndex = IDElement;
             switch (Position1)
@@ -379,14 +395,16 @@ namespace AutoRebaring.RebarLogistic
             }
             double delta = Math.Abs(End1 - End2) - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
             if (GeomUtil.IsSmaller(delta, 0)) return false;
+            StandardTurn nextTurn = Singleton.Instance.GetStandardTurn(ID + 1, LocationIndex);
             nextTurn.EqualZero1 = false;
             nextTurn.EqualZero2 = false;
             nextTurn.Start1 = End1 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
             nextTurn.Start2 = End2 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
             nextTurn.IDElement = elemIndex;
+            Singleton.Instance.UpdateStandardTurn(nextTurn);
             return true;
         }
-        public bool Position1LowerCheck(StandardTurn nextTurn)
+        public bool Position1LowerCheck()
         {
             int elemIndex = IDElement;
             switch (Position1)
@@ -397,14 +415,16 @@ namespace AutoRebaring.RebarLogistic
                     elemIndex += 1;
                     break;
             }
+            StandardTurn nextTurn = Singleton.Instance.GetStandardTurn(ID + 1, LocationIndex);
             nextTurn.EqualZero1 = false;
             nextTurn.EqualZero2 = true;
-            nextTurn.Start1 = nextTurn.End1 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
-            nextTurn.Start2 = nextTurn.End2;
+            nextTurn.Start1 = End1 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
+            nextTurn.Start2 = End2;
             nextTurn.IDElement = elemIndex;
+            Singleton.Instance.UpdateStandardTurn(nextTurn);
             return true;
         }
-        public bool Position2LowerCheck(StandardTurn nextTurn)
+        public bool Position2LowerCheck()
         {
             int elemIndex = IDElement;
             switch (Position2)
@@ -415,10 +435,13 @@ namespace AutoRebaring.RebarLogistic
                     elemIndex += 1;
                     break;
             }
-            nextTurn.EqualZero1 = false;
-            nextTurn.EqualZero2 = true;
-            nextTurn.Start1 = nextTurn.End1;
-            nextTurn.Start2 = nextTurn.End2 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
+            StandardTurn nextTurn = Singleton.Instance.GetStandardTurn(ID + 1, LocationIndex);
+            nextTurn.EqualZero1 = true;
+            nextTurn.EqualZero2 = false;
+            nextTurn.Start1 = End1;
+            nextTurn.Start2 = End2 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
+            nextTurn.IDElement = elemIndex;
+            Singleton.Instance.UpdateStandardTurn(nextTurn);
             return true;
         }
         public bool Next()
@@ -428,9 +451,9 @@ namespace AutoRebaring.RebarLogistic
                 Swap = true;
                 return true;
             }
-            if (VariableIndex < VariableCount - 1)
+            if (IDVariable < VariableCount - 1)
             {
-                VariableIndex++;
+                IDVariable++;
                 Swap = false;
                 return true;
             }

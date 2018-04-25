@@ -226,40 +226,24 @@
       <DependentUpon>InputForm.xaml</DependentUpon>
     </Compile>
     <Compile Include="Form\WindowForm.cs" />
+    <Compile Include="Library\FilterSelection.cs" />
+    <Compile Include="Library\GeomUtil.cs" />
     <Compile Include="Others\ComputerInfo.cs" />
     <Compile Include="Others\Encryting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RebarLogistic\VariableImplant.cs" />
     <Compile Include="RebarLogistic\StandardLogistic.cs" />
     <Compile Include="RebarLogistic\StandardTurn.cs" />
     <Compile Include="RebarLogistic\StirrupLogistic.cs" />
-    <Compile Include="RebarLogistic\Variable.cs" />
+    <Compile Include="RebarLogistic\VariableStandard.cs" />
     <Compile Include="Single\Singleton.cs" />
-    <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\CheckGeometry.cs">
-      <Link>Library\CheckGeometry.cs</Link>
-    </Compile>
-    <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\ElementGeometryInfo.cs">
-      <Link>Library\ElementGeometryInfo.cs</Link>
-    </Compile>
-    <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\GeomUtil.cs">
-      <Link>Library\GeomUtil.cs</Link>
-    </Compile>
-    <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\MultiPolygon.cs">
-      <Link>Library\MultiPolygon.cs</Link>
-    </Compile>
-    <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\ParameterUtil.cs">
-      <Link>Library\ParameterUtil.cs</Link>
-    </Compile>
-    <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\Polygon.cs">
-      <Link>Library\Polygon.cs</Link>
-    </Compile>
-    <Compile Include="T:\P.BIM\02_LIBRARY\R_C#\General\SelectionFilter.cs">
-      <Link>Library\SelectionFilter.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="AutoRebaring.addin">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Reference\2018_RevitAPI.dll" />
+    <Content Include="Reference\2018_RevitAPIUI.dll" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

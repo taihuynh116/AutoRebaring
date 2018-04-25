@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoRebaring.Single;
+using AutoRebaring.RebarLogistic;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -190,6 +191,21 @@ namespace AutoRebaring.ElementInfo
                         break;
                 }
                 Singleton.Instance.AddStandardPlaneInfo(standPlaneInfo);
+            }
+        }
+        public static void GetVariable()
+        {
+            VariableStandard vs = new VariableStandard();
+            Singleton.Instance.VariableStandard = vs;
+
+            for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
+            {
+                for (int j = 0; j < Singleton.Instance.GetElementTypeInfo().LocationCount; j++)
+                {
+                    VariableImplant vi = new VariableImplant(i, j);
+                    Singleton.Instance.AddVariableImplant(vi);
+                }
+                
             }
         }
     }
