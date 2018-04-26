@@ -85,11 +85,14 @@ namespace AutoRebaring.ElementInfo
     }
     public enum ShortenEnum
     {
-        None, Small, Big
+        None=0,
+        Small=1,
+        Big =2
     }
 
     public interface IShortenType
     {
+        ShortenEnum ShortenEnum { get; }
         ShortenEnum ShortenU1 { get; set; }
         ShortenEnum ShortenU2 { get; set; }
         ShortenEnum ShortenV1 { get; set; }
@@ -100,14 +103,9 @@ namespace AutoRebaring.ElementInfo
         double DeltaV2 { get; set; }
     }
     
-    
     public enum RebarLocation
     {
         L1, L2
-    }
-    public enum StandardLocationRegion
-    {
-        Column, Edge, Middle
     }
     public interface IStandardPlaneSingleInfo
     {
@@ -117,12 +115,9 @@ namespace AutoRebaring.ElementInfo
         double Spacing { get; set; }
         double ArrayLength { get; }
         UV StartPoint { get; set; }
-        RebarLayoutRule LayoutRule { get; }
-        RebarHookType HookType { get; set; }
-        RebarBarType BarType { get; set; }
         RebarLocation RebarLocation { get; set; }
-        StandardLocationRegion LocationRegion { get; set; }
-        //Rebar CreateRebar();
+        int LocationIndex { get; set; }
+        Rebar CreateRebar(int idTurn, int locIndex);
     }
     public interface IStandardParameter
     {
@@ -133,8 +128,8 @@ namespace AutoRebaring.ElementInfo
     {
         int ID { get; set; }
         List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
-        List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
+        void CreateRebar(int idTurn, int locIndex);
     }
     public interface IElementTypeInfo
     {

@@ -196,8 +196,8 @@ namespace AutoRebaring.ElementInfo
             d = rvpStand.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * rvpStand.TopOffsetRatio) : d;
             TopOffset = Top - d;
 
-            TopLockHead = Top - lp.LockheadConcreteCover * ConstantValue.milimeter2Feet;
-            TopSmall = Top - lp.SmallConcreteCover * ConstantValue.milimeter2Feet;
+            TopLockHead = TopLimit - lp.LockheadConcreteCover * ConstantValue.milimeter2Feet;
+            TopSmall = TopLimit - lp.SmallConcreteCover * ConstantValue.milimeter2Feet;
 
             d = rvpStand.OffsetInclude ? rvpStand.BottomOffset * ConstantValue.milimeter2Feet : 0;
             d = rvpStand.OffsetRatioInclude ? Math.Max(d, (Top - Bottom) * rvpStand.BottomOffsetRatio) : d;

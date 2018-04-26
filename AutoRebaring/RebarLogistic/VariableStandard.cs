@@ -37,7 +37,7 @@ namespace AutoRebaring.RebarLogistic
             double step = sc.Step * ConstantValue.milimeter2Feet;
 
             List<double> lstandards = Singleton.Instance.FitStandards;
-            List<double> lplusStandards = Singleton.Instance.PairFitImplants;
+            List<double> lplusStandards = Singleton.Instance.PairFitStandards;
             List<double> ltripStandards = Singleton.Instance.TripFitStandards;
 
             L1Standards = new List<double>();

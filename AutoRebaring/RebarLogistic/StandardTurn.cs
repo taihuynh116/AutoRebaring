@@ -251,15 +251,6 @@ namespace AutoRebaring.RebarLogistic
         }
         public bool EqualZero1 { get; set; } = false;
         public bool EqualZero2 { get; set; } = false;
-        public bool DeltaOK
-        {
-            get
-            {
-                double delta = Math.Abs(End1 - End2) - Singleton.Instance.GetVerticalInfo(IDElement).RebarDevelopmentLengths[LocationIndex];
-                if (GeomUtil.IsSmaller(delta, 0)) return false;
-                return true;
-            }
-        }
         public bool IsImplanted { get; set; } = false;
         public Position Position1
         {
@@ -268,7 +259,7 @@ namespace AutoRebaring.RebarLogistic
                 IVerticalInfo verInfo = Singleton.Instance.GetVerticalInfo(IDElement);
                 if (Finish1)
                 {
-                    return Position.Position3;
+                    return Position.Position2;
                 }
                 return checkPosition(End1);
             }
@@ -280,9 +271,35 @@ namespace AutoRebaring.RebarLogistic
                 IVerticalInfo verInfo = Singleton.Instance.GetVerticalInfo(IDElement);
                 if (Finish2)
                 {
-                    return Position.Position3;
+                    return Position.Position2;
                 }
                 return checkPosition(End2);
+            }
+        }
+        public int IDNextElement
+        {
+            get
+            {
+                if (Position1 == Position.Wrong || Position2 == Position.Wrong) return IDElement;
+                int idnext = IDElement+ Math.Min((int)Position1, (int)Position2);
+                return idnext < Singleton.Instance.GetElementCount() ? idnext : Singleton.Instance.GetElementCount() - 1;
+            }
+        }
+        public double Delta
+        {
+            get
+            {
+                return Math.Abs(End1 - End2) - Singleton.Instance.GetVerticalInfo(IDNextElement).RebarDevelopmentLengths[LocationIndex];
+            }
+        }
+        public bool IsValidate
+        {
+            get
+            {
+                if (Position1 == Position.Wrong || Position2 == Position.Wrong) return false;
+                if (Finish1 || Finish2) return true;
+                if (GeomUtil.IsSmaller(Delta, 0)) return false;
+                return true;
             }
         }
         public bool FirstPass { get; set; } = false;
@@ -311,11 +328,11 @@ namespace AutoRebaring.RebarLogistic
         }
         public void setImplant(double start, double end, bool type)
         {
-            setImplantChoice();
-            if (checkManual(start, end))
-            {
-                type = true;
-            }
+            //setImplantChoice();
+            //if (checkManual(start, end))
+            //{
+            //    type = true;
+            //}
         }
         public void setImplantChoice()
         {
@@ -354,95 +371,29 @@ namespace AutoRebaring.RebarLogistic
             }
 
             if (GeomUtil.IsEqualOrSmaller(end, endLim0))
-                return Position.Position1;
+                return Position.Wrong;
             if (GeomUtil.IsBigger(end, endLim0) && GeomUtil.IsSmaller(end, startLim1))
-                return Position.Wrong1;
+                return Position.Wrong;
             if (GeomUtil.IsEqualOrBigger(end, startLim1) && GeomUtil.IsEqualOrSmaller(end, endLim1))
-                return Position.Position2;
+                return Position.Position1;
             if (GeomUtil.IsBigger(end, endLim1) && GeomUtil.IsSmaller(end, startLim2))
-                return Position.Wrong2;
+                return Position.Wrong;
             if (GeomUtil.IsEqualOrBigger(end, startLim2) && GeomUtil.IsEqualOrSmaller(end, endLim2))
-                return Position.Position3;
-            return Position.Wrong3;
+                return Position.Position2;
+            return Position.Wrong;
         }
-        public bool CheckValidNextTurn()
+        public void HandleNextTurn()
         {
-            if ((int)Position1 >= 3 || (int)Position2 >= 3) return false;
-            if ((int)Position1 == 0 || (int)Position2 == 0) return false;
-            if (Position1 == Position2)
-            {
-                return EqualPositionCheck();
-            }
-            else if (Position1 < Position2)
-            {
-                return Position1LowerCheck();
-            }
-            return Position2LowerCheck();
-        }
-        public bool EqualPositionCheck()
-        {
-            int elemIndex = IDElement;
-            switch (Position1)
-            {
-                case Position.Position1:
-                    break;
-                case Position.Position2:
-                    elemIndex += 1;
-                    break;
-                case Position.Position3:
-                    elemIndex += 2;
-                    break;
-            }
-            double delta = Math.Abs(End1 - End2) - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
-            if (GeomUtil.IsSmaller(delta, 0)) return false;
+            if (!IsValidate) return;
             StandardTurn nextTurn = Singleton.Instance.GetStandardTurn(ID + 1, LocationIndex);
-            nextTurn.EqualZero1 = false;
-            nextTurn.EqualZero2 = false;
-            nextTurn.Start1 = End1 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
-            nextTurn.Start2 = End2 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
-            nextTurn.IDElement = elemIndex;
+            bool pos1Bigger = (int)Position1 > (int)Position2;
+            bool pos2Bigger = (int)Position2 > (int)Position1;
+            nextTurn.IDElement = IDNextElement;
+            nextTurn.EqualZero1 = pos1Bigger ? true : false;
+            nextTurn.EqualZero2 = pos2Bigger ? true : false;
+            nextTurn.Start1 = pos1Bigger ? End1 : End1 - Singleton.Instance.GetVerticalInfo(IDNextElement).RebarDevelopmentLengths[LocationIndex];
+            nextTurn.Start2 = pos2Bigger ? End2 : End2 - Singleton.Instance.GetVerticalInfo(IDNextElement).RebarDevelopmentLengths[LocationIndex];
             Singleton.Instance.UpdateStandardTurn(nextTurn);
-            return true;
-        }
-        public bool Position1LowerCheck()
-        {
-            int elemIndex = IDElement;
-            switch (Position1)
-            {
-                case Position.Position1:
-                    break;
-                case Position.Position2:
-                    elemIndex += 1;
-                    break;
-            }
-            StandardTurn nextTurn = Singleton.Instance.GetStandardTurn(ID + 1, LocationIndex);
-            nextTurn.EqualZero1 = false;
-            nextTurn.EqualZero2 = true;
-            nextTurn.Start1 = End1 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
-            nextTurn.Start2 = End2;
-            nextTurn.IDElement = elemIndex;
-            Singleton.Instance.UpdateStandardTurn(nextTurn);
-            return true;
-        }
-        public bool Position2LowerCheck()
-        {
-            int elemIndex = IDElement;
-            switch (Position2)
-            {
-                case Position.Position1:
-                    break;
-                case Position.Position2:
-                    elemIndex += 1;
-                    break;
-            }
-            StandardTurn nextTurn = Singleton.Instance.GetStandardTurn(ID + 1, LocationIndex);
-            nextTurn.EqualZero1 = true;
-            nextTurn.EqualZero2 = false;
-            nextTurn.Start1 = End1;
-            nextTurn.Start2 = End2 - Singleton.Instance.GetVerticalInfo(elemIndex).RebarDevelopmentLengths[LocationIndex];
-            nextTurn.IDElement = elemIndex;
-            Singleton.Instance.UpdateStandardTurn(nextTurn);
-            return true;
         }
         public bool Next()
         {
@@ -462,7 +413,9 @@ namespace AutoRebaring.RebarLogistic
     }
     public enum Position
     {
-        Position1, Position2, Position3, Wrong1, Wrong2, Wrong3
+        Wrong=0,
+        Position1 =1,
+        Position2 =2
     }
     public enum TurnChosenType { Fit, PairFit, TripFit, Residual }
 }

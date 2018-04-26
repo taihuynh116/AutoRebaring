@@ -44,13 +44,28 @@ namespace AutoRebaring.Command
             ElementInfoUtils.GetAllParameters();
             ElementInfoUtils.GetVariable();
 
-            List<StandardLogistic> stanLogs = new List<StandardLogistic>();
-            for (int i = 0; i < Singleton.Instance.GetElementTypeInfo().LocationCount; i++)
+            int locCount = Singleton.Instance.GetElementTypeInfo().LocationCount;
+            for (int i = 0; i < locCount; i++)
             {
                 StandardLogistic stanLog = new StandardLogistic(i);
                 stanLog.RunLogistic();
-                stanLogs.Add(stanLog);
             }
+
+            for (int i = 0; i < locCount; i++)
+            {
+                for (int j = 0; j < Singleton.Instance.GetStandardTurnCount(i); j++)
+                {
+                    StandardTurn st = Singleton.Instance.GetStandardTurn(j, i);
+                    IStandardPlaneInfo standPlaneInfo = Singleton.Instance.GetStandardPlaneInfo(st.IDElement);
+                    IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(st.IDElement);
+                    IShortenType shortenType = null;
+                    shortenType = planeInfo.ShortenTypes[0];
+                    standPlaneInfo.CreateRebar(j, i);
+                    //standPlaneInfo.CreateRebar(j, i, shortenType.ShortenEnum);
+                }
+            }
+
+            var instance = Singleton.Instance;
 
             tx.Commit();
             return Result.Succeeded;

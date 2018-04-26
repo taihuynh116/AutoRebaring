@@ -156,7 +156,7 @@ namespace AutoRebaring.ElementInfo
         {
             IDesignInfo di = Singleton.Instance.GetDesignInfo(ID);
             ARCoverParameter cp = Singleton.Instance.CoverParameter;
-            double offset = cp.ConcreteCover*ConstantValue.milimeter2Feet + di.StandardDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
+            double offset = cp.ConcreteCover*ConstantValue.milimeter2Feet + di.StirrupDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
             List<UV> boundPnts = BoundaryPointLists[0];
 
             List<UV> standardPnts = new List<UV>()

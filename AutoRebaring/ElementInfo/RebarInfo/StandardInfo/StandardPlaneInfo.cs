@@ -17,131 +17,24 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
     {
         public int ID { get; set; }
         public List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
-        public List<IStandardPlaneSingleInfo> ShortenStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
         public ColumnStandardPlaneInfo(int id)
         {
             ID = id;
 
-            GetNormalStandardPlaneInfos();
             GetShortenStandardPlaneInfos();
             GetImplantStandardPlaneInfos();
-        }
-        private void GetNormalStandardPlaneInfos()
-        {
-            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
-            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
-
-            int n1 = designInfo.StandardNumbers[0];
-            int n2 = designInfo.StandardNumbers[1];
-            double spac1 = designInfo.StandardSpacings[0];
-            double spac2 = designInfo.StandardSpacings[1];
-            List<UV> pnts = planeInfo.StandardRebarPointLists[0];
-            XYZ vecX = planeInfo.VectorX;
-            XYZ vecY = planeInfo.VectorY;
-            UV vecU = planeInfo.VectorU;
-            UV vecV = planeInfo.VectorV;
-
-            NormalStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
-
-            IStandardPlaneSingleInfo stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[0],
-                Spacing = spac1,
-                Number = (n1 % 2 == 0) ? n1 / 2 : n1 / 2 + 1,
-                Normal = vecX,
-                RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
-
-            stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[3],
-                Spacing = spac1,
-                Number = (n1 % 2 == 0) ? n1 / 2 : n1 / 2 + 1,
-                Normal = vecX,
-                RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
-
-            stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[0] + vecU * spac1 / 2,
-                Spacing = spac1,
-                Number = n1 / 2,
-                Normal = vecX,
-                RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
-
-            stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[3] + vecU * spac1 / 2,
-                Spacing = spac1,
-                Number = n1 / 2,
-                Normal = vecX,
-                RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
-
-            stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[0] + vecV * spac2,
-                Spacing = spac2,
-                Number = (n2 - 2) / 2,
-                Normal = vecY,
-                RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
-
-            stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[1] + vecV * spac2,
-                Spacing = spac2,
-                Number = (n2 - 2) / 2,
-                Normal = vecY,
-                RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
-
-            stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[0] + vecV * spac2 / 2,
-                Spacing = spac2,
-                Number = (n2 % 2 == 0) ? (n2 - 2) / 2 : (n2 - 2) / 2 + 1,
-                Normal = vecY,
-                RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
-
-            stPlSinInfo = new StraightStandardPlaneSingleInfo()
-            {
-                StartPoint = pnts[1] + vecV * spac2 / 2,
-                Spacing = spac2,
-                Number = (n2 % 2 == 0) ? (n2 - 2) / 2 : (n2 - 2) / 2 + 1,
-                Normal = vecY,
-                RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
-            };
-            NormalStandardPlaneInfos.Add(stPlSinInfo);
         }
         private void GetShortenStandardPlaneInfos()
         {
             IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
 
             IShortenType shortenType = planeInfo.ShortenTypes[0];
-            ShortenStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
+            NormalStandardPlaneInfos = new List<IStandardPlaneSingleInfo>();
             GetShortenV(0, shortenType.ShortenV1);
             GetShortenV(3, shortenType.ShortenV2);
-            GetShortenV(0, shortenType.ShortenU1);
-            GetShortenV(1, shortenType.ShortenU2);
+            GetShortenU(0, shortenType.ShortenU1);
+            GetShortenU(1, shortenType.ShortenU2);
         }
         private void GetShortenV(int index, ShortenEnum shorten)
         {
@@ -188,9 +81,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                         {
@@ -200,9 +93,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                         {
@@ -211,9 +104,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = (nA1 % 2 == 0) ? nA1 / 2 : nA1 / 2 + 1,
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                         {
@@ -222,9 +115,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = nA1 / 2,
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
                     }
                     break;
                 case ShortenEnum.Small:
@@ -233,7 +126,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n1; i++)
                         {
                             double del = delU1 - spac1 / 2 * i;
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigU1 = i + 1;
                             }
@@ -241,7 +134,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             {
                                 numSmallU1 = i + 1 - numBigU1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
@@ -251,43 +144,50 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n1; i++)
                         {
                             double del = delU2 - spac1 / 2 * i;
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigU2 = i + 1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
+                            else if (GeomUtil.IsBigger(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
                             {
                                 numSmallU2 = i + 1 - numBigU2;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
                         }
 
-                        IStandardPlaneSingleInfo stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        IStandardPlaneSingleInfo stPlSinInfo = null;
+                        if (numBigU1 >= 1)
                         {
-                            StartPoint = pnts[index],
-                            Spacing = spac1,
-                            Number = (numBigU1 % 2 == 0) ? numBigU1 / 2 : numBigU1 / 2 + 1,
-                            Normal = vecX,
-                            RebarLocation = RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index],
+                                Spacing = spac1,
+                                Number = (numBigU1 % 2 == 0) ? numBigU1 / 2 : numBigU1 / 2 + 1,
+                                Normal = vecX,
+                                RebarLocation = RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigU1 >= 2)
                         {
-                            StartPoint = pnts[index] + vecU * spac1 / 2,
-                            Spacing = spac1,
-                            Number = numBigU1 / 2,
-                            Normal = vecX,
-                            RebarLocation = RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecU * spac1 / 2,
+                                Spacing = spac1,
+                                Number = numBigU1 / 2,
+                                Normal = vecX,
+                                RebarLocation = RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int num = numBigU1, num2 = numSmallU1;
                         for (int i = 0; i < numSmallU1; i++)
@@ -305,9 +205,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
                         num = num + num2; num2 = n1 - numBigU1 - numSmallU1 - numBigU2 - numSmallU2;
@@ -320,9 +220,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new CrackingStandardPlaneSingleInfo()
                         {
@@ -333,9 +233,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         num = num + num2; num2 = numSmallU2;
                         for (int i = 0; i < numSmallU2; i++)
@@ -353,35 +253,41 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
                         num = num + num2; num2 = numBigU2;
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigU2 >= 1)
                         {
-                            StartPoint = pnts[index] + vecU * spac1 / 2 * num,
-                            Spacing = spac1,
-                            Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
-                            Normal = vecX,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecU * spac1 / 2 * num,
+                                Spacing = spac1,
+                                Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
+                                Normal = vecX,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigU2 >= 2)
                         {
-                            StartPoint = pnts[index] + vecU * spac1 / 2 * (num + 1),
-                            Spacing = spac1,
-                            Number = num2 / 2,
-                            Normal = vecX,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecU * spac1 / 2 * (num + 1),
+                                Spacing = spac1,
+                                Number = num2 / 2,
+                                Normal = vecX,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int numImpU = nA1 - n1 + numBigU1 + numBigU2;
                         if (numImpU > 0)
@@ -394,9 +300,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU % 2 == 0 ? numImpU / 2 : numImpU / 2 + 1,
                                 Normal = vecX,
                                 RebarLocation = RebarLocation.L1,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                             stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                             {
@@ -405,9 +311,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU / 2,
                                 Normal = vecX,
                                 RebarLocation = RebarLocation.L2,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
                     }
                     break;
@@ -417,7 +323,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n1; i++)
                         {
                             double del = delU1 - spac1 / 2 * i;
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigU1 = i + 1;
                             }
@@ -425,7 +331,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             {
                                 numSmallU1 = i + 1 - numBigU1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
@@ -435,43 +341,50 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n1; i++)
                         {
                             double del = delU2 - spac1 / 2 * i;
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigU2 = i + 1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
+                            else if (GeomUtil.IsBigger(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
                             {
                                 numSmallU2 = i + 1 - numBigU2;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
                         }
 
-                        IStandardPlaneSingleInfo stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        IStandardPlaneSingleInfo stPlSinInfo = null;
+                        if (numBigU1 >= 1)
                         {
-                            StartPoint = pnts[index],
-                            Spacing = spac1,
-                            Number = (numBigU1 % 2 == 0) ? numBigU1 / 2 : numBigU1 / 2 + 1,
-                            Normal = vecX,
-                            RebarLocation = RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index],
+                                Spacing = spac1,
+                                Number = (numBigU1 % 2 == 0) ? numBigU1 / 2 : numBigU1 / 2 + 1,
+                                Normal = vecX,
+                                RebarLocation = RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigU1 >= 2)
                         {
-                            StartPoint = pnts[index] + vecU * spac1 / 2,
-                            Spacing = spac1,
-                            Number = numBigU1 / 2,
-                            Normal = vecX,
-                            RebarLocation = RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecU * spac1 / 2,
+                                Spacing = spac1,
+                                Number = numBigU1 / 2,
+                                Normal = vecX,
+                                RebarLocation = RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int num = numBigU1, num2 = numSmallU1;
                         for (int i = 0; i < numSmallU1; i++)
@@ -489,9 +402,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
                         num = num + num2; num2 = n1 - numBigU1 - numSmallU1 - numBigU2 - numSmallU2;
@@ -502,9 +415,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new StraightStandardPlaneSingleInfo()
                         {
@@ -513,9 +426,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 / 2,
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         num = num + num2; num2 = numSmallU2;
                         for (int i = 0; i < numSmallU2; i++)
@@ -533,35 +446,41 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
                         num = num + num2; num2 = numBigU2;
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigU2 >= 1)
                         {
-                            StartPoint = pnts[index] + vecU * spac1 / 2 * num,
-                            Spacing = spac1,
-                            Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
-                            Normal = vecX,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecU * spac1 / 2 * num,
+                                Spacing = spac1,
+                                Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
+                                Normal = vecX,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigU2 >= 2)
                         {
-                            StartPoint = pnts[index] + vecU * spac1 / 2 * (num + 1),
-                            Spacing = spac1,
-                            Number = num2 / 2,
-                            Normal = vecX,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecU * spac1 / 2 * (num + 1),
+                                Spacing = spac1,
+                                Number = num2 / 2,
+                                Normal = vecX,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int numImpU = nA1 - n1 + numBigU1 + numBigU2;
                         if (numImpU > 0)
@@ -574,9 +493,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU % 2 == 0 ? numImpU / 2 : numImpU / 2 + 1,
                                 Normal = vecX,
                                 RebarLocation = RebarLocation.L1,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                             stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                             {
@@ -585,9 +504,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU / 2,
                                 Normal = vecX,
                                 RebarLocation = RebarLocation.L2,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
                     }
                     break;
@@ -638,9 +557,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                         {
@@ -650,9 +569,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                         {
@@ -661,9 +580,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = (nA2 % 2 == 0) ? (nA2 - 2) / 2 : (nA2 - 2) / 2 + 1,
                             Normal = vecY,
                             RebarLocation = RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                         {
@@ -672,9 +591,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = (nA2 - 2) / 2,
                             Normal = vecY,
                             RebarLocation = RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
                     }
                     break;
                 case ShortenEnum.Small:
@@ -683,7 +602,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n2; i++)
                         {
                             double del = delV1 - spac2 / 2 * (i + 1);
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigV1 = i + 1;
                             }
@@ -691,7 +610,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             {
                                 numSmallV1 = i + 1 - numBigV1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
@@ -701,43 +620,50 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n2; i++)
                         {
                             double del = delV2 - spac2 / 2 * (i + 1);
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigV2 = i + 1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
+                            else if (GeomUtil.IsBigger(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
                             {
                                 numSmallV2 = i + 1 - numBigV2;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
                         }
 
-                        IStandardPlaneSingleInfo stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        IStandardPlaneSingleInfo stPlSinInfo = null;
+                        if (numBigV1 >= 1)
                         {
-                            StartPoint = pnts[index] + vecV * spac2 / 2,
-                            Spacing = spac2,
-                            Number = (numBigV1 % 2 == 0) ? numBigV1 / 2 : numBigV1 / 2 + 1,
-                            Normal = vecY,
-                            RebarLocation = RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2 / 2,
+                                Spacing = spac2,
+                                Number = (numBigV1 % 2 == 0) ? numBigV1 / 2 : numBigV1 / 2 + 1,
+                                Normal = vecY,
+                                RebarLocation = RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigV1 >= 2)
                         {
-                            StartPoint = pnts[index] + vecV * spac2,
-                            Spacing = spac2,
-                            Number = numBigV1 / 2,
-                            Normal = vecY,
-                            RebarLocation = RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2,
+                                Spacing = spac2,
+                                Number = numBigV1 / 2,
+                                Normal = vecY,
+                                RebarLocation = RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int num = numBigV1, num2 = numSmallV1;
                         for (int i = 0; i < numSmallV1; i++)
@@ -755,12 +681,12 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
-                        num = num + num2; num2 = n2 - numBigV1 - numSmallV1 - numBigV2 - numSmallV2;
+                        num = num + num2; num2 = n2 - 2 - numBigV1 - numSmallV1 - numBigV2 - numSmallV2;
                         stPlSinInfo = new CrackingStandardPlaneSingleInfo()
                         {
                             StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 1),
@@ -770,9 +696,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new CrackingStandardPlaneSingleInfo()
                         {
@@ -783,9 +709,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         num = num + num2; num2 = numSmallV2;
                         for (int i = 0; i < numSmallV2; i++)
@@ -803,35 +729,41 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
                         num = num + num2; num2 = numBigV2;
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigV2 >= 1)
                         {
-                            StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 1),
-                            Spacing = spac2,
-                            Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
-                            Normal = vecY,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 1),
+                                Spacing = spac2,
+                                Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
+                                Normal = vecY,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigV2 >= 2)
                         {
-                            StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 2),
-                            Spacing = spac2,
-                            Number = num2 / 2,
-                            Normal = vecY,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 2),
+                                Spacing = spac2,
+                                Number = num2 / 2,
+                                Normal = vecY,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int numImpU = nA2 - n2 + numBigV1 + numBigV2;
                         if (numImpU > 0)
@@ -844,9 +776,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU % 2 == 0 ? numImpU / 2 : numImpU / 2 + 1,
                                 Normal = vecY,
                                 RebarLocation = RebarLocation.L2,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                             stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                             {
@@ -855,9 +787,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU / 2,
                                 Normal = vecY,
                                 RebarLocation = RebarLocation.L1,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
                     }
                     break;
@@ -867,7 +799,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n2; i++)
                         {
                             double del = delV1 - spac2 / 2 * (i + 1);
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigV1 = i + 1;
                             }
@@ -875,7 +807,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             {
                                 numSmallV1 = i + 1 - numBigV1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
@@ -885,43 +817,50 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         for (int i = 0; i < n2; i++)
                         {
                             double del = delV2 - spac2 / 2 * (i + 1);
-                            if (GeomUtil.IsEqual(del, shortenLimit) || del > shortenLimit)
+                            if (GeomUtil.IsEqualOrBigger(del, shortenLimit))
                             {
                                 numBigV2 = i + 1;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
+                            else if (GeomUtil.IsBigger(del, 0) && GeomUtil.IsSmaller(del, shortenLimit))
                             {
                                 numSmallV2 = i + 1 - numBigV2;
                             }
-                            else if (GeomUtil.IsEqual(del, 0) || del < 0)
+                            else if (GeomUtil.IsEqualOrSmaller(del, 0))
                             {
                                 break;
                             }
                         }
 
-                        IStandardPlaneSingleInfo stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        IStandardPlaneSingleInfo stPlSinInfo = null;
+                        if (numBigV1 >= 1)
                         {
-                            StartPoint = pnts[index] + vecV * spac2 / 2,
-                            Spacing = spac2,
-                            Number = (numBigV1 % 2 == 0) ? numBigV1 / 2 : numBigV1 / 2 + 1,
-                            Normal = vecY,
-                            RebarLocation = RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2 / 2,
+                                Spacing = spac2,
+                                Number = (numBigV1 % 2 == 0) ? numBigV1 / 2 : numBigV1 / 2 + 1,
+                                Normal = vecY,
+                                RebarLocation = RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigV1 >= 2)
                         {
-                            StartPoint = pnts[index] + vecV * spac2,
-                            Spacing = spac2,
-                            Number = numBigV1 / 2,
-                            Normal = vecY,
-                            RebarLocation = RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2,
+                                Spacing = spac2,
+                                Number = numBigV1 / 2,
+                                Normal = vecY,
+                                RebarLocation = RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int num = numBigV1, num2 = numSmallV1;
                         for (int i = 0; i < numSmallV1; i++)
@@ -939,24 +878,22 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
-                        num = num + num2; num2 = n2 - numBigV1 - numSmallV1 - numBigV2 - numSmallV2;
-                        stPlSinInfo = new CrackingStandardPlaneSingleInfo()
+                        num = num + num2; num2 = n2 - 2 - numBigV1 - numSmallV1 - numBigV2 - numSmallV2;
+                        stPlSinInfo = new StraightStandardPlaneSingleInfo()
                         {
                             StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 1),
                             Spacing = spac2,
                             Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
                             Normal = vecY,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            CrackingDirection = vecExpSmall,
-                            CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         stPlSinInfo = new StraightStandardPlaneSingleInfo()
                         {
@@ -965,9 +902,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 / 2,
                             Normal = vecY,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Column
+                            LocationIndex = 0
                         };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                        NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                         num = num + num2; num2 = numSmallV2;
                         for (int i = 0; i < numSmallV2; i++)
@@ -985,35 +922,41 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
 
                         num = num + num2; num2 = numBigV2;
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigV2 >= 1)
                         {
-                            StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 1),
-                            Spacing = spac2,
-                            Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
-                            Normal = vecY,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 1),
+                                Spacing = spac2,
+                                Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
+                                Normal = vecY,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
-                        stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                        if (numBigV2 >= 2)
                         {
-                            StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 2),
-                            Spacing = spac2,
-                            Number = num2 / 2,
-                            Normal = vecY,
-                            RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Column
-                        };
-                        ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            stPlSinInfo = new LockheadStandardPlaneSingleInfo()
+                            {
+                                StartPoint = pnts[index] + vecV * spac2 / 2 * (num + 2),
+                                Spacing = spac2,
+                                Number = num2 / 2,
+                                Normal = vecY,
+                                RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
+                                LockheadDirection = vecExpBig,
+                                LocationIndex = 0
+                            };
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
+                        }
 
                         int numImpU = nA2 - n2 + numBigV1 + numBigV2;
                         if (numImpU > 0)
@@ -1026,9 +969,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU % 2 == 0 ? numImpU / 2 : numImpU / 2 + 1,
                                 Normal = vecY,
                                 RebarLocation = RebarLocation.L2,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
 
                             stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                             {
@@ -1037,9 +980,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 Number = numImpU / 2,
                                 Normal = vecY,
                                 RebarLocation = RebarLocation.L1,
-                                LocationRegion = StandardLocationRegion.Column
+                                LocationIndex = 0
                             };
-                            ShortenStandardPlaneInfos.Add(stPlSinInfo);
+                            NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
                     }
                     break;
@@ -1081,7 +1024,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1093,7 +1036,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1105,7 +1048,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1117,7 +1060,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -1130,7 +1073,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (nA1 % 2 == 0) ? nA1 / 2 : nA1 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1141,7 +1084,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (nA1 % 2 == 0) ? nA1 / 2 : nA1 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1152,7 +1095,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nA1 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1163,7 +1106,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nA1 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -1179,7 +1122,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigU1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1191,7 +1134,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigU2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1203,7 +1146,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigU1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1215,7 +1158,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigU2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -1228,7 +1171,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (n2 % 2 == 0) ? (n2 - 2) / 2 : (n2 - 2) / 2 + 1,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1239,7 +1182,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (n2 % 2 == 0) ? (n2 - 2) / 2 : (n2 - 2) / 2 + 1,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1250,7 +1193,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (n2 - 2) / 2,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -1261,11 +1204,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (n2 - 2) / 2,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Column
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
             #endregion
+        }
+        public void CreateRebar(int idTurn, int locIndex)
+        {
+            NormalStandardPlaneInfos.ForEach(x => x.CreateRebar(idTurn, locIndex));
         }
     }
     public class WallStandardPlaneInfo : IStandardPlaneInfo
@@ -1293,7 +1240,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int ne2 = designInfo.StandardNumbers[3];
             bool isDoubleNE2 = designInfo.StandardNumbers[4] == 1 ? true : false;
             int nm = designInfo.StandardNumbers[5];
-            
+
             double spacE11 = designInfo.StandardSpacings[0];
             double spacE12 = designInfo.StandardSpacings[1];
             double spacE2 = designInfo.StandardSpacings[2];
@@ -1324,7 +1271,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne11 % 2 == 0) ? ne11 / 2 : ne11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1335,7 +1282,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne11 % 2 == 0) ? ne11 / 2 : ne11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1346,7 +1293,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = ne11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1357,7 +1304,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = ne11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
             #endregion
@@ -1370,7 +1317,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne2 % 2 == 0) ? (ne2 - 2) / 2 : (ne2 - 2) / 2 + 1,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1381,7 +1328,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne2 - 2) / 2,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1394,7 +1341,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (ne2 % 2 == 0) ? (ne2 - 2) / 2 : (ne2 - 2) / 2 + 1,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1405,7 +1352,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (ne2 - 2) / 2,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
             }
@@ -1421,7 +1368,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = ne12 % 2 == 0 ? (ne12 - 2) / 2 : (ne12 - 2) / 2 + 1,
                     Normal = vecX,
                     RebarLocation = ie12[i] % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1432,7 +1379,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (ne12 - 2) / 2,
                     Normal = vecX,
                     RebarLocation = ie12[i] % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
             }
@@ -1447,7 +1394,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nm % 2 == 0 ? nm / 2 : nm / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1458,7 +1405,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nm / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1469,7 +1416,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nm % 2 == 0 ? nm / 2 : nm / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1480,7 +1427,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nm / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
             #endregion
@@ -1494,7 +1441,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne11 % 2 == 0) ? ne11 / 2 : ne11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1505,7 +1452,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne11 % 2 == 0) ? ne11 / 2 : ne11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1516,7 +1463,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = ne11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1527,7 +1474,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = ne11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
             #endregion
@@ -1540,7 +1487,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne2 % 2 == 0) ? (ne2 - 2) / 2 : (ne2 - 2) / 2 + 1,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1551,7 +1498,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (ne2 - 2) / 2,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1564,7 +1511,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (ne2 % 2 == 0) ? (ne2 - 2) / 2 : (ne2 - 2) / 2 + 1,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1575,7 +1522,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (ne2 - 2) / 2,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
             }
@@ -1591,7 +1538,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = ne12 % 2 == 0 ? (ne12 - 2) / 2 : (ne12 - 2) / 2 + 1,
                     Normal = vecX,
                     RebarLocation = ie12[i] % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1602,7 +1549,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (ne12 - 2) / 2,
                     Normal = vecX,
                     RebarLocation = ie12[i] % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 NormalStandardPlaneInfos.Add(stPlSinInfo);
             }
@@ -1679,7 +1626,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int neA2 = designInfoAfter.StandardNumbers[3];
             bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4] == 1 ? true : false;
             int nmA = designInfoAfter.StandardNumbers[5];
-            
+
             double spacE11 = designInfo.StandardSpacings[0];
             double spacE12 = designInfo.StandardSpacings[1];
             double spacE2 = designInfo.StandardSpacings[2];
@@ -1714,7 +1661,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1726,7 +1673,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1737,7 +1684,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = (neA11 % 2 == 0) ? neA11 / 2 : neA11 / 2 + 1,
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1748,7 +1695,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = neA11 / 2,
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -1799,7 +1746,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1811,7 +1758,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1831,7 +1778,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -1846,7 +1793,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1859,7 +1806,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1879,7 +1826,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -1893,7 +1840,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1905,7 +1852,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -1956,7 +1903,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1968,7 +1915,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -1988,7 +1935,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2001,7 +1948,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2012,7 +1959,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 / 2,
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2032,7 +1979,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2046,7 +1993,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2058,7 +2005,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -2087,9 +2034,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int neA12 = designInfoAfter.StandardNumbers[1];
             int ceA12 = designInfoAfter.StandardNumbers[2];
             int neA2 = designInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4]==1 ? true:false;
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4] == 1 ? true : false;
             int nmA = designInfoAfter.StandardNumbers[5];
-            
+
             double spacE11 = designInfo.StandardSpacings[0];
             double spacE12 = designInfo.StandardSpacings[1];
             double spacE2 = designInfo.StandardSpacings[2];
@@ -2124,7 +2071,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2136,7 +2083,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2147,7 +2094,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = (neA2 % 2 == 0) ? (neA2 - 2) / 2 : (neA2 - 2) / 2 + 1,
                             Normal = vecY,
                             RebarLocation = RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2158,7 +2105,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = (neA2 - 2) / 2,
                             Normal = vecY,
                             RebarLocation = RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -2209,7 +2156,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2221,7 +2168,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2241,7 +2188,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2256,7 +2203,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2269,7 +2216,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2289,7 +2236,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2303,7 +2250,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2315,7 +2262,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -2366,7 +2313,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2378,7 +2325,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2398,7 +2345,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2413,7 +2360,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2426,7 +2373,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2446,7 +2393,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL2 ? RebarLocation.L2 : RebarLocation.L1,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Edge
+                                LocationIndex = 0
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2460,7 +2407,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2472,7 +2419,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecY,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Edge
+                            LocationIndex = 0
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -2503,7 +2450,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int neA2 = designInfoAfter.StandardNumbers[3];
             bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4] == 1 ? true : false;
             int nmA = designInfoAfter.StandardNumbers[5];
-            
+
             double spacE11 = designInfo.StandardSpacings[0];
             double spacE12 = designInfo.StandardSpacings[1];
             double spacE2 = designInfo.StandardSpacings[2];
@@ -2568,7 +2515,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = index12 % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                 LockheadDirection = vecExpBig,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2580,7 +2527,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = index12 % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                 LockheadDirection = vecExpBig,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2599,7 +2546,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     RebarLocation = (index12 + num + i) % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                     CrackingDirection = vecExpSmall2,
                     CrackingLength = vecExpSmall2.GetLength(),
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ShortenStandardPlaneInfos.Add(stPlSinInfo);
             }
@@ -2612,7 +2559,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = (index12 + num) % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2623,7 +2570,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = num2 / 2,
                 Normal = vecX,
                 RebarLocation = (index12 + num) % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2642,7 +2589,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     RebarLocation = (index12 + num + i) % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                     CrackingDirection = vecExpSmall2,
                     CrackingLength = vecExpSmall2.GetLength(),
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ShortenStandardPlaneInfos.Add(stPlSinInfo);
             }
@@ -2656,7 +2603,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = (index12 + num) % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                 LockheadDirection = vecExpBig,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2668,7 +2615,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = (index12 + num) % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                 LockheadDirection = vecExpBig,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ShortenStandardPlaneInfos.Add(stPlSinInfo);
             #endregion
@@ -2695,9 +2642,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int neA12 = designInfoAfter.StandardNumbers[1];
             int ceA12 = designInfoAfter.StandardNumbers[2];
             int neA2 = designInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4]==1? true:false;
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4] == 1 ? true : false;
             int nmA = designInfoAfter.StandardNumbers[5];
-            
+
             double spacE11 = designInfo.StandardSpacings[0];
             double spacE12 = designInfo.StandardSpacings[1];
             double spacE2 = designInfo.StandardSpacings[2];
@@ -2732,7 +2679,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2744,7 +2691,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2755,7 +2702,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = (nmA % 2 == 0) ? nmA / 2 : nmA / 2 + 1,
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2766,7 +2713,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = nmA / 2,
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -2817,7 +2764,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2829,7 +2776,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2849,7 +2796,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Middle
+                                LocationIndex = 1
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2864,7 +2811,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2877,7 +2824,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             CrackingDirection = vecExpSmall,
                             CrackingLength = dimExpSmall,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2897,7 +2844,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Middle
+                                LocationIndex = 1
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -2911,7 +2858,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2923,7 +2870,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -2974,7 +2921,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -2986,7 +2933,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -3006,7 +2953,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Middle
+                                LocationIndex = 1
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -3019,7 +2966,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -3030,7 +2977,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 / 2,
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -3050,7 +2997,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                                 RebarLocation = isL1 ? RebarLocation.L1 : RebarLocation.L2,
                                 CrackingDirection = vecExpSmall2,
                                 CrackingLength = vecExpSmall2.GetLength(),
-                                LocationRegion = StandardLocationRegion.Middle
+                                LocationIndex = 1
                             };
                             ShortenStandardPlaneInfos.Add(stPlSinInfo);
                         }
@@ -3064,7 +3011,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
 
@@ -3076,7 +3023,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L2 : RebarLocation.L1,
                             LockheadDirection = vecExpBig,
-                            LocationRegion = StandardLocationRegion.Middle
+                            LocationIndex = 1
                         };
                         ShortenStandardPlaneInfos.Add(stPlSinInfo);
                     }
@@ -3100,9 +3047,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             int neA12 = designInfoAfter.StandardNumbers[1];
             int ceA12 = designInfoAfter.StandardNumbers[2];
             int neA2 = designInfoAfter.StandardNumbers[3];
-            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4]==1? true:false;
+            bool isDoubleNEA2 = designInfoAfter.StandardNumbers[4] == 1 ? true : false;
             int nmA = designInfoAfter.StandardNumbers[5];
-            
+
             double spacE11 = designInfo.StandardSpacings[0];
             double spacE12 = designInfo.StandardSpacings[1];
             double spacE2 = designInfo.StandardSpacings[2];
@@ -3152,7 +3099,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3164,7 +3111,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3176,7 +3123,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3188,7 +3135,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3201,7 +3148,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA11 % 2 == 0) ? neA11 / 2 : neA11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3212,7 +3159,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA11 % 2 == 0) ? neA11 / 2 : neA11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3223,7 +3170,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = neA11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3234,7 +3181,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = neA11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3250,7 +3197,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigU1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3264,7 +3211,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
                     LockheadDirection = vecExpBigU2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3277,7 +3224,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigU1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3291,7 +3238,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
                     LockheadDirection = vecExpBigU2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3305,7 +3252,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA2 % 2 == 0) ? (neA2 - 2) / 2 : (neA2 - 2) / 2 + 1,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3318,7 +3265,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA2 % 2 == 0) ? (neA2 - 2) / 2 : (neA2 - 2) / 2 + 1,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3330,7 +3277,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA2 - 2) / 2,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3343,7 +3290,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA2 - 2) / 2,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3362,7 +3309,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecX,
                     RebarLocation = (ie12[i] % 2 == 0) ? RebarLocation.L2 : RebarLocation.L1,
                     LockheadDirection = vecExpBigU1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3374,7 +3321,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecX,
                     RebarLocation = (ie12[i] % 2 == 0) ? RebarLocation.L1 : RebarLocation.L2,
                     LockheadDirection = vecExpBigU1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
                 #endregion
@@ -3390,7 +3337,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA12 % 2 == 0) ? (neA12 - 2) / 2 : (neA12 - 2) / 2 + 1,
                     Normal = vecX,
                     RebarLocation = (ieA12[i] % 2 == 0) ? RebarLocation.L2 : RebarLocation.L1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3401,7 +3348,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA12 - 2) / 2,
                     Normal = vecX,
                     RebarLocation = (ieA12[i] % 2 == 0) ? RebarLocation.L1 : RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
                 #endregion
@@ -3419,7 +3366,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3431,7 +3378,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3443,7 +3390,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3455,7 +3402,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3468,7 +3415,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (nmA % 2 == 0) ? nmA / 2 : nmA / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3479,7 +3426,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (nmA % 2 == 0) ? nmA / 2 : nmA / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3490,7 +3437,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nmA / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3501,7 +3448,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = nmA / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Middle
+                LocationIndex = 1
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3518,7 +3465,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3530,7 +3477,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3542,7 +3489,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3554,7 +3501,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigV2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3567,7 +3514,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA11 % 2 == 0) ? neA11 / 2 : neA11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3578,7 +3525,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA11 % 2 == 0) ? neA11 / 2 : neA11 / 2 + 1,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3589,7 +3536,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = neA11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3600,7 +3547,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = neA11 / 2,
                 Normal = vecX,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3618,7 +3565,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
                     LockheadDirection = vecExpBigU1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3631,7 +3578,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigU2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3645,7 +3592,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
                     LockheadDirection = vecExpBigU1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3658,7 +3605,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
                 LockheadDirection = vecExpBigU1,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3673,7 +3620,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA2 % 2 == 0) ? (neA2 - 2) / 2 : (neA2 - 2) / 2 + 1,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3685,7 +3632,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA2 % 2 == 0) ? (neA2 - 2) / 2 : (neA2 - 2) / 2 + 1,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3698,7 +3645,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA2 - 2) / 2,
                     Normal = vecY,
                     RebarLocation = RebarLocation.L2,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             }
@@ -3710,7 +3657,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 Number = (neA2 - 2) / 2,
                 Normal = vecY,
                 RebarLocation = RebarLocation.L2,
-                LocationRegion = StandardLocationRegion.Edge
+                LocationIndex = 0
             };
             ImplantStandardPlaneInfos.Add(ipPlSinInfo);
             #endregion
@@ -3728,7 +3675,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecX,
                     RebarLocation = (ie12[i] % 2 == 0) ? RebarLocation.L2 : RebarLocation.L1,
                     LockheadDirection = vecExpBigU1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3740,7 +3687,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Normal = vecX,
                     RebarLocation = (ie12[i] % 2 == 0) ? RebarLocation.L1 : RebarLocation.L2,
                     LockheadDirection = vecExpBigU1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
                 #endregion
@@ -3756,7 +3703,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA12 % 2 == 0) ? (neA12 - 2) / 2 : (neA12 - 2) / 2 + 1,
                     Normal = vecX,
                     RebarLocation = (ieA12[i] % 2 == 0) ? RebarLocation.L2 : RebarLocation.L1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
 
@@ -3767,13 +3714,17 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                     Number = (neA12 - 2) / 2,
                     Normal = vecX,
                     RebarLocation = (ieA12[i] % 2 == 0) ? RebarLocation.L2 : RebarLocation.L1,
-                    LocationRegion = StandardLocationRegion.Edge
+                    LocationIndex = 0
                 };
                 ImplantStandardPlaneInfos.Add(ipPlSinInfo);
                 #endregion
             }
             #endregion
             #endregion
+        }
+        public void CreateRebar(int idTurn, int locIndex)
+        {
+            NormalStandardPlaneInfos.ForEach(x => x.CreateRebar(idTurn, locIndex));
         }
     }
 }

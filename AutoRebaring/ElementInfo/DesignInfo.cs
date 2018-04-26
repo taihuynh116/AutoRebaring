@@ -71,7 +71,7 @@ namespace AutoRebaring.ElementInfo
 
             double standDia = StandardTypes[0].BarDiameter;
             double stirrDia = StirrupTypes[0].BarDiameter;
-            double cover = cp.ConcreteCover * ConstantValue.milimeter2Feet * 2 - stirrDia * 2 - standDia;
+            double cover = cp.ConcreteCover * ConstantValue.milimeter2Feet * 2 + stirrDia * 2 *ConstantValue.RebarStandardOffsetControl+ standDia;
             StandardSpacings = new List<double>
             {
                 (pi.B1s[0] - cover)/(StandardNumbers[0]-1)*2,

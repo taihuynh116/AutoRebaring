@@ -54,28 +54,31 @@ namespace AutoRebaring.RebarLogistic
                 while (true)
                 {
                     StandardTurn st = Singleton.Instance.GetStandardTurn(i, LocationIndex);
+                    StandardTurn stN = Singleton.Instance.GetStandardTurnAfter(i, LocationIndex);
                     if (!st.Swap)
                     {
-                        if (CheckPosition(st))
+                        if (st.IsValidate)
                         {
                             if (st.Finish1 && st.Finish2)
                             {
-                                Count = i + 1;
+                                Singleton.Instance.AddStandardTurnCount(LocationIndex, i + 1);
                                 goto L1;
                             }
+                            st.HandleNextTurn();
                             break;
                         }
                     }
                     if (st.CanSwap)
                     {
                         st.Swap = true;
-                        if (CheckPosition(st))
+                        if (st.IsValidate)
                         {
                             if (st.Finish1 && st.Finish2)
                             {
-                                Count = i + 1;
+                                Singleton.Instance.AddStandardTurnCount(LocationIndex, i + 1);
                                 goto L1;
                             }
+                            st.HandleNextTurn();
                             break;
                         }
                     }
@@ -121,22 +124,6 @@ namespace AutoRebaring.RebarLogistic
             }
             L1:
             return true;
-        }
-        public bool CheckPosition(StandardTurn st)
-        {
-            //else
-            //{
-            //    if (Singleton.Instance.GetVerticalInfo(st.IDElement).SmallStandardChosens[LocationIndex])
-            //    {
-            //        st.SetImplant1();
-            //        st.SetImplant2();
-            //    }
-            //}
-            bool check = st.CheckValidNextTurn();
-            double delta = Math.Abs(st.End1 - st.End2) - Singleton.Instance.GetVerticalInfo(st.IDElement).RebarDevelopmentLengths[LocationIndex];
-            Position pos1 = st.Position1;
-            Position pos2 = st.Position2;
-            return check;
         }
     }
 }

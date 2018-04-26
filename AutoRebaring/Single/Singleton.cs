@@ -35,6 +35,7 @@ namespace AutoRebaring.Single
         private List<IStandardPlaneInfo> standPlaneInfos = new List<IStandardPlaneInfo>();
         private List<IStandardPlaneSingleInfo> standPlaneSingleInfos = new List<IStandardPlaneSingleInfo>();
         private List<List<StandardTurn>> standTurnsList = new List<List<StandardTurn>>();
+        private List<int> standTurnsCount = new List<int>();
         private List<List<VariableImplant>> variableImplantsList = new List<List<VariableImplant>>();
         private int elemTypeInfoID;
         public VariableStandard VariableStandard { get; set; }
@@ -56,7 +57,6 @@ namespace AutoRebaring.Single
         public List<double> RebarZ2s { get; set; }
         public Document Document { get; set; }
         public Element Element { get; set; }
-
         public ARRebarVerticalParameter StandardVeticalParameter { get; set; }
         public ARRebarVerticalParameter StirrupVerticalParameter { get; set; }
         #endregion
@@ -77,6 +77,14 @@ namespace AutoRebaring.Single
                 standTurnsList.Add(new List<StandardTurn>());
             }
             standTurnsList[st.LocationIndex].Add(st);
+        }
+        public void AddStandardTurnCount(int locIndex, int count)
+        {
+            if (standTurnsCount.Count - 1 < locIndex)
+            {
+                standTurnsCount.Add(count);
+            }
+            standTurnsCount[locIndex] = count;
         }
         public void AddVariableImplant(VariableImplant vi)
         {
@@ -130,7 +138,16 @@ namespace AutoRebaring.Single
         public IStandardPlaneInfo GetStandardPlaneInfo(int id) { return standPlaneInfos[id]; }
         public IStandardPlaneSingleInfo GetStandardPlaneSingleInfo(int id) { return standPlaneSingleInfos[id]; }
         public StandardTurn GetStandardTurn(int id, int locIndex) { return standTurnsList[locIndex][id]; }
+        public StandardTurn GetStandardTurnAfter(int id, int locIndex)
+        {
+            int idAfter = id + 1 < standTurnsList[locIndex].Count ? id + 1 : standTurnsList[locIndex].Count - 1;
+            return GetStandardTurn(idAfter, locIndex);
+        }
         public VariableImplant GetVariableImplant(int id, int locIndex) { return variableImplantsList[locIndex][id]; }
+        public int GetStandardTurnCount(int locIndex)
+        {
+            return standTurnsCount[locIndex];
+        }
         #endregion
     }
 }

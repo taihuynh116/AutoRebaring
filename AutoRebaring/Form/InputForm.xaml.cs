@@ -2029,8 +2029,9 @@ namespace AutoRebaring.Form
             }
             Singleton.Instance.PairFitImplants = pairFitImplants;
 
-            
-            RebarHookType hookType = new FilteredElementCollector(Singleton.Instance.Document).OfClass(typeof(RebarHookType)).Where(x => x != null).Cast<RebarHookType>().First();
+
+            //RebarHookType hookType = new FilteredElementCollector(Singleton.Instance.Document).OfClass(typeof(RebarHookType)).Where(x => x != null).Cast<RebarHookType>().First();
+            RebarHookType hookType = null;
 
             long idStartLevel = LevelDao.GetId(IDProject, cbbStartLevel.Text);
             Singleton.Instance.StartLevel = LevelDao.GetLevel(idStartLevel);
@@ -2066,7 +2067,7 @@ namespace AutoRebaring.Form
             catch { }
 
             Singleton.Instance.RebarZ1s = new List<double> { z11 * ConstantValue.milimeter2Feet, z21 * ConstantValue.milimeter2Feet };
-            Singleton.Instance.RebarZ2s = new List<double> { z21 * ConstantValue.milimeter2Feet, z22 * ConstantValue.milimeter2Feet };
+            Singleton.Instance.RebarZ2s = new List<double> { z12 * ConstantValue.milimeter2Feet, z22 * ConstantValue.milimeter2Feet };
 
             long idStandChosen = StandardChosenDao.GetId(IDProject);
             Singleton.Instance.StandardChosen = StandardChosenDao.GetStandardChosen(idStandChosen);

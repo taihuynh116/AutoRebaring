@@ -9,7 +9,7 @@ namespace AutoRebaring.Constant
     public static class ConstantValue
     {
         public const int LoopCount = 20;
-        public const double RebarStandardOffsetControl = 1.5;
+        public const double RebarStandardOffsetControl = 1.3;
         public const double feet2Meter = 0.3048;
         public const double meter2Feet = 1/feet2Meter;
         public const double feet2MiliMeter = feet2Meter * 1000;
