@@ -27,7 +27,7 @@ namespace AutoRebaring.Form
             ResizeMode = System.Windows.ResizeMode.NoResize;
             Left = rec.Right - Width - offWid;
             Top = rec.Top + offHei;
-            Topmost = false;
+            Topmost = true;
         }
     }
 }

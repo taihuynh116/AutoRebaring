@@ -9,6 +9,7 @@ using AutoRebaring.Single;
 using AutoRebaring.RebarLogistic;
 using Geometry;
 using AutoRebaring.Database.AutoRebaring.EF;
+using AutoRebaring.Constant;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 {
@@ -38,7 +39,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
                     p2 = new XYZ(StartPoint.U, StartPoint.V, st.End1);
                     break;
                 case RebarLocation.L2:
-                    if (GeomUtil.IsEqual(st.L1, 0)) return null;
+                    if (GeomUtil.IsEqual(st.L2, 0)) return null;
                     p1 = new XYZ(StartPoint.U, StartPoint.V, st.Start2);
                     p2 = new XYZ(StartPoint.U, StartPoint.V, st.End2);
                     break;
@@ -66,6 +67,20 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
+            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Type").Set("Straight");
+
+            View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
+            View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
+            View View3d = Singleton.Instance.Document.GetElement(new ElementId(297204)) as View;
+            View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
+
+            rb.SetSolidInView(View3d as View3D, true);
+            rb.SetUnobscuredInView(View3d, true);
+            rb.SetUnobscuredInView(East, true);
+            rb.SetUnobscuredInView(South, true);
+            rb.SetUnobscuredInView(Section, true);
+
             return rb;
         }
     }
@@ -96,7 +111,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
                     p2 = new XYZ(StartPoint.U, StartPoint.V, st.End1);
                     break;
                 case RebarLocation.L2:
-                    if (GeomUtil.IsEqual(st.L1, 0)) return null;
+                    if (GeomUtil.IsEqual(st.L2, 0)) return null;
                     p1 = new XYZ(StartPoint.U, StartPoint.V, verticalInfo.TopAnchorAfters[LocationIndex]);
                     p2 = new XYZ(StartPoint.U, StartPoint.V, st.End2);
                     break;
@@ -117,6 +132,20 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
+            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Type").Set("Implant");
+
+            View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
+            View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
+            View View3d = Singleton.Instance.Document.GetElement(new ElementId(297204)) as View;
+            View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
+
+            rb.SetSolidInView(View3d as View3D, true);
+            rb.SetUnobscuredInView(View3d, true);
+            rb.SetUnobscuredInView(East, true);
+            rb.SetUnobscuredInView(South, true);
+            rb.SetUnobscuredInView(Section, true);
+
             return rb;
         }
     }
@@ -149,14 +178,16 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
                     p2 = new XYZ(StartPoint.U, StartPoint.V, verticalInfo.TopLockHead);
                     break;
                 case RebarLocation.L2:
-                    if (GeomUtil.IsEqual(st.L1, 0)) return null;
+                    if (GeomUtil.IsEqual(st.L2, 0)) return null;
                     p1 = new XYZ(StartPoint.U, StartPoint.V, st.Start2);
                     p2 = new XYZ(StartPoint.U, StartPoint.V, verticalInfo.TopLockHead);
                     break;
             }
             p3 = p2 + LockheadDirection * designInfo.StandardDiameters[LocationIndex] * lp.LockheadMutiply;
             List<Curve> curves = new List<Curve> { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3) };
-            Rebar rb = Rebar.CreateFromCurves(Single.Singleton.Instance.Document, RebarStyle.Standard, designInfo.StandardTypes[LocationIndex], designInfo.StandardHookTypes[LocationIndex],
+            Rebar rb = null;
+
+            rb = Rebar.CreateFromCurves(Single.Singleton.Instance.Document, RebarStyle.Standard, designInfo.StandardTypes[LocationIndex], designInfo.StandardHookTypes[LocationIndex],
                 designInfo.StandardHookTypes[LocationIndex], revitInfo.Element, Normal, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
 
             RebarShapeDrivenAccessor rsda = rb.GetShapeDrivenAccessor();
@@ -171,6 +202,20 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
+            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Type").Set("Lockhead");
+
+            View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
+            View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
+            View View3d = Singleton.Instance.Document.GetElement(new ElementId(297204)) as View;
+            View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
+
+            rb.SetSolidInView(View3d as View3D, true);
+            rb.SetUnobscuredInView(View3d, true);
+            rb.SetUnobscuredInView(East, true);
+            rb.SetUnobscuredInView(South, true);
+            rb.SetUnobscuredInView(Section, true);
+
             return rb;
         }
     }
@@ -201,17 +246,17 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
                 case RebarLocation.L1:
                     if (GeomUtil.IsEqual(st.L1, 0)) return null;
                     p1 = new XYZ(StartPoint.U, StartPoint.V, st.Start1);
-                    p3 = p1 + CrackingDirection * CrackingLength;
+                    p3 = p1 + CrackingDirection;
                     p3 = new XYZ(p3.X, p3.Y, verticalInfo.TopSmall);
-                    p2 = p3 - CrackingDirection * CrackingLength - XYZ.BasisZ * CrackingLength * lp.LHRatio;
+                    p2 = p3 - CrackingDirection - XYZ.BasisZ * CrackingLength * lp.LHRatio;
                     p4 = new XYZ(p3.X, p3.Y, st.End1);
                     break;
                 case RebarLocation.L2:
-                    if (GeomUtil.IsEqual(st.L1, 0)) return null;
+                    if (GeomUtil.IsEqual(st.L2, 0)) return null;
                     p1 = new XYZ(StartPoint.U, StartPoint.V, st.Start2);
-                    p3 = p1 + CrackingDirection * CrackingLength;
+                    p3 = p1 + CrackingDirection;
                     p3 = new XYZ(p3.X, p3.Y, verticalInfo.TopSmall);
-                    p2 = p3 - CrackingDirection * CrackingLength - XYZ.BasisZ * CrackingLength * lp.LHRatio;
+                    p2 = p3 - CrackingDirection  - XYZ.BasisZ * CrackingLength * lp.LHRatio;
                     p4 = new XYZ(p3.X, p3.Y, st.End2);
                     break;
             }
@@ -232,6 +277,20 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
+            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Type").Set("Cracking");
+
+            View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
+            View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
+            View View3d = Singleton.Instance.Document.GetElement(new ElementId(297204)) as View;
+            View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
+
+            rb.SetSolidInView(View3d as View3D, true);
+            rb.SetUnobscuredInView(View3d, true);
+            rb.SetUnobscuredInView(East, true);
+            rb.SetUnobscuredInView(South, true);
+            rb.SetUnobscuredInView(Section, true);
+
             return rb;
         }
     }

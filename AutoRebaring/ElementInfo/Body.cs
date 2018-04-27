@@ -63,8 +63,8 @@ namespace AutoRebaring.ElementInfo
         List<double> EndLimit2s { get; set; }
 
         List<double> RebarDevelopmentLengths { get; set; }
-        List<bool> SmallStandardChosens { get; set; }
         List<StirrupDistribution> StirrupDistributions { get; set; }
+        List<StandardCreatingEnum> StandardCreatingTypes { get; set; }
         void GetInformation();
         void GetRebarInformation();
     }
@@ -128,7 +128,7 @@ namespace AutoRebaring.ElementInfo
     {
         int ID { get; set; }
         List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
-        List<IStandardPlaneSingleInfo> ImplantStandardPlaneInfos { get; set; }
+        List<IStandardPlaneSingleInfo> LockheadStandardPlaneInfos { get; set; }
         void CreateRebar(int idTurn, int locIndex);
     }
     public interface IElementTypeInfo
@@ -136,6 +136,10 @@ namespace AutoRebaring.ElementInfo
         int ID { get; set; }
         ElementTypeEnum Type { get; set; }
         int LocationCount { get; set; }
-
+    }
+    public enum StandardCreatingEnum
+    {
+        Normal = 0,
+        Lockhead = 1
     }
 }

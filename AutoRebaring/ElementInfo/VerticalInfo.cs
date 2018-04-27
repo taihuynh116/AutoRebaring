@@ -35,13 +35,13 @@ namespace AutoRebaring.ElementInfo
         public double BottomStirrup2 { get; set; }
         public List<double> RebarDevelopmentLengths { get; set; }
         public List<StirrupDistribution> StirrupDistributions { get; set; }
-        public List<bool> SmallStandardChosens { get; set; } = new List<bool>();
         public double BottomOffsetValue { get; set; }
         public List<double> EndLimit0s { get; set; }
         public List<double> StartLimit1s { get; set; }
         public List<double> EndLimit1s { get; set; }
         public List<double> StartLimit2s { get; set; }
         public List<double> EndLimit2s { get; set; }
+        public List<StandardCreatingEnum> StandardCreatingTypes { get; set; } = new List<StandardCreatingEnum>();
         #endregion
 
         public VerticalInfo(int id)
@@ -118,7 +118,7 @@ namespace AutoRebaring.ElementInfo
             for (int i = 0; i < elems.Count; i++)
             {
                 BoundingBoxXYZ bbe = elems[i].get_BoundingBox(null);
-                double minZ = bbe.Max.Z, maxLimZ = bbe.Max.Z, maxFloorZ = 0, maxBeamZ = 0;
+                double minZ = bbe.Max.Z, maxLimZ = bbe.Max.Z, maxFloorZ = bbe.Min.Z, maxBeamZ = bbe.Min.Z;
 
                 if (maxLimZ > middle)
                 {
@@ -223,12 +223,26 @@ namespace AutoRebaring.ElementInfo
             ARDevelopmentParameter dp = Singleton.Instance.DevelopmentParameter;
 
             TopAnchorAfters = diA.StandardDiameters.
-                Select(x => ap.AnchorMultiply * x).ToList();
+                Select(x => TopLimit- ap.AnchorMultiply * x).ToList();
             RebarDevelopmentLengths = di.StandardDiameters.
                 Select(x => dp.DevelopmentMultiply * x).ToList();
             for (int i = 0; i < di.StandardDiameters.Count; i++)
             {
-                SmallStandardChosens.Add(GeomUtil.IsBigger(di.StandardDiameters[i], diA.StandardDiameters[i]));
+                if (ID == Singleton.Instance.GetElementCount() - 1)
+                {
+                    StandardCreatingTypes.Add(StandardCreatingEnum.Lockhead);
+                }
+                else
+                {
+                    if (GeomUtil.IsBigger(diA.StandardDiameters[i], di.StandardDiameters[i]))
+                    {
+                        StandardCreatingTypes.Add(StandardCreatingEnum.Lockhead);
+                    }
+                    else
+                    {
+                        StandardCreatingTypes.Add(StandardCreatingEnum.Normal);
+                    }
+                }
             }
         }
     }

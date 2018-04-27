@@ -42,7 +42,7 @@ namespace AutoRebaring.ElementInfo
 
             PlaneInfo pi = new PlaneInfo(doc, e);
             UV p1 = pi.CentralPoint - pi.VectorU * pi.B1 / 2 - pi.VectorV * pi.B2 / 2;
-            UV p2 = pi.CentralPoint - pi.VectorU * pi.B1 / 2 - pi.VectorV * pi.B2 / 2;
+            UV p2 = pi.CentralPoint + pi.VectorU * pi.B1 / 2 + pi.VectorV * pi.B2 / 2;
             List<Element> elemCols = new FilteredElementCollector(doc).WhereElementIsNotElementType().Where(x => x != null).Where(x => (x is Wall) || (x is FamilyInstance && x.Category.Id.IntegerValue == (int)BuiltInCategory.OST_StructuralColumns)).ToList();
             List<Element> elems = new List<Element>();
             foreach (Element eA in elemCols)
@@ -62,17 +62,14 @@ namespace AutoRebaring.ElementInfo
                 double startEle = startLevel.Elevation * ConstantValue.milimeter2Feet, endEle = endLevel.Elevation * ConstantValue.milimeter2Feet;
                 string sLvl = sLevel.Name, eLvl = eLevel.Name;
                 double sEle = sLevel.Elevation, eEle = eLevel.Elevation;
-                if (GeomUtil.IsEqualOrBigger(sLevel.Elevation, startEle))
+                if (GeomUtil.IsEqualOrBigger(sLevel.Elevation, startEle) && GeomUtil.IsEqualOrSmaller(eLevel.Elevation, endEle))
                 {
-                    if (GeomUtil.IsEqualOrSmaller(eLevel.Elevation, endEle))
+                    PlaneInfo piA = new PlaneInfo(doc, eA);
+                    UV p1A = piA.CentralPoint - piA.VectorU * piA.B1 / 2 - piA.VectorV * piA.B2 / 2;
+                    UV p2A = piA.CentralPoint + piA.VectorU * piA.B1 / 2 + piA.VectorV * piA.B2 / 2;
+                    if (GeomUtil.IsEqualOrSmaller(p1.U, p2A.U) && GeomUtil.IsEqualOrSmaller(p1A.U, p2.U) && GeomUtil.IsEqualOrSmaller(p1.V, p2A.V) && GeomUtil.IsEqualOrSmaller(p1A.V, p2.V))
                     {
-                        PlaneInfo piA = new PlaneInfo(doc, eA);
-                        UV p1A = piA.CentralPoint - piA.VectorU * piA.B1 / 2 - piA.VectorV * piA.B2 / 2;
-                        UV p2A = piA.CentralPoint - piA.VectorU * piA.B1 / 2 - piA.VectorV * piA.B2 / 2;
-                        if (GeomUtil.IsEqualOrSmaller(p1.U, p2A.U) && GeomUtil.IsEqualOrSmaller(p1A.U, p2.U) && GeomUtil.IsEqualOrSmaller(p1.V, p2A.V) && GeomUtil.IsEqualOrSmaller(p1A.V, p2.V))
-                        {
-                            revitInfos.Add(new RevitInfo(doc, eA));
-                        }
+                        revitInfos.Add(new RevitInfo(doc, eA));
                     }
                 }
             }
@@ -87,7 +84,7 @@ namespace AutoRebaring.ElementInfo
         public static void GetAllParameters()
         {
             ElementTypeEnum elemTypeEnum = Singleton.Instance.GetElementTypeEnum();
-            
+
             // F1
             for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
             {
@@ -172,8 +169,8 @@ namespace AutoRebaring.ElementInfo
                 planeInfo.GetRebarLocation();
                 planeInfo.GetShortenType();
                 verticalInfo.GetRebarInformation();
-                
-                Singleton.Instance.UpdatePlaneInfo(i,planeInfo);
+
+                Singleton.Instance.UpdatePlaneInfo(i, planeInfo);
                 Singleton.Instance.UpdateDesignInfo(i, designInfo);
                 Singleton.Instance.UpdateVerticalInfo(i, verticalInfo);
             }
@@ -205,11 +202,11 @@ namespace AutoRebaring.ElementInfo
                     VariableImplant vi = new VariableImplant(i, j);
                     Singleton.Instance.AddVariableImplant(vi);
                 }
-                
+
             }
         }
     }
-   
+
     public class RevitInfoSorter : IComparer<IRevitInfo>
     {
         public RevitInfoSorter() { }
