@@ -73,12 +73,12 @@ namespace AutoRebaring.ElementInfo
         int ID { get; set; }
         Level Level { get; set; }
         List<RebarBarType> StandardTypes { get; set; }
-        List<double> StandardDiameters { get; set; }
+        List<double> StandardDiameters { get; }
         List<RebarHookType> StandardHookTypes { get; set; }
         List<int> StandardNumbers { get; set; }
         List<double> StandardSpacings { get; set; }
         List<RebarBarType> StirrupTypes { get; set; }
-        List<double> StirrupDiameters { get; set; }
+        List<double> StirrupDiameters { get; }
         List<double> BotTopSpacings { get; set; }
         List<double> MiddleSpacings { get; set; }
         void GetStandardSpacing();

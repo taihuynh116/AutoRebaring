@@ -18,16 +18,16 @@ namespace AutoRebaring.ElementInfo
         public int ID { get; set; }
         public Level Level { get; set; }
         public List<RebarBarType> StandardTypes { get; set; }
-        public List<double> StandardDiameters { get; set; }
+        public List<double> StandardDiameters { get { return StandardTypes.Select(x => x.BarDiameter).ToList(); } }
         public List<RebarHookType> StandardHookTypes { get; set; }
         public List<int> StandardNumbers { get; set; }
         public List<RebarBarType> StirrupTypes { get; set; }
-        public List<double> StirrupDiameters { get; set; }
+        public List<double> StirrupDiameters { get { return StirrupTypes.Select(x => x.BarDiameter).ToList(); } }
         public List<double> BotTopSpacings { get; set; }
         public List<double> MiddleSpacings { get; set; }
         public List<double> StandardSpacings { get; set; }
         #endregion
-
+        public ColumnDesignInfo() { }
         public ColumnDesignInfo(Level level, RebarBarType standType, RebarHookType hookType, int n1, int n2, RebarBarType stirType1, RebarBarType stirType2, double bt1, double bt2, double m1, double m2)
         {
             Level = level;
@@ -37,8 +37,6 @@ namespace AutoRebaring.ElementInfo
             StirrupTypes = new List<RebarBarType> { stirType1, stirType2 };
             BotTopSpacings = new List<double> { bt1, bt2 };
             MiddleSpacings = new List<double> { m1, m2 };
-            StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
-            StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
         public ColumnDesignInfo(Level level, List<RebarBarType> standTypes, List<RebarHookType> hookTypes, List<int> standNumbers, List<RebarBarType> stirrTypes, List<double> btSpacs, List<double> mSpacs)
         {
@@ -49,8 +47,6 @@ namespace AutoRebaring.ElementInfo
             StirrupTypes = stirrTypes;
             BotTopSpacings = btSpacs;
             MiddleSpacings = mSpacs;
-            StandardDiameters = StandardTypes.Select(x => x.BarDiameter).ToList();
-            StirrupDiameters = StirrupTypes.Select(x => x.BarDiameter).ToList();
         }
         public ColumnDesignInfo(IDesignInfo designInfo, Level level)
         {
@@ -61,8 +57,6 @@ namespace AutoRebaring.ElementInfo
             StirrupTypes = designInfo.StirrupTypes;
             BotTopSpacings = designInfo.BotTopSpacings;
             MiddleSpacings = designInfo.MiddleSpacings;
-            StandardDiameters = designInfo.StandardDiameters;
-            StirrupDiameters = designInfo.StirrupDiameters;
         }
         public void GetStandardSpacing()
         {
