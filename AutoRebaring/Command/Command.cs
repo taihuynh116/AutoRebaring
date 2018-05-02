@@ -35,7 +35,7 @@ namespace AutoRebaring.Command
             ElementInfoUtils.AddElementTypeInfo();
             ElementInfoUtils.PickElement(doc, sel);
 
-            ElementInfoUtils.AddTestInformation(10, 6);
+            ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6, 7, 5, 1, 5, 1, 6);
             //Window = new WindowForm();
             //Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
             //Window.Form = new InputForm();
@@ -54,15 +54,14 @@ namespace AutoRebaring.Command
 
             for (int i = 0; i < locCount; i++)
             {
-                for (int j = 0; j < Singleton.Instance.GetStandardTurnCount(i); j++)
+                for (int j = 0; j < Singleton.Instance.GetStandardTurnCount(0); j++)
                 {
-                    StandardTurn st = Singleton.Instance.GetStandardTurn(j, i);
+                    StandardTurn st = Singleton.Instance.GetStandardTurn(j, 0);
                     IStandardPlaneInfo standPlaneInfo = Singleton.Instance.GetStandardPlaneInfo(st.IDElement);
                     IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(st.IDElement);
                     IShortenType shortenType = null;
                     shortenType = planeInfo.ShortenTypes[0];
                     standPlaneInfo.CreateRebar(j, i);
-                    //standPlaneInfo.CreateRebar(j, i, shortenType.ShortenEnum);
                 }
             }
 

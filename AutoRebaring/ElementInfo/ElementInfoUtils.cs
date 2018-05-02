@@ -170,6 +170,7 @@ namespace AutoRebaring.ElementInfo
                 planeInfo.GetRebarLocation();
                 planeInfo.GetShortenType();
                 verticalInfo.GetRebarInformation();
+                verticalInfo.CheckLockheadInformation();
 
                 Singleton.Instance.UpdatePlaneInfo(i, planeInfo);
                 Singleton.Instance.UpdateDesignInfo(i, designInfo);
@@ -206,7 +207,7 @@ namespace AutoRebaring.ElementInfo
 
             }
         }
-        public static void AddTestInformation(int first, int second)
+        public static void AddTestInformationColumn(int first, int second)
         {
             Document doc = Singleton.Instance.Document;
             List<Level> levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).Cast<Level>().ToList();
@@ -247,7 +248,7 @@ namespace AutoRebaring.ElementInfo
                 new ColumnDesignInfo()
                 {
                     Level = levels.Where(x=> x.Name=="Tầng 3").First(),
-                    StandardTypes = barTypes.Where(x=> x.Name=="T20").ToList(),
+                    StandardTypes = barTypes.Where(x=> x.Name=="T18").ToList(),
                     StandardHookTypes = new List<RebarHookType>{null},
                     StandardNumbers = new List<int>{first, first},
                     StirrupTypes = new List<RebarBarType>{stirType, stirType},
@@ -257,7 +258,7 @@ namespace AutoRebaring.ElementInfo
                 new ColumnDesignInfo()
                 {
                     Level = levels.Where(x=> x.Name=="Tầng 4").First(),
-                    StandardTypes = barTypes.Where(x=> x.Name=="T18").ToList(),
+                    StandardTypes = barTypes.Where(x=> x.Name=="T20").ToList(),
                     StandardHookTypes = new List<RebarHookType>{null},
                     StandardNumbers = new List<int>{second, second},
                     StirrupTypes = new List<RebarBarType>{stirType, stirType},
@@ -303,7 +304,10 @@ namespace AutoRebaring.ElementInfo
             };
             ARStandardChosen sc = new ARStandardChosen()
             {
-                Lmax = 7800, Lmin=1900, Step =100, LImplantMax=3900
+                Lmax = 7800,
+                Lmin = 1900,
+                Step = 100,
+                LImplantMax = 3900
             };
             List<double> rebarZ1s = new List<double> {
                 (startLevel.Elevation + 1200) * ConstantValue.milimeter2Feet };
@@ -322,7 +326,7 @@ namespace AutoRebaring.ElementInfo
             ARRebarVerticalParameter stvp = new ARRebarVerticalParameter()
             {
                 BottomOffset = 0,
-                BottomOffsetRatio =6,
+                BottomOffsetRatio = 6,
                 TopOffset = 0,
                 TopOffsetRatio = 6,
                 OffsetInclude = false,
@@ -347,6 +351,164 @@ namespace AutoRebaring.ElementInfo
             Singleton.Instance.RebarZ2s = rebarZ2s;
             Singleton.Instance.StandardVeticalParameter = svp;
             Singleton.Instance.StirrupVerticalParameter = stvp;
+        }
+        public static void AddTestInformationWall(int ne11B, int ne12B, int ce12B, int ne2B, int de2B, int nmB,
+            int ne11T, int ne12T, int ce12T, int ne2T, int de2T, int nmT)
+        {
+            Document doc = Singleton.Instance.Document;
+            List<Level> levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).Cast<Level>().ToList();
+            List<RebarBarType> barTypes = new FilteredElementCollector(doc).OfClass(typeof(RebarBarType)).Cast<RebarBarType>().ToList();
+
+            ARCoverParameter cp = new ARCoverParameter()
+            {
+                ConcreteCover = 35
+            };
+            ARAnchorParameter ap = new ARAnchorParameter()
+            {
+                AnchorMultiply = 40
+            };
+            ARDevelopmentParameter dp = new ARDevelopmentParameter()
+            {
+                DevelopmentMultiply = 40,
+                DevelopmentLengthsDistance = 0,
+                DeltaDevelopmentError = 0,
+                NumberDevelopmentError = 0,
+                DevelopmentErrorInclude = false,
+                DevelopmentLevelOffsetAllowed = 0,
+                DevelopmentLevelOffsetInclude = true,
+                ReinforcementStirrupInclude = true
+            };
+            ARLockheadParameter lp = new ARLockheadParameter()
+            {
+                ShortenLimit = 100,
+                LockheadMutiply = 20,
+                LockheadConcreteCover = 100,
+                SmallConcreteCover = 50,
+                LHRatio = 6
+            };
+            RebarBarType stirType = barTypes.Where(x => x.Name == "T10").First();
+            RebarBarType barType18 = barTypes.Where(x => x.Name == "T18").First();
+            RebarBarType barType20 = barTypes.Where(x => x.Name == "T20").First();
+            RebarBarType barType22 = barTypes.Where(x => x.Name == "T22").First();
+            double tbSpac = 100 * ConstantValue.milimeter2Feet;
+            double mSpac = 200 * ConstantValue.milimeter2Feet;
+            List<IDesignInfo> desInfos = new List<IDesignInfo>()
+            {
+                new WallDesignInfo()
+                {
+                    Level = levels.Where(x=> x.Name=="Tầng 3").First(),
+                    StandardTypes = new List<RebarBarType>{barType18, barType20 },
+                    StandardHookTypes = new List<RebarHookType>{null, null},
+                    StandardNumbers = new List<int>{ne11B, ne12B, ce12B, ne2B, de2B, nmB},
+                    StirrupTypes = new List<RebarBarType>{stirType,stirType, stirType},
+                    BotTopSpacings = new List<double>{tbSpac, tbSpac},
+                    MiddleSpacings = new List<double>{mSpac, mSpac}
+                },
+                new WallDesignInfo()
+                {
+                    Level = levels.Where(x=> x.Name=="Tầng 4").First(),
+                    StandardTypes = new List<RebarBarType>{barType18, barType20 },
+                    StandardHookTypes = new List<RebarHookType>{null, null},
+                    StandardNumbers = new List<int>{ne11T, ne12T, ce12T, ne2T, de2T, nmT},
+                    StirrupTypes = new List<RebarBarType>{stirType, stirType, stirType},
+                    BotTopSpacings = new List<double>{tbSpac, tbSpac},
+                    MiddleSpacings = new List<double>{mSpac, mSpac}
+                },
+            };
+            List<double> fitStands = new List<double>
+            {
+                5850 * ConstantValue.milimeter2Feet, 3900 *ConstantValue.milimeter2Feet,
+                2925 * ConstantValue.milimeter2Feet, 2340 * ConstantValue.milimeter2Feet
+            };
+            List<double> pairFitStands = new List<double>
+            {
+                11700 *ConstantValue.milimeter2Feet, 7800 * ConstantValue.milimeter2Feet,
+                5850 * ConstantValue.milimeter2Feet
+            };
+            List<double> tripFitStands = new List<double>
+            {
+                11700 *ConstantValue.milimeter2Feet, 7800 * ConstantValue.milimeter2Feet
+            };
+            List<double> fitImplants = new List<double>
+            {
+                3900 * ConstantValue.milimeter2Feet, 2925 *ConstantValue.milimeter2Feet,
+                2340 * ConstantValue.milimeter2Feet, 1950 * ConstantValue.milimeter2Feet
+            };
+            List<double> pairFitImplants = new List<double>
+            {
+                5850 * ConstantValue.milimeter2Feet, 3900 *ConstantValue.milimeter2Feet,
+                2925 * ConstantValue.milimeter2Feet
+            };
+            ARLevel startLevel = new ARLevel()
+            {
+                Name = "Tầng 3",
+                Elevation = 6600,
+                Title = "T3"
+            };
+            ARLevel endLevel = new ARLevel()
+            {
+                Name = "Tầng 5",
+                Elevation = 13200,
+                Title = "53"
+            };
+            ARStandardChosen sc = new ARStandardChosen()
+            {
+                Lmax = 7800,
+                Lmin = 1900,
+                Step = 100,
+                LImplantMax = 3900
+            };
+            List<double> rebarZ1s = new List<double> {
+                (startLevel.Elevation + 1200) * ConstantValue.milimeter2Feet , (startLevel.Elevation + 1500) * ConstantValue.milimeter2Feet};
+            List<double> rebarZ2s = new List<double> {
+                (startLevel.Elevation + 2200) * ConstantValue.milimeter2Feet , (startLevel.Elevation + 2500) * ConstantValue.milimeter2Feet};
+            ARRebarVerticalParameter svp = new ARRebarVerticalParameter()
+            {
+                BottomOffset = 0,
+                BottomOffsetRatio = 1,
+                TopOffset = 0,
+                TopOffsetRatio = 1,
+                OffsetInclude = false,
+                OffsetRatioInclude = false,
+                IsInsideBeam = false
+            };
+            ARRebarVerticalParameter stvp = new ARRebarVerticalParameter()
+            {
+                BottomOffset = 0,
+                BottomOffsetRatio = 6,
+                TopOffset = 0,
+                TopOffsetRatio = 6,
+                OffsetInclude = false,
+                OffsetRatioInclude = true,
+                IsInsideBeam = false
+            };
+            ARWallParameter wp = new ARWallParameter()
+            {
+                EdgeWidth = 0,
+                EdgeWidthInclude = false,
+                EdgeRatio = 0.3,
+                EdgeRatioInclude = true
+            };
+
+            Singleton.Instance.CoverParameter = cp;
+            Singleton.Instance.AnchorParameter = ap;
+            Singleton.Instance.DevelopmentParameter = dp;
+            Singleton.Instance.LockheadParameter = lp;
+            Singleton.Instance.DesignInfos = desInfos;
+            Singleton.Instance.FitStandards = fitStands;
+            Singleton.Instance.PairFitStandards = pairFitStands;
+            Singleton.Instance.TripFitStandards = tripFitStands;
+            Singleton.Instance.FitImplants = fitImplants;
+            Singleton.Instance.PairFitImplants = pairFitImplants;
+            Singleton.Instance.StartLevel = startLevel;
+            Singleton.Instance.EndLevel = endLevel;
+            Singleton.Instance.StandardChosen = sc;
+            Singleton.Instance.RebarZ1s = rebarZ1s;
+            Singleton.Instance.RebarZ2s = rebarZ2s;
+            Singleton.Instance.StandardVeticalParameter = svp;
+            Singleton.Instance.StirrupVerticalParameter = stvp;
+            Singleton.Instance.WallParameter = wp;
+            Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Wall);
         }
     }
 

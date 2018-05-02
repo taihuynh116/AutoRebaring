@@ -67,6 +67,7 @@ namespace AutoRebaring.ElementInfo
         List<StandardCreatingEnum> StandardCreatingTypes { get; set; }
         void GetInformation();
         void GetRebarInformation();
+        void CheckLockheadInformation();
     }
     public interface IDesignInfo
     {
@@ -92,7 +93,7 @@ namespace AutoRebaring.ElementInfo
 
     public interface IShortenType
     {
-        ShortenEnum ShortenEnum { get; }
+        bool IsLockhealAll { get; }
         ShortenEnum ShortenU1 { get; set; }
         ShortenEnum ShortenU2 { get; set; }
         ShortenEnum ShortenV1 { get; set; }

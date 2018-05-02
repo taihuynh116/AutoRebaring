@@ -279,9 +279,11 @@ namespace AutoRebaring.ElementInfo
             StirrupRebarPointLists = new List<List<UV>>();
 
             double offConc = cp.ConcreteCover * ConstantValue.milimeter2Feet;
-            double offStirr = di.StirrupDiameters[0];
+            double offStirr =di.StirrupDiameters[0];
             double offCntr = di.StirrupDiameters[0]* ( ConstantValue.RebarStandardOffsetControl-1);
             double offStand= di.StandardDiameters[0];
+
+            //cp.ConcreteCover* ConstantValue.milimeter2Feet + di.StirrupDiameters[0] * ConstantValue.RebarStandardOffsetControl + di.StandardDiameters[0] / 2;
 
             #region Standard
             List<UV> boundPnts = BoundaryPointLists[0];
@@ -294,7 +296,7 @@ namespace AutoRebaring.ElementInfo
             };
             StandardRebarPointLists.Add(pnts);
 
-            double offSpac = di.StandardSpacings[3];
+            double offSpac = di.StandardSpacings[3]*0.5;
             offStand = di.StandardDiameters[1];
             boundPnts = BoundaryPointLists[1];
             pnts = new List<UV>()
@@ -310,7 +312,7 @@ namespace AutoRebaring.ElementInfo
             pnts = new List<UV>()
             {
                 boundPnts[0] + VectorV*(offConc+ offStirr+offCntr+ offStand/2) + VectorU*(offStirr/2 + offCntr+ offStand/2),
-                boundPnts[1] + (VectorU+VectorV)* (offConc+ offStirr+offCntr+ offStand/2),
+                boundPnts[1] + (-VectorU+VectorV)* (offConc+ offStirr+offCntr+ offStand/2),
                 boundPnts[2] - (VectorU+VectorV)* (offConc+ offStirr+offCntr+ offStand/2),
                 boundPnts[3] - VectorV*(offConc+ offStirr+offCntr+ offStand/2) + VectorU*(offStirr/2 + offCntr+ offStand/2)
             };

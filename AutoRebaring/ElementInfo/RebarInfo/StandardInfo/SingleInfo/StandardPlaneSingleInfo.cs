@@ -13,9 +13,18 @@ using AutoRebaring.Constant;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 {
+    public class RebarID
+    {
+        public static int ID = 0;
+    }
     public class StraightStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
-        public int ID { get; set; } = 0;
+        public StraightStandardPlaneSingleInfo()
+        {
+            ID = RebarID.ID;
+            RebarID.ID++;
+        }
+        public int ID { get; set; }
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }
@@ -26,6 +35,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
+            if (LocationIndex != locIndex) return null;
+
             StandardTurn st = Singleton.Instance.GetStandardTurn(idTurn, locIndex);
             IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(st.IDElement);
             IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(st.IDElement);
@@ -69,6 +80,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
             rb.LookupParameter("Level").Set(revitInfo.Level.Name);
             rb.LookupParameter("Type").Set("Straight");
+            rb.LookupParameter("ID").Set(ID);
 
             View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
             View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
@@ -86,7 +98,12 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     }
     public class ImplantStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
-        public int ID { get; set; } = 0;
+        public ImplantStandardPlaneSingleInfo()
+        {
+            ID = RebarID.ID;
+            RebarID.ID++;
+        }
+        public int ID { get; set; }
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }
@@ -97,6 +114,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
+            if (LocationIndex != locIndex) return null;
+
             StandardTurn st = Singleton.Instance.GetStandardTurn(idTurn, locIndex);
             IDesignInfo designInfoAfter = Singleton.Instance.GetDesignInfoAfter(st.IDElement);
             IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(st.IDElement);
@@ -134,6 +153,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
             rb.LookupParameter("Level").Set(revitInfo.Level.Name);
             rb.LookupParameter("Type").Set("Implant");
+            rb.LookupParameter("ID").Set(ID);
 
             View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
             View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
@@ -151,7 +171,12 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     }
     public class LockheadStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
-        public int ID { get; set; } = 0;
+        public LockheadStandardPlaneSingleInfo()
+        {
+            ID = RebarID.ID;
+            RebarID.ID++;
+        }
+        public int ID { get; set; }
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }
@@ -163,6 +188,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
+            if (LocationIndex != locIndex) return null;
+
             StandardTurn st = Singleton.Instance.GetStandardTurn(idTurn, locIndex);
             IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(st.IDElement);
             IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(st.IDElement);
@@ -186,9 +213,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             p3 = p2 + LockheadDirection * designInfo.StandardDiameters[LocationIndex] * lp.LockheadMutiply;
             List<Curve> curves = new List<Curve> { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3) };
             Rebar rb = null;
-
-            rb = Rebar.CreateFromCurves(Single.Singleton.Instance.Document, RebarStyle.Standard, designInfo.StandardTypes[LocationIndex], designInfo.StandardHookTypes[LocationIndex],
-                designInfo.StandardHookTypes[LocationIndex], revitInfo.Element, Normal, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
+            try
+            {
+                rb = Rebar.CreateFromCurves(Single.Singleton.Instance.Document, RebarStyle.Standard, designInfo.StandardTypes[LocationIndex], designInfo.StandardHookTypes[LocationIndex],
+                    designInfo.StandardHookTypes[LocationIndex], revitInfo.Element, Normal, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
+            }
+            catch
+            {
+                throw;
+            }
 
             RebarShapeDrivenAccessor rsda = rb.GetShapeDrivenAccessor();
             if (GeomUtil.IsEqual(ArrayLength, 0))
@@ -204,6 +237,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
             rb.LookupParameter("Level").Set(revitInfo.Level.Name);
             rb.LookupParameter("Type").Set("Lockhead");
+            rb.LookupParameter("ID").Set(ID);
 
             View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
             View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
@@ -221,7 +255,12 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     }
     public class CrackingStandardPlaneSingleInfo : IStandardPlaneSingleInfo
     {
-        public int ID { get; set; } = 0;
+        public CrackingStandardPlaneSingleInfo()
+        {
+            ID = RebarID.ID;
+            RebarID.ID++;
+        }
+        public int ID { get; set; }
         public XYZ Normal { get; set; }
         public int Number { get; set; }
         public double Spacing { get; set; }
@@ -234,6 +273,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
+            if (LocationIndex != locIndex) return null;
+
             StandardTurn st = Singleton.Instance.GetStandardTurn(idTurn, locIndex);
             IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(st.IDElement);
             IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(st.IDElement);
@@ -261,7 +302,14 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
                     break;
             }
 
-            List<Curve> curves = new List<Curve> { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) };
+            List<Curve> curves = null;
+            try
+            {
+                curves = new List<Curve> { Line.CreateBound(p1, p2), Line.CreateBound(p2, p3), Line.CreateBound(p3, p4) };
+            }
+            catch {
+                throw;
+            }
             Rebar rb = Rebar.CreateFromCurves(Single.Singleton.Instance.Document, RebarStyle.Standard, designInfo.StandardTypes[LocationIndex], designInfo.StandardHookTypes[LocationIndex],
                 designInfo.StandardHookTypes[LocationIndex], revitInfo.Element, Normal, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
 
@@ -279,6 +327,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
             rb.LookupParameter("Level").Set(revitInfo.Level.Name);
             rb.LookupParameter("Type").Set("Cracking");
+            rb.LookupParameter("ID").Set(ID);
 
             View East = Singleton.Instance.Document.GetElement(new ElementId(2307)) as View;
             View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;

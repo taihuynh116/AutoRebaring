@@ -223,25 +223,25 @@ namespace AutoRebaring.ElementInfo
             ARDevelopmentParameter dp = Singleton.Instance.DevelopmentParameter;
 
             TopAnchorAfters = diA.StandardDiameters.
-                Select(x => TopLimit- ap.AnchorMultiply * x).ToList();
+                Select(x => TopLimit - ap.AnchorMultiply * x).ToList();
             RebarDevelopmentLengths = di.StandardDiameters.
                 Select(x => dp.DevelopmentMultiply * x).ToList();
+        }
+        public void CheckLockheadInformation()
+        {
+            IDesignInfo di = Singleton.Instance.GetDesignInfo(ID);
+            IDesignInfo diA = Singleton.Instance.GetDesignInfoAfter(ID);
+            IPlaneInfo pi = Singleton.Instance.GetPlaneInfo(ID);
+
             for (int i = 0; i < di.StandardDiameters.Count; i++)
             {
-                if (ID == Singleton.Instance.GetElementCount() - 1)
+                if (pi.ShortenTypes[i].IsLockhealAll || (ID == Singleton.Instance.GetElementCount() - 1) || GeomUtil.IsBigger(diA.StandardDiameters[i], di.StandardDiameters[i]))
                 {
                     StandardCreatingTypes.Add(StandardCreatingEnum.Lockhead);
                 }
                 else
                 {
-                    if (GeomUtil.IsBigger(diA.StandardDiameters[i], di.StandardDiameters[i]))
-                    {
-                        StandardCreatingTypes.Add(StandardCreatingEnum.Lockhead);
-                    }
-                    else
-                    {
-                        StandardCreatingTypes.Add(StandardCreatingEnum.Normal);
-                    }
+                    StandardCreatingTypes.Add(StandardCreatingEnum.Normal);
                 }
             }
         }
