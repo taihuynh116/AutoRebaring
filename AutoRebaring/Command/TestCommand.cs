@@ -6,6 +6,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using AutoRebaring.ElementInfo;
 using AutoRebaring.Form;
+using AutoRebaring.RebarLogistic;
 using AutoRebaring.Single;
 using Geometry;
 using System;
@@ -36,7 +37,8 @@ namespace AutoRebaring.Command
             foreach (var item in elems)
             {
                 string s = "";
-                try {
+                try
+                {
                     s = item.LookupParameter("Comments").AsString();
                 }
                 catch { }
@@ -101,4 +103,113 @@ namespace AutoRebaring.Command
             return Result.Succeeded;
         }
     }
+
+    [Transaction(TransactionMode.Manual)]
+    public class TestColumn : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIApplication uiapp = commandData.Application;
+            UIDocument uidoc = uiapp.ActiveUIDocument;
+            Application app = uiapp.Application;
+            Document doc = uidoc.Document;
+            Selection sel = uidoc.Selection;
+            Transaction tx = new Transaction(doc, "AutoRebaring");
+            tx.Start();
+
+            ElementInfoUtils.AddElementTypeInfo();
+            ElementInfoUtils.PickElement(doc, sel);
+
+            ElementInfoUtils.AddTestInformationColumn(6, 10);
+            //Window = new WindowForm();
+            //Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
+            //Window.Form = new InputForm();
+            //Window.ShowDialog();
+
+            ElementInfoUtils.GetRelatedElements();
+            ElementInfoUtils.GetAllParameters();
+            ElementInfoUtils.GetVariable();
+
+            doc.ActiveView.SketchPlane = SketchPlane.Create(doc, Plane.CreateByOriginAndBasis(doc.ActiveView.Origin, doc.ActiveView.RightDirection, doc.ActiveView.UpDirection));
+            IPlaneInfo pi = Singleton.Instance.GetPlaneInfo(0);
+            //foreach (List<UV> pnts in pi.StandardRebarPointLists)
+            //{
+            List<UV> pnts = pi.StandardRebarPointLists[2];
+            XYZ p0 = new XYZ(pnts[0].U, pnts[0].V, 0);
+            XYZ p1 = new XYZ(pnts[1].U, pnts[1].V, 0);
+            XYZ p2 = new XYZ(pnts[2].U, pnts[2].V, 0);
+            XYZ p3 = new XYZ(pnts[3].U, pnts[3].V, 0);
+            doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p0, p1));
+            doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p1, p2));
+            doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p2, p3));
+            doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p3, p0));
+            //}
+
+            tx.Commit();
+            return Result.Succeeded;
+        }
+    }
+
+    [Transaction(TransactionMode.Manual)]
+    public class TestWall : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIApplication uiapp = commandData.Application;
+            UIDocument uidoc = uiapp.ActiveUIDocument;
+            Application app = uiapp.Application;
+            Document doc = uidoc.Document;
+            Selection sel = uidoc.Selection;
+            Transaction tx = new Transaction(doc, "AutoRebaring");
+            tx.Start();
+
+            ElementInfoUtils.AddElementTypeInfo();
+            ElementInfoUtils.PickElement(doc, sel);
+
+            ElementInfoUtils.AddTestInformationWall(5, 3, 1, 5, 0, 6, 5, 3, 1, 5, 0, 6);
+            //Window = new WindowForm();
+            //Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
+            //Window.Form = new InputForm();
+            //Window.ShowDialog();
+
+            ElementInfoUtils.GetRelatedElements();
+            ElementInfoUtils.GetAllParameters();
+            ElementInfoUtils.GetVariable();
+
+            doc.ActiveView.SketchPlane = SketchPlane.Create(doc, Plane.CreateByOriginAndBasis(doc.ActiveView.Origin, doc.ActiveView.RightDirection, doc.ActiveView.UpDirection));
+            IPlaneInfo pi = Singleton.Instance.GetPlaneInfo(0);
+
+            //foreach (List<UV> pnts in pi.BoundaryPointLists)
+            //{
+            //    //List<UV> pnts = pi.StandardRebarPointLists[2];
+
+            //    XYZ p0 = new XYZ(pnts[0].U, pnts[0].V, 0);
+            //    XYZ p1 = new XYZ(pnts[1].U, pnts[1].V, 0);
+            //    XYZ p2 = new XYZ(pnts[2].U, pnts[2].V, 0);
+            //    XYZ p3 = new XYZ(pnts[3].U, pnts[3].V, 0);
+            //    doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p0, p1));
+            //    doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p1, p2));
+            //    doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p2, p3));
+            //    doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p3, p0));
+            //}
+
+            foreach (List<UV> pnts in pi.StandardRebarPointLists)
+            {
+                //List<UV> pnts = pi.StandardRebarPointLists[2];
+
+                XYZ p0 = new XYZ(pnts[0].U, pnts[0].V, 0);
+                XYZ p1 = new XYZ(pnts[1].U, pnts[1].V, 0);
+                XYZ p2 = new XYZ(pnts[2].U, pnts[2].V, 0);
+                XYZ p3 = new XYZ(pnts[3].U, pnts[3].V, 0);
+                doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p0, p1));
+                doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p1, p2));
+                doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p2, p3));
+                doc.Create.NewDetailCurve(doc.ActiveView, Line.CreateBound(p3, p0));
+            }
+
+            tx.Commit();
+            return Result.Succeeded;
+        }
+    }
+
 }

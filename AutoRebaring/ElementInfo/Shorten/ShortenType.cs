@@ -9,12 +9,12 @@ namespace AutoRebaring.ElementInfo.Shorten
 {
     public class ShortenType : IShortenType
     {
-        public ShortenEnum ShortenEnum
+        public bool IsLockhealAll
         {
             get
             {
-                int maxShorten = Math.Max((int)ShortenU1, Math.Max((int)ShortenU2, Math.Max((int)ShortenV1, (int)ShortenV2)));
-                return (ShortenEnum)maxShorten;
+                if (ShortenU1 == ShortenEnum.Big && ShortenU2 == ShortenEnum.Big && ShortenV1 == ShortenEnum.Big && ShortenV2 == ShortenEnum.Big) return true;
+                return false;
             }
         }
         public ShortenEnum ShortenU1 { get; set; }
@@ -25,6 +25,7 @@ namespace AutoRebaring.ElementInfo.Shorten
         public double DeltaU2 { get; set; }
         public double DeltaV1 { get; set; }
         public double DeltaV2 { get; set; }
+
         public ShortenType() { }
     }
 }
