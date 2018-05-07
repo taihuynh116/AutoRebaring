@@ -21,6 +21,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
 
         public long IDMacAddress { get; set; }
 
+        public long IDWindowsName { get; set; }
+
         public DateTime LastLogin { get; set; }
 
         public bool IsActive { get; set; }
@@ -32,5 +34,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual ARUser ARUser { get; set; }
 
         public virtual ARUserType ARUserType { get; set; }
+
+        public virtual ARWindowsName ARWindowsName { get; set; }
     }
 }

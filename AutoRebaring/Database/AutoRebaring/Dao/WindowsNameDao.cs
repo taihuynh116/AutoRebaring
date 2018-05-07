@@ -7,27 +7,27 @@ using System.Threading.Tasks;
 
 namespace AutoRebaring.Database.AutoRebaring.Dao
 {
-    public class ProjectDao
+    public class WindowsNameDao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
-        public ProjectDao() { }
-        public void Update(string name)
+        public WindowsNameDao() { }
+        public void Update(string windowName)
         {
-            var res = db.ARProjects.Where(x => x.Name == name);
+            var res = db.ARWindowsNames.Where(x => x.Name == windowName);
             if (res.Count() == 0)
             {
-                var obj = new ARProject()
+                var obj = new ARWindowsName()
                 {
-                    CreateDate = DateTime.Now,
-                    Name = name
+                    Name = windowName,
+                    CreateDate = DateTime.Now
                 };
-                db.ARProjects.Add(obj);
+                db.ARWindowsNames.Add(obj);
             }
             db.SaveChanges();
         }
-        public long GetId(string name)
+        public long GetId(string windowName)
         {
-            var res = db.ARProjects.Where(x => x.Name == name);
+            var res = db.ARWindowsNames.Where(x => x.Name == windowName);
             if (res.Count() == 0)
             {
                 return -1;

@@ -27,7 +27,6 @@ namespace AutoRebaring.Database.AutoRebaring.EF
             ARView3d = new HashSet<ARView3d>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long ID { get; set; }
 
         public DateTime CreateDate { get; set; }

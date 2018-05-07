@@ -8,7 +8,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
     public partial class AutoRebaringDbContext : DbContext
     {
         public AutoRebaringDbContext()
-            : base("data source=118.69.224.199,1444;initial catalog=TAIHT;persist security info=True;user id=taiht;password=Skarner116!;MultipleActiveResultSets=True;App=EntityFramework")
+            : base("name=AutoRebaringDbContext")
         {
         }
 
@@ -54,6 +54,8 @@ namespace AutoRebaring.Database.AutoRebaring.EF
         public virtual DbSet<ARUserType> ARUserTypes { get; set; }
         public virtual DbSet<ARView3d> ARView3d { get; set; }
         public virtual DbSet<ARWallParameter> ARWallParameters { get; set; }
+        public virtual DbSet<ARWindowsName> ARWindowsNames { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ARStirrupParameter> ARStirrupParameters { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -457,6 +459,16 @@ namespace AutoRebaring.Database.AutoRebaring.EF
                 .HasMany(e => e.AROtherParameters)
                 .WithRequired(e => e.ARView3d)
                 .HasForeignKey(e => e.IDView3d)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<ARWindowsName>()
+                .Property(e => e.Name)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<ARWindowsName>()
+                .HasMany(e => e.ARUserProjects)
+                .WithRequired(e => e.ARWindowsName)
+                .HasForeignKey(e => e.IDWindowsName)
                 .WillCascadeOnDelete(false);
         }
     }

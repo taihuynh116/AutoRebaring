@@ -11,26 +11,6 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public UserDao() { }
-        public void Update(string userName, string password)
-        {
-            var res = db.ARUsers.Where(x => x.Username == userName);
-            if (res.Count() == 0)
-            {
-                var obj = new ARUser()
-                {
-                    Username = userName,
-                    Password = password,
-                    CreateDate = DateTime.Now
-                };
-                db.ARUsers.Add(obj);
-            }
-            else
-            {
-                var obj = res.First();
-                obj.Password = password;
-            }
-            db.SaveChanges();
-        }
         public long GetId(string userName)
         {
             var res = db.ARUsers.Where(x => x.Username == userName);
@@ -48,6 +28,34 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
                 return null;
             }
             return res.First();
+        }
+        public int CheckValid(string userName, string password)
+        {
+            var res = db.ARUsers.Where(x => x.Username == userName);
+            if (res.Count() == 0)
+            {
+                var obj = new ARUser()
+                {
+                    Username = userName,
+                    Password = password,
+                    CreateDate = DateTime.Now
+                };
+                db.ARUsers.Add(obj);
+                db.SaveChanges();
+                return 1;
+            }
+            else
+            {
+                var obj = res.First();
+                if (obj.Password == password)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
         }
     }
 }

@@ -46,5 +46,9 @@ namespace AutoRebaring.Others
             }
             return null;
         }
+        public static string GetWindowsName()
+        {
+            return System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+        }
     }
 }

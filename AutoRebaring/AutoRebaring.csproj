@@ -164,6 +164,7 @@
     <Compile Include="Database\AutoRebaring\Dao\UserTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\View3dDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\WallParameterDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\WindowsNameDao.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARAnchorParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARCoverParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARDesignGeneral.cs" />
@@ -207,7 +208,9 @@
     <Compile Include="Database\AutoRebaring\EF\ARUserType.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARView3d.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARWallParameter.cs" />
+    <Compile Include="Database\AutoRebaring\EF\ARWindowsName.cs" />
     <Compile Include="Database\AutoRebaring\EF\AutoRebaringDbContext.cs" />
+    <Compile Include="Database\AutoRebaring\EF\sysdiagram.cs" />
     <Compile Include="Database\BIM_PORTAL\BIM_PORTALDbContext.cs" />
     <Compile Include="Database\BIM_PORTAL\Projects.cs" />
     <Compile Include="ElementInfo\Body.cs" />

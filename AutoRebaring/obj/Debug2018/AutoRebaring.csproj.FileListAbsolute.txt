@@ -48,3 +48,5 @@ D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringG
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.dll
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csprojResolveAssemblyReference.cache
+D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.CoreCompileInputs.cache
+D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.CopyComplete

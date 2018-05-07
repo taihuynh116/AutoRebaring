@@ -35,7 +35,7 @@ namespace AutoRebaring.Command
             ElementInfoUtils.AddElementTypeInfo();
             ElementInfoUtils.PickElement(doc, sel);
 
-            ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6, 7, 5, 1, 5, 1, 6);
+            //ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6, 7, 5, 1, 5, 1, 6);
             //Window = new WindowForm();
             //Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
             //Window.Form = new InputForm();

@@ -27,6 +27,7 @@ namespace AutoRebaring.Constant
         public const string StartLevelColumn = "Base Level";
         public const string EndLevelColumn = "Top Level";
 
+        public const string InvalidLogin = "Yêu cầu nhập username, password";
         public const string WrongPassword = "Tên đăng nhập, mật khẩu không đúng!";
         public const string NonAuthorized = "Tài khoản của bạn không được phân quyền vào dự án này!";
         public const string AuthorizationNotExisted = "Tài khoản bạn không tồn tại, liên hệ bộ phận kĩ thuật để xử lý vấn đề.";
