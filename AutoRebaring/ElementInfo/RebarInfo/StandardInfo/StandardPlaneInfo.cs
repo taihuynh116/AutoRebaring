@@ -1617,7 +1617,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 
                         stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                         {
-                            StartPoint = pnts[index] + vecU * spacE11/2,
+                            StartPoint = pnts[index] + vecU * spacE11 / 2,
                             Spacing = spacE11,
                             Number = ne11 / 2,
                             Normal = vecX,
@@ -1640,7 +1640,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 
                         stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                         {
-                            StartPoint = pntAs[index] + vecU * spacEA11 /2,
+                            StartPoint = pntAs[index] + vecU * spacEA11 / 2,
                             Spacing = spacEA11,
                             Number = neA11 / 2,
                             Normal = vecX,
@@ -2925,7 +2925,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                 XYZ normExpSmall2 = vecExpSmall2.Normalize().CrossProduct(XYZ.BasisZ);
                 stPlSinInfo = new CrackingStandardPlaneSingleInfo()
                 {
-                    StartPoint = pnts[1] + vecV * index12 * spacE2 / 2 - vecU * spac1Des / 2 * (numBigU2 + numSmallU2 -i + 1),
+                    StartPoint = pnts[1] + vecV * index12 * spacE2 / 2 - vecU * spac1Des / 2 * (numBigU2 + numSmallU2 - i + 1),
                     Spacing = spac1Des,
                     Number = 1,
                     Normal = normExpSmall2,
@@ -2957,7 +2957,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             {
                 stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                 {
-                    StartPoint = pnts[1] + vecV * index12 * spacE2 / 2 - vecU * spac1Des / 2 * (numBigU2-1),
+                    StartPoint = pnts[1] + vecV * index12 * spacE2 / 2 - vecU * spac1Des / 2 * (numBigU2 - 1),
                     Spacing = spac1Des,
                     Number = num2 / 2,
                     Normal = vecX,
@@ -3048,7 +3048,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 
                         stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                         {
-                            StartPoint = pnts[index] + vecU * spacM/2,
+                            StartPoint = pnts[index] + vecU * spacM / 2,
                             Spacing = spacM,
                             Number = nm / 2,
                             Normal = vecX,
@@ -3071,7 +3071,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
 
                         stPlSinInfo = new ImplantStandardPlaneSingleInfo()
                         {
-                            StartPoint = pntAs[index] + vecU * spacMA/2,
+                            StartPoint = pntAs[index] + vecU * spacMA / 2,
                             Spacing = spacMA,
                             Number = nmA / 2,
                             Normal = vecX,
@@ -3187,7 +3187,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
                             Normal = vecX,
                             RebarLocation = num % 2 == 0 ? RebarLocation.L1 : RebarLocation.L2,
-                            CrackingDirection = vecExpSmall* dimExpSmall,
+                            CrackingDirection = vecExpSmall * dimExpSmall,
                             CrackingLength = dimExpSmall,
                             LocationIndex = 1
                         };
@@ -3215,7 +3215,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             bool isL1 = ((num % 2 == 0) == (i % 2 == 0)) ? true : false;
                             stPlSinInfo = new CrackingStandardPlaneSingleInfo()
                             {
-                                StartPoint = pnts[index== 0? 1 :2] - vecU * spac1Des / 2 * (numBigU2 + numSmallU2-i-1),
+                                StartPoint = pnts[index == 0 ? 1 : 2] - vecU * spac1Des / 2 * (numBigU2 + numSmallU2 - i - 1),
                                 Spacing = spac1Des,
                                 Number = 1,
                                 Normal = normExpSmall2,
@@ -3232,7 +3232,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         {
                             stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                             {
-                                StartPoint = pnts[index==0?1:2] - vecU * spac1Des / 2 * (numBigU2-1),
+                                StartPoint = pnts[index == 0 ? 1 : 2] - vecU * spac1Des / 2 * (numBigU2 - 1),
                                 Spacing = spac1Des,
                                 Number = num2 % 2 == 0 ? num2 / 2 : num2 / 2 + 1,
                                 Normal = vecX,
@@ -3242,12 +3242,12 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                             };
                             NormalStandardPlaneInfos.Add(stPlSinInfo);
                         }
-                        
+
                         if (numBigU2 >= 2)
                         {
                             stPlSinInfo = new LockheadStandardPlaneSingleInfo()
                             {
-                                StartPoint = pnts[index] - vecU * spac1Des / 2 * (numBigU2-2),
+                                StartPoint = pnts[index] - vecU * spac1Des / 2 * (numBigU2 - 2),
                                 Spacing = spac1Des,
                                 Number = num2 / 2,
                                 Normal = vecX,
@@ -3497,7 +3497,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
                         }
 
                         num = num + num2;
-                        if (nm - numBigU1 - numBigU2 >=  nmA)
+                        if (nm - numBigU1 - numBigU2 >= nmA)
                         {
                             num2 = nm - nmA - numBigU1 - numBigU2;
                             if (num2 >= 1)
@@ -4283,10 +4283,24 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             switch (verticalInfo.StandardCreatingTypes[locIndex])
             {
                 case StandardCreatingEnum.Normal:
-                    NormalStandardPlaneInfos.ForEach(x => x.CreateRebar(idTurn, locIndex));
+                    try
+                    {
+                        NormalStandardPlaneInfos.ForEach(x => x.CreateRebar(idTurn, locIndex));
+                    }
+                    catch
+                    {
+                        throw;
+                    }
                     break;
                 case StandardCreatingEnum.Lockhead:
-                    LockheadStandardPlaneInfos.ForEach(x => x.CreateRebar(idTurn, locIndex));
+                    try
+                    {
+                        LockheadStandardPlaneInfos.ForEach(x => x.CreateRebar(idTurn, locIndex));
+                    }
+                    catch
+                    {
+                        throw;
+                    }
                     break;
             }
         }

@@ -4,7 +4,7 @@
 library
 C#
 .cs
-D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\
+E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\
 AutoRebaring
 none
 false
@@ -12,8 +12,13 @@ TRACE;DEBUG;Debug2018
 
 1-1177452466
 31508642043
+<<<<<<< HEAD
 119-1780361874
 19-710762189
+=======
+116-242433936
+191495069018
+>>>>>>> ac6d03f3bfe2327aa6bb45a79672fcbcd2560257
 Form\InputForm.xaml;
 
 False
