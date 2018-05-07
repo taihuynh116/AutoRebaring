@@ -52,14 +52,23 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             }
             return res.First().ID;
         }
-        public long GetUserId(long idProject, long idMacAddress, long idWindowsName)
+        public long GetId(long idProject, long idMacAddress, long idWindowsName)
         {
             var res = db.ARUserProjects.Where(x => x.IDProject == idProject && x.IDMacAddress == idMacAddress && x.IDWindowsName == idWindowsName);
             if (res.Count() == 0)
             {
                 return -1;
             }
-            return res.OrderByDescending(x=> x.LastLogin).First().IDUser;
+            return res.OrderByDescending(x=> x.LastLogin).First().ID;
+        }
+        public ARUserProject GetUserProject(long id)
+        {
+            var res = db.ARUserProjects.Where(x => x.ID == id);
+            if (res.Count() == 0)
+            {
+                return null;
+            }
+            return res.First();
         }
         public int GetStatus(long id)
         {

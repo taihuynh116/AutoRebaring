@@ -8,7 +8,7 @@ namespace AutoRebaring.Database.AutoRebaring.EF
     public partial class AutoRebaringDbContext : DbContext
     {
         public AutoRebaringDbContext()
-            : base("name=AutoRebaringDbContext")
+            : base("data source=103.252.252.163;initial catalog=AutoRebaring;persist security info=True;user id=misery;password=Skarner116!;MultipleActiveResultSets=True;App=EntityFramework")
         {
         }
 

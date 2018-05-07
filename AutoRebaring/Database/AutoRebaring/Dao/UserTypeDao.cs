@@ -20,5 +20,11 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             }
             return res.First().ID;
         }
+        public ARUserType GetUserType(long id)
+        {
+            var res = db.ARUserTypes.Where(x => x.ID == id);
+            if (res.Count() == 0) return null;
+            return res.First();
+        }
     }
 }

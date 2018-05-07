@@ -193,11 +193,30 @@ namespace AutoRebaring.Form
         }
         private void FirstAddUserName()
         {
-            IDUser = UserProjectDao.GetUserId(IDProject, IDMacAddress, IDWindowsName);
-            var user = UserDao.GetUser(IDUser);
-            if (user != null)
+            IDUserProject = UserProjectDao.GetId(IDProject, IDMacAddress, IDWindowsName);
+            var resUserProject = UserProjectDao.GetUserProject(IDUserProject);
+            if (resUserProject != null)
             {
-                txtUserName.Text = user.Username; txtPassword.Password = user.Password; isFirstSetUserName = true;
+                IDUser = resUserProject.IDUser;
+                var resUser = UserDao.GetUser(IDUser);
+                if (resUser != null)
+                {
+                    txtUserName.Text = resUser.Username; txtPassword.Password = resUser.Password; isFirstSetUserName = true;
+                }
+                IDUserType = resUserProject.IDUserType;
+                var resUserType = UserTypeDao.GetUserType(IDUserType);
+                if (resUserType != null)
+                {
+                    switch (resUserType.Type)
+                    {
+                        case ConstantValue.Admin:
+                            rbtAdmin.IsChecked = true;
+                            break;
+                        case ConstantValue.User:
+                            rbtUser.IsChecked = true;
+                            break;
+                    }
+                }
                 CheckUserName();
             }
             else
@@ -685,11 +704,20 @@ namespace AutoRebaring.Form
             {
                 case 0:
                     MessageBox.Show(ConstantValue.WrongPassword);
-                    break;
+                    return;
                 case 1:
                     break;
                 case 2:
                     break;
+            }
+            IDUser = UserDao.GetId(userName);
+
+            if (rbtAdmin.IsChecked.Value)
+            {
+                IDUserType = UserTypeDao.GetId(ConstantValue.Admin);
+            }
+            else {
+                IDUserType = UserTypeDao.GetId(ConstantValue.User);
             }
 
             IDUser = UserDao.GetId(userName);
@@ -728,7 +756,11 @@ namespace AutoRebaring.Form
                     levelTitleGrb.Visibility = System.Windows.Visibility.Visible;
                     rebarDesGrb.Visibility = System.Windows.Visibility.Visible;
                     btnOK.Visibility = System.Windows.Visibility.Visible;
+                    txtUserName.IsEnabled = false;
+                    txtPassword.IsEnabled = false;
                     btnCheckUser.IsEnabled = false;
+                    rbtAdmin.IsEnabled = false;
+                    rbtUser.IsEnabled = false;
                     break;
                 case false:
                     colParamGrb.Visibility = System.Windows.Visibility.Collapsed;
@@ -739,7 +771,11 @@ namespace AutoRebaring.Form
                     levelTitleGrb.Visibility = System.Windows.Visibility.Collapsed;
                     rebarDesGrb.Visibility = System.Windows.Visibility.Collapsed;
                     btnOK.Visibility = System.Windows.Visibility.Collapsed;
+                    txtUserName.IsEnabled = true;
+                    txtPassword.IsEnabled = true;
                     btnCheckUser.IsEnabled = true;
+                    rbtAdmin.IsEnabled = true;
+                    rbtUser.IsEnabled = true;
                     break;
             }
         }
