@@ -11,6 +11,7 @@ namespace AutoRebaring.ElementInfo
     {
         public double Z1 { get; set; }
         public double Z2 { get; set; }
+        public StirrupLocation StirrupLocation { get; set; }
         public StirrupDistribution(double z1, double z2)
         {
             Z1 = z1; Z2 = z2;

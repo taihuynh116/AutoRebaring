@@ -13,7 +13,7 @@ namespace AutoRebaring.Constant
         public const int LoopCount = 20;
         public const double RebarStandardOffsetControl = 1.3;
         public const double feet2Meter = 0.3048;
-        public const double meter2Feet = 1/feet2Meter;
+        public const double meter2Feet = 1 / feet2Meter;
         public const double feet2MiliMeter = feet2Meter * 1000;
         public const double milimeter2Feet = 1 / feet2MiliMeter;
 
@@ -78,5 +78,11 @@ namespace AutoRebaring.Constant
 
         public const string KieuThepDoc = "Kiểu thép dọc:";
         public const string Vungbien = "Vùng biên:";
+
+        public static List<string> CoverStirrupParameters = new List<string> { "B", "D", "C", "E" };
+        public static List<string> CStirrupParameters = new List<string> { "B" };
+
+        public static List<Type> CoverStirrupTypes = new List<Type> { typeof(double), typeof(double), typeof(double), typeof(double) };
+        public static List<Type> CStirrupTypes = new List<Type> { typeof(double) };
     }
 }

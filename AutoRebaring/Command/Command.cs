@@ -65,6 +65,8 @@ namespace AutoRebaring.Command
                 }
             }
 
+
+
             var instance = Singleton.Instance;
 
             tx.Commit();
