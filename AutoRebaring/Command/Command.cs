@@ -46,6 +46,7 @@ namespace AutoRebaring.Command
             ElementInfoUtils.GetAllParameters();
             ElementInfoUtils.GetVariable();
 
+            var res = Singleton.Instance;
             int locCount = Singleton.Instance.GetElementTypeInfo().LocationCount;
             for (int i = 0; i < locCount; i++)
             {

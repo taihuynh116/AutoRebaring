@@ -486,7 +486,7 @@ namespace AutoRebaring.ElementInfo
             {
                 EdgeWidth = 0,
                 EdgeWidthInclude = false,
-                EdgeRatio = 0.3,
+                EdgeRatio = 5,
                 EdgeRatioInclude = true
             };
 
