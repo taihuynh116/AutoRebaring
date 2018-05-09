@@ -9,7 +9,7 @@
         <ScrollViewer Margin="0,0,0,0" VerticalScrollBarVisibility="Visible">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <GroupBox Header="ĐĂNG NHẬP" HorizontalAlignment="Left" Height="100" Margin="0,0,0,0" VerticalAlignment="Top" Width="327" FontWeight="Normal">
+                    <GroupBox Header="ĐĂNG NHẬP" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="327" FontWeight="Normal">
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
@@ -23,6 +23,11 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="Mật khẩu:"></Label>
                                     <PasswordBox x:Name="txtPassword" Margin="81,0,0,0" TextBlock.TextAlignment="Right" HorizontalAlignment="Left" VerticalAlignment="Top" PasswordChar="*" Width="100" Height="23"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Account Type:"></Label>
+                                    <RadioButton x:Name="rbtAdmin" Margin="25,0,0,0" VerticalAlignment="Center" Content="ADMIN"></RadioButton>
+                                    <RadioButton x:Name="rbtUser" Margin="25,0,0,0" VerticalAlignment="Center" Content="USER" IsChecked="True"></RadioButton>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Orientation="Vertical">

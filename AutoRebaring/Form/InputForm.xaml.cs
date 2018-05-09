@@ -32,8 +32,8 @@ namespace AutoRebaring.Form
     {
         #region DatabaseDao
         public MacAddressDao MacAddressDao { get; set; } = new MacAddressDao();
+        public WindowsNameDao WindowsNameDao { get; set; } = new WindowsNameDao();
         public ProjectDao ProjectDao { get; set; } = new ProjectDao();
-        public BIM_PORTALDbContext BIM_PORTALDbContext { get; set; } = new BIM_PORTALDbContext();
         public UserDao UserDao { get; set; } = new UserDao();
         public UserTypeDao UserTypeDao { get; set; } = new UserTypeDao();
         public UserProjectDao UserProjectDao { get; set; } = new UserProjectDao();
@@ -79,6 +79,7 @@ namespace AutoRebaring.Form
         public long IDUserType { get; set; } = -1;
         public long IDUserProject { get; set; } = -1;
         public long IDMacAddress { get; set; } = -1;
+        public long IDWindowsName { get; set; } = -1;
         public long IDMark { get; set; } = -1;
         public long IDElementType { get; set; } = -1;
         public long IDElementTypeProject { get; set; } = -1;
@@ -173,27 +174,49 @@ namespace AutoRebaring.Form
         }
         private void FirstAddProject()
         {
-            foreach (var item in BIM_PORTALDbContext.Projects)
-            {
-                ProjectDao.Update(item.SYS_ID, item.Code + "_" + item.Value);
-            }
+            string projectName = Singleton.Instance.Document.ProjectInformation.Name;
+            lblProject.Content = projectName;
+            ProjectDao.Update(projectName);
 
-            lblProject.Content = Singleton.Instance.Document.ProjectInformation.Name;
-            IDProject = ProjectDao.GetId((string)lblProject.Content);
+            IDProject = ProjectDao.GetId(projectName);
         }
         private void FirstAddMacAddress()
         {
             string macAddress = ComputerInfo.GetMacAddress();
+            string windowsName = ComputerInfo.GetWindowsName();
+
             MacAddressDao.Update(macAddress);
             IDMacAddress = MacAddressDao.GetId(macAddress);
+
+            WindowsNameDao.Update(windowsName);
+            IDWindowsName = WindowsNameDao.GetId(windowsName);
         }
         private void FirstAddUserName()
         {
-            IDUser = UserProjectDao.GetUserId(IDProject, IDMacAddress);
-            var user = UserDao.GetUser(IDUser);
-            if (user != null)
+            IDUserProject = UserProjectDao.GetId(IDProject, IDMacAddress, IDWindowsName);
+            var resUserProject = UserProjectDao.GetUserProject(IDUserProject);
+            if (resUserProject != null)
             {
-                txtUserName.Text = user.Username; txtPassword.Password = user.Password; isFirstSetUserName = true;
+                IDUser = resUserProject.IDUser;
+                var resUser = UserDao.GetUser(IDUser);
+                if (resUser != null)
+                {
+                    txtUserName.Text = resUser.Username; txtPassword.Password = resUser.Password; isFirstSetUserName = true;
+                }
+                IDUserType = resUserProject.IDUserType;
+                var resUserType = UserTypeDao.GetUserType(IDUserType);
+                if (resUserType != null)
+                {
+                    switch (resUserType.Type)
+                    {
+                        case ConstantValue.Admin:
+                            rbtAdmin.IsChecked = true;
+                            break;
+                        case ConstantValue.User:
+                            rbtUser.IsChecked = true;
+                            break;
+                    }
+                }
                 CheckUserName();
             }
             else
@@ -661,6 +684,11 @@ namespace AutoRebaring.Form
 
         private void btnCheckUser_Click(object sender, RoutedEventArgs e)
         {
+            if (txtUserName.Text.Length == 0 || txtPassword.Password.Length == 0)
+            {
+                MessageBox.Show(ConstantValue.InvalidLogin);
+                return;
+            }
             CheckUserName();
         }
         private void CheckUserName()
@@ -669,27 +697,31 @@ namespace AutoRebaring.Form
             Password = !isFirstSetUserName ? Encrypting.ToSHA256(txtPassword.Password) : txtPassword.Password;
             isFirstSetUserName = false;
 
-            int res = BIM_PORTALDbContext.Login(userName, Password, (int)IDProject);
-            switch (res)
+            ShowGroupBox(false);
+
+            string windowsName = ComputerInfo.GetWindowsName();
+            switch (UserDao.CheckValid(userName, Password))
             {
                 case 0:
-                    if (!isFirstSetUserName)
-                        MessageBox.Show(ConstantValue.WrongPassword);
-                    ShowGroupBox(false);
+                    MessageBox.Show(ConstantValue.WrongPassword);
                     return;
                 case 1:
-                    MessageBox.Show(ConstantValue.NonAuthorized);
-                    return;
-                case 2:
-                    IDUserType = UserTypeDao.GetId(ConstantValue.User);
                     break;
-                case 3:
-                    IDUserType = UserTypeDao.GetId(ConstantValue.Admin);
+                case 2:
                     break;
             }
-            UserDao.Update(userName, Password);
             IDUser = UserDao.GetId(userName);
-            UserProjectDao.Update(IDProject, IDUserType, IDUser, IDMacAddress);
+
+            if (rbtAdmin.IsChecked.Value)
+            {
+                IDUserType = UserTypeDao.GetId(ConstantValue.Admin);
+            }
+            else {
+                IDUserType = UserTypeDao.GetId(ConstantValue.User);
+            }
+
+            IDUser = UserDao.GetId(userName);
+            UserProjectDao.Update(IDProject, IDUserType, IDUser, IDMacAddress, IDWindowsName);
             IDUserProject = UserProjectDao.GetId(IDProject, IDUser);
 
             int status = UserProjectDao.GetStatus(IDUserProject);
@@ -724,7 +756,11 @@ namespace AutoRebaring.Form
                     levelTitleGrb.Visibility = System.Windows.Visibility.Visible;
                     rebarDesGrb.Visibility = System.Windows.Visibility.Visible;
                     btnOK.Visibility = System.Windows.Visibility.Visible;
+                    txtUserName.IsEnabled = false;
+                    txtPassword.IsEnabled = false;
                     btnCheckUser.IsEnabled = false;
+                    rbtAdmin.IsEnabled = false;
+                    rbtUser.IsEnabled = false;
                     break;
                 case false:
                     colParamGrb.Visibility = System.Windows.Visibility.Collapsed;
@@ -735,7 +771,11 @@ namespace AutoRebaring.Form
                     levelTitleGrb.Visibility = System.Windows.Visibility.Collapsed;
                     rebarDesGrb.Visibility = System.Windows.Visibility.Collapsed;
                     btnOK.Visibility = System.Windows.Visibility.Collapsed;
+                    txtUserName.IsEnabled = true;
+                    txtPassword.IsEnabled = true;
                     btnCheckUser.IsEnabled = true;
+                    rbtAdmin.IsEnabled = true;
+                    rbtUser.IsEnabled = true;
                     break;
             }
         }

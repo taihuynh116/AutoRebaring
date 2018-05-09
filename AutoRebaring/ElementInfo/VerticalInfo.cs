@@ -214,6 +214,8 @@ namespace AutoRebaring.ElementInfo
             d = rvpStirr.OffsetInclude ? rvpStirr.BottomOffset * ConstantValue.milimeter2Feet : 0;
             d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.BottomOffsetRatio) : d;
             BottomStirrup2 = BottomStirrup1 + d;
+
+            StirrupDistributions = new List<StirrupDistribution> { new StirrupDistribution(BottomStirrup1, BottomStirrup2), new StirrupDistribution(TopStirrup1, TopStirrup2) };
         }
         public void GetRebarInformation()
         {
@@ -244,6 +246,41 @@ namespace AutoRebaring.ElementInfo
                     StandardCreatingTypes.Add(StandardCreatingEnum.Normal);
                 }
             }
+        }
+        public void MergeStirrupDistribution(double z1, double z2)
+        {
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            double midSpac1 = designInfo.MiddleSpacings[0];
+
+            StirrupDistributions.Add(new StirrupDistribution(z1, z2));
+            List<StirrupDistribution> stirDiss1 = StirrupDistributions;
+            stirDiss1.Sort();
+            while (true)
+            {
+                List<StirrupDistribution> stirDiss2 = new List<StirrupDistribution>();
+                bool isMergeAll = false;
+                for (int i = 0; i < stirDiss1.Count-1; i+=2)
+                {
+                    bool isMerge = false;
+                    stirDiss2.AddRange(StirrupDistribution.CheckMerge(stirDiss1[i], stirDiss1[i + 1], midSpac1, out isMerge));
+                    if (isMerge) isMergeAll = true;
+                }
+                if (stirDiss1.Count % 2 == 1)
+                {
+                    bool isMerge = false;
+                    List<StirrupDistribution> temDiss = StirrupDistribution.CheckMerge(stirDiss2[stirDiss2.Count - 1], stirDiss1[stirDiss1.Count - 1], midSpac1, out isMerge);
+                    if (isMerge)
+                    {
+                        if (stirDiss2.Count > 1) isMergeAll = true;
+                        else isMergeAll = false;
+                        stirDiss2[stirDiss2.Count - 1] = temDiss[0];
+                    }
+                    else stirDiss2.Add(temDiss[1]);
+                }
+                stirDiss1 = stirDiss2;
+                if (!isMergeAll) break;
+            }
+            StirrupDistributions = stirDiss1;
         }
     }
     public class ColumnVerticalInfo : VerticalInfo

@@ -99,10 +99,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -164,6 +164,7 @@
     <Compile Include="Database\AutoRebaring\Dao\UserTypeDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\View3dDao.cs" />
     <Compile Include="Database\AutoRebaring\Dao\WallParameterDao.cs" />
+    <Compile Include="Database\AutoRebaring\Dao\WindowsNameDao.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARAnchorParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARCoverParameter.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARDesignGeneral.cs" />
@@ -207,7 +208,9 @@
     <Compile Include="Database\AutoRebaring\EF\ARUserType.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARView3d.cs" />
     <Compile Include="Database\AutoRebaring\EF\ARWallParameter.cs" />
+    <Compile Include="Database\AutoRebaring\EF\ARWindowsName.cs" />
     <Compile Include="Database\AutoRebaring\EF\AutoRebaringDbContext.cs" />
+    <Compile Include="Database\AutoRebaring\EF\sysdiagram.cs" />
     <Compile Include="Database\BIM_PORTAL\BIM_PORTALDbContext.cs" />
     <Compile Include="Database\BIM_PORTAL\Projects.cs" />
     <Compile Include="ElementInfo\Body.cs" />
@@ -215,6 +218,8 @@
     <Compile Include="ElementInfo\ElementInfoUtils.cs" />
     <Compile Include="ElementInfo\ElementTypeInfo.cs" />
     <Compile Include="ElementInfo\PlaneInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StirrupInfo\SingleInfo\StirrupPlaneSingleInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StirrupInfo\StirrupPlaneInfo.cs" />
     <Compile Include="ElementInfo\RevitInfo.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardParameter.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardPlaneInfo.cs" />
@@ -231,6 +236,11 @@
     <Compile Include="Others\ComputerInfo.cs" />
     <Compile Include="Others\Encryting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RebarLogistic\VariableImplant.cs" />
     <Compile Include="RebarLogistic\StandardLogistic.cs" />
     <Compile Include="RebarLogistic\StandardTurn.cs" />
@@ -244,21 +254,26 @@
     </Content>
     <Content Include="Reference\2018_RevitAPI.dll" />
     <Content Include="Reference\2018_RevitAPIUI.dll" />
+    <None Include="packages.config" />
+    <None Include="Resources\AutoRebaring_32x32b.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ElementInfo\RebarInfo\StirrupInfo\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Form\InputForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

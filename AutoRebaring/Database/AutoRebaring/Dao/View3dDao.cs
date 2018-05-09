@@ -31,7 +31,7 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             var res = db.ARView3d.Where(x => x.IDProject == idProject && x.Name == name);
             if (res.Count() == 0)
             {
-                return -1;
+                return db.ARView3d.First().ID;
             }
             return res.First().ID;
         }

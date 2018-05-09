@@ -1,20 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RevitAddIns>
-  <AddIn Type="Command">
-    <Text>Command AutoRebaring</Text>
-    <Description>Some description for AutoRebaring</Description>
-    <Assembly>AutoRebaring.dll</Assembly>
-    <FullClassName>AutoRebaring.Command</FullClassName>
-    <ClientId>62fe63ae-03d5-49d5-acb7-113bcc3e2fba</ClientId>
-    <VendorId>com.typepad.thebuildingcoder</VendorId>
-    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
-  </AddIn>
   <AddIn Type="Application">
-    <Name>Application AutoRebaring</Name>
-    <Assembly>AutoRebaring.dll</Assembly>
+    <Name>AutoRebaring</Name>
+    <Text>AutoRebaring (Wall+Column)</Text>
+    <Assembly>AutoRebaring\AutoRebaring.dll</Assembly>
     <FullClassName>AutoRebaring.App</FullClassName>
-    <ClientId>01688703-7c46-4e1f-9987-23cab9fd0a5d</ClientId>
-    <VendorId>com.typepad.thebuildingcoder</VendorId>
-    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+    <ClientId>c6e55680-5811-4b44-bc99-56d6756e7895</ClientId>
+    <VendorId>Huỳnh Thiện Tài</VendorId>
+    <VendorDescription>Huỳnh Thiện Tài, http://vietbimcoder.com</VendorDescription>
   </AddIn>
 </RevitAddIns>

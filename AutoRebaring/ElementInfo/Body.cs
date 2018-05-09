@@ -120,6 +120,15 @@ namespace AutoRebaring.ElementInfo
         int LocationIndex { get; set; }
         Rebar CreateRebar(int idTurn, int locIndex);
     }
+    public interface IStirrupPlaneSingleInfo
+    {
+        int ID { get; set; }
+        UV StartPoint { get; set; }
+        XYZ VectorX { get; set; }
+        XYZ VectorY { get; set; }
+        List<object> ParameterValues { get; set; }
+        Rebar CreateRebar(int idElem, StirrupDistribution stirDis);
+    }
     public interface IStandardParameter
     {
         List<string> ParameterNames { get; set; }
@@ -131,6 +140,17 @@ namespace AutoRebaring.ElementInfo
         List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
         List<IStandardPlaneSingleInfo> LockheadStandardPlaneInfos { get; set; }
         void CreateRebar(int idTurn, int locIndex);
+    }
+    public interface IStirrupPlaneInfo
+    {
+        int ID { get; set; }
+        List<IStirrupPlaneSingleInfo> CoverStirrupPlaneInfos { get; set; }
+        List<IStirrupPlaneSingleInfo> CStirrupPlaneInfos { get; set; }
+        void CreateRebar();
+    }
+    public enum StirrupLocation
+    {
+        Bottom, Middle, Top
     }
     public interface IElementTypeInfo
     {

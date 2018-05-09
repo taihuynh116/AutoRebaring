@@ -11,23 +11,17 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
     {
         AutoRebaringDbContext db = new AutoRebaringDbContext();
         public ProjectDao() { }
-        public void Update(long idProject, string name)
+        public void Update(string name)
         {
-            var res = db.ARProjects.Where(x => x.ID == idProject);
+            var res = db.ARProjects.Where(x => x.Name == name);
             if (res.Count() == 0)
             {
                 var obj = new ARProject()
                 {
-                    ID = idProject,
                     CreateDate = DateTime.Now,
                     Name = name
                 };
                 db.ARProjects.Add(obj);
-            }
-            else
-            {
-                var obj = res.First();
-                obj.Name = name;
             }
             db.SaveChanges();
         }

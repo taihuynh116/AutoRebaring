@@ -13,7 +13,7 @@ using AutoRebaring.Constant;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 {
-    public class RebarID
+    public class StandardID
     {
         public static int ID = 0;
     }
@@ -21,8 +21,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     {
         public StraightStandardPlaneSingleInfo()
         {
-            ID = RebarID.ID;
-            RebarID.ID++;
+            ID = StandardID.ID;
+            StandardID.ID++;
         }
         public int ID { get; set; }
         public XYZ Normal { get; set; }
@@ -100,8 +100,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     {
         public ImplantStandardPlaneSingleInfo()
         {
-            ID = RebarID.ID;
-            RebarID.ID++;
+            ID = StandardID.ID;
+            StandardID.ID++;
         }
         public int ID { get; set; }
         public XYZ Normal { get; set; }
@@ -173,8 +173,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     {
         public LockheadStandardPlaneSingleInfo()
         {
-            ID = RebarID.ID;
-            RebarID.ID++;
+            ID = StandardID.ID;
+            StandardID.ID++;
         }
         public int ID { get; set; }
         public XYZ Normal { get; set; }
@@ -257,8 +257,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
     {
         public CrackingStandardPlaneSingleInfo()
         {
-            ID = RebarID.ID;
-            RebarID.ID++;
+            ID = StandardID.ID;
+            StandardID.ID++;
         }
         public int ID { get; set; }
         public XYZ Normal { get; set; }
