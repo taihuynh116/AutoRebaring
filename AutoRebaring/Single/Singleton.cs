@@ -37,6 +37,7 @@ namespace AutoRebaring.Single
         private List<List<StandardTurn>> standTurnsList = new List<List<StandardTurn>>();
         private List<int> standTurnsCount = new List<int>();
         private List<List<VariableImplant>> variableImplantsList = new List<List<VariableImplant>>();
+        private List<List<StirrupDistribution>> stirDissList = new List<List<StirrupDistribution>>();
         private int elemTypeInfoID;
         public VariableStandard VariableStandard { get; set; }
         public ARWallParameter WallParameter { get; set; }
@@ -94,6 +95,14 @@ namespace AutoRebaring.Single
             }
             variableImplantsList[vi.LocationIndex].Add(vi);
         }
+        public void AddStirrupDistribution(StirrupDistribution sd)
+        {
+            if (stirDissList.Count - 1 < sd.IDElement)
+            {
+                stirDissList.Add(new List<StirrupDistribution>());
+            }
+            stirDissList[sd.IDElement].Add(sd);
+        }
         #endregion
 
         #region Update Date
@@ -104,6 +113,7 @@ namespace AutoRebaring.Single
         public void UpdateStandardPlaneInfo(int id, IStandardPlaneInfo standPlaneInfo) { standPlaneInfos[id] = standPlaneInfo; }
         public void UpdateStandardTurn(StandardTurn st) { standTurnsList[st.LocationIndex][st.ID] = st; }
         public void UpdateVaribleImplant(VariableImplant vi) { variableImplantsList[vi.LocationIndex][vi.ID] = vi; }
+        public void UpdateStirrupDistribution(List<StirrupDistribution> sds) { stirDissList[sds[0].IDElement] = sds; }
         #endregion
 
         #region Inquire Data
@@ -148,6 +158,8 @@ namespace AutoRebaring.Single
         {
             return standTurnsCount[locIndex];
         }
+        public int GetStirrupDistribuitionsCount (int idElem) { return stirDissList[idElem].Count; }
+        public StirrupDistribution GetStirrupDistribution(int idElem, int id) { return stirDissList[idElem][id]; }
         #endregion
     }
 }

@@ -34,7 +34,6 @@ namespace AutoRebaring.ElementInfo
         public double BottomStirrup1 { get; set; }
         public double BottomStirrup2 { get; set; }
         public List<double> RebarDevelopmentLengths { get; set; }
-        public List<StirrupDistribution> StirrupDistributions { get; set; }
         public double BottomOffsetValue { get; set; }
         public List<double> EndLimit0s { get; set; }
         public List<double> StartLimit1s { get; set; }
@@ -215,7 +214,17 @@ namespace AutoRebaring.ElementInfo
             d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.BottomOffsetRatio) : d;
             BottomStirrup2 = BottomStirrup1 + d;
 
-            StirrupDistributions = new List<StirrupDistribution> { new StirrupDistribution(BottomStirrup1, BottomStirrup2), new StirrupDistribution(TopStirrup1, TopStirrup2) };
+            //StirrupDistributions = new List<StirrupDistribution> { new StirrupDistribution(0,BottomStirrup1, BottomStirrup2), new StirrupDistribution(1,TopStirrup1, TopStirrup2) };
+            StirrupDistribution sd1 = new StirrupDistribution()
+            {
+                ID = 0, IDElement = this.ID, Z1 = BottomStirrup1, Z2= BottomStirrup2
+            };
+            StirrupDistribution sd2 = new StirrupDistribution()
+            {
+                ID = 1, IDElement = this.ID, Z1 = TopStirrup1, Z2 = TopStirrup2
+            };
+            Singleton.Instance.AddStirrupDistribution(sd1);
+            Singleton.Instance.AddStirrupDistribution(sd2);
         }
         public void GetRebarInformation()
         {
@@ -247,41 +256,42 @@ namespace AutoRebaring.ElementInfo
                 }
             }
         }
-        public void MergeStirrupDistribution(double z1, double z2)
-        {
-            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
-            double midSpac1 = designInfo.MiddleSpacings[0];
 
-            StirrupDistributions.Add(new StirrupDistribution(z1, z2));
-            List<StirrupDistribution> stirDiss1 = StirrupDistributions;
-            stirDiss1.Sort();
-            while (true)
-            {
-                List<StirrupDistribution> stirDiss2 = new List<StirrupDistribution>();
-                bool isMergeAll = false;
-                for (int i = 0; i < stirDiss1.Count-1; i+=2)
-                {
-                    bool isMerge = false;
-                    stirDiss2.AddRange(StirrupDistribution.CheckMerge(stirDiss1[i], stirDiss1[i + 1], midSpac1, out isMerge));
-                    if (isMerge) isMergeAll = true;
-                }
-                if (stirDiss1.Count % 2 == 1)
-                {
-                    bool isMerge = false;
-                    List<StirrupDistribution> temDiss = StirrupDistribution.CheckMerge(stirDiss2[stirDiss2.Count - 1], stirDiss1[stirDiss1.Count - 1], midSpac1, out isMerge);
-                    if (isMerge)
-                    {
-                        if (stirDiss2.Count > 1) isMergeAll = true;
-                        else isMergeAll = false;
-                        stirDiss2[stirDiss2.Count - 1] = temDiss[0];
-                    }
-                    else stirDiss2.Add(temDiss[1]);
-                }
-                stirDiss1 = stirDiss2;
-                if (!isMergeAll) break;
-            }
-            StirrupDistributions = stirDiss1;
-        }
+        //public void MergeStirrupDistribution(double z1, double z2)
+        //{
+        //    IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+        //    double midSpac1 = designInfo.MiddleSpacings[0];
+
+        //    StirrupDistributions.Add(new StirrupDistribution(z1, z2));
+        //    List<StirrupDistribution> stirDiss1 = StirrupDistributions;
+        //    stirDiss1.Sort();
+        //    while (true)
+        //    {
+        //        List<StirrupDistribution> stirDiss2 = new List<StirrupDistribution>();
+        //        bool isMergeAll = false;
+        //        for (int i = 0; i < stirDiss1.Count-1; i+=2)
+        //        {
+        //            bool isMerge = false;
+        //            stirDiss2.AddRange(StirrupDistribution.CheckMerge(stirDiss1[i], stirDiss1[i + 1], midSpac1, out isMerge));
+        //            if (isMerge) isMergeAll = true;
+        //        }
+        //        if (stirDiss1.Count % 2 == 1)
+        //        {
+        //            bool isMerge = false;
+        //            List<StirrupDistribution> temDiss = StirrupDistribution.CheckMerge(stirDiss2[stirDiss2.Count - 1], stirDiss1[stirDiss1.Count - 1], midSpac1, out isMerge);
+        //            if (isMerge)
+        //            {
+        //                if (stirDiss2.Count > 1) isMergeAll = true;
+        //                else isMergeAll = false;
+        //                stirDiss2[stirDiss2.Count - 1] = temDiss[0];
+        //            }
+        //            else stirDiss2.Add(temDiss[1]);
+        //        }
+        //        stirDiss1 = stirDiss2;
+        //        if (!isMergeAll) break;
+        //    }
+        //    StirrupDistributions = stirDiss1;
+        //}
     }
     public class ColumnVerticalInfo : VerticalInfo
     {
