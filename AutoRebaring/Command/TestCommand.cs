@@ -54,4 +54,41 @@ namespace AutoRebaring.Command
             return Result.Succeeded;
         }
     }
+
+    [Transaction(TransactionMode.Manual)]
+    public class SelectColumn : IExternalCommand
+    {
+        private WindowForm Window { get; set; }
+        const string r = "Revit";
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIApplication uiapp = commandData.Application;
+            UIDocument uidoc = uiapp.ActiveUIDocument;
+            Application app = uiapp.Application;
+            Document doc = uidoc.Document;
+            Selection sel = uidoc.Selection;
+            Transaction tx = new Transaction(doc, "AutoRebaring");
+            tx.Start();
+
+            List<ElementId> filElemIds = new List<ElementId>();
+            List<Element> elems = new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance)).OfCategory(BuiltInCategory.OST_StructuralColumns).ToList();
+            foreach (var item in elems)
+            {
+                string mark = "";
+                try
+                {
+                    mark = item.LookupParameter("Mark").AsString();
+                }
+                catch { };
+                if (mark == "B.C3A")
+                {
+                    filElemIds.Add(item.Id);
+                }
+            }
+            sel.SetElementIds(filElemIds);
+
+            tx.Commit();
+            return Result.Succeeded;
+        }
+    }
 }

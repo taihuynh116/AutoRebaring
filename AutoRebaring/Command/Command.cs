@@ -36,6 +36,8 @@ namespace AutoRebaring.Command
             ElementInfoUtils.PickElement(doc, sel);
 
             //ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6, 7, 5, 1, 5, 1, 6);
+            //ElementInfoUtils.AddTestInformationColumn(10, 8);
+
             Window = new WindowForm();
             Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
             Window.Form = new InputForm();
@@ -65,9 +67,7 @@ namespace AutoRebaring.Command
                     standPlaneInfo.CreateRebar(j, i);
                 }
             }
-
-
-
+            
             var instance = Singleton.Instance;
 
             tx.Commit();
