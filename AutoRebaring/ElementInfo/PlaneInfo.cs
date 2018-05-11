@@ -208,11 +208,8 @@ namespace AutoRebaring.ElementInfo
             ARWallParameter wp = Singleton.Instance.WallParameter;
             double edge = 0;
             if (wp.EdgeWidthInclude) edge = wp.EdgeWidth * ConstantValue.milimeter2Feet;
-<<<<<<< HEAD
             if (wp.EdgeRatioInclude) edge = Math.Max(edge, B1/wp.EdgeRatio);
-=======
-            if (wp.EdgeRatioInclude) edge = Math.Max(edge, B1/ wp.EdgeRatio);
->>>>>>> abe774e7c84783dc58d525690d9d160f7d04f8ab
+
             double middle = B1 - edge * 2;
 
             B1s = new List<double> { edge, middle, edge };

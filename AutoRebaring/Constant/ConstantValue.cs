@@ -84,5 +84,8 @@ namespace AutoRebaring.Constant
 
         public static List<Type> CoverStirrupTypes = new List<Type> { typeof(double), typeof(double), typeof(double), typeof(double) };
         public static List<Type> CStirrupTypes = new List<Type> { typeof(double) };
+
+        public static List<int> View3dIDIntergers = new List<int> { };
+        public static List<int> ViewIDIntergers = new List<int> { };
     }
 }

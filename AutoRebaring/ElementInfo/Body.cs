@@ -63,7 +63,6 @@ namespace AutoRebaring.ElementInfo
         List<double> EndLimit2s { get; set; }
 
         List<double> RebarDevelopmentLengths { get; set; }
-        List<StirrupDistribution> StirrupDistributions { get; set; }
         List<StandardCreatingEnum> StandardCreatingTypes { get; set; }
         void GetInformation();
         void GetRebarInformation();
@@ -147,10 +146,6 @@ namespace AutoRebaring.ElementInfo
         List<IStirrupPlaneSingleInfo> CoverStirrupPlaneInfos { get; set; }
         List<IStirrupPlaneSingleInfo> CStirrupPlaneInfos { get; set; }
         void CreateRebar();
-    }
-    public enum StirrupLocation
-    {
-        Bottom, Middle, Top
     }
     public interface IElementTypeInfo
     {

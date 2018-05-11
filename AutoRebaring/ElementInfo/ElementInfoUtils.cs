@@ -61,6 +61,7 @@ namespace AutoRebaring.ElementInfo
                 }
                 string startLvl = startLevel.Name, endLvl = endLevel.Name;
                 double startEle = startLevel.Elevation * ConstantValue.milimeter2Feet, endEle = endLevel.Elevation * ConstantValue.milimeter2Feet;
+                if (sLevel == null || eLevel == null) continue;
                 string sLvl = sLevel.Name, eLvl = eLevel.Name;
                 double sEle = sLevel.Elevation, eEle = eLevel.Elevation;
                 if (GeomUtil.IsEqualOrBigger(sLevel.Elevation, startEle) && GeomUtil.IsEqualOrSmaller(eLevel.Elevation, endEle))
@@ -207,6 +208,16 @@ namespace AutoRebaring.ElementInfo
 
             }
         }
+        public static void GetDetailDistribution()
+        {
+            for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
+            {
+                for (int j = 0; j < Singleton.Instance.GetStirrupDistribuitionsCount(i); j++)
+                {
+                    StirrupDistribution.GetDetailDistribution(j, i);
+                }
+            }
+        }
         public static void AddTestInformationColumn(int first, int second)
         {
             Document doc = Singleton.Instance.Document;
@@ -248,7 +259,7 @@ namespace AutoRebaring.ElementInfo
                 new ColumnDesignInfo()
                 {
                     Level = levels.Where(x=> x.Name=="Tầng 3").First(),
-                    StandardTypes = barTypes.Where(x=> x.Name=="T18").ToList(),
+                    StandardTypes = barTypes.Where(x=> x.Name=="T20").ToList(),
                     StandardHookTypes = new List<RebarHookType>{null},
                     StandardNumbers = new List<int>{first, first},
                     StirrupTypes = new List<RebarBarType>{stirType, stirType},
@@ -258,7 +269,7 @@ namespace AutoRebaring.ElementInfo
                 new ColumnDesignInfo()
                 {
                     Level = levels.Where(x=> x.Name=="Tầng 4").First(),
-                    StandardTypes = barTypes.Where(x=> x.Name=="T20").ToList(),
+                    StandardTypes = barTypes.Where(x=> x.Name=="T18").ToList(),
                     StandardHookTypes = new List<RebarHookType>{null},
                     StandardNumbers = new List<int>{second, second},
                     StirrupTypes = new List<RebarBarType>{stirType, stirType},
@@ -509,6 +520,11 @@ namespace AutoRebaring.ElementInfo
             Singleton.Instance.StirrupVerticalParameter = stvp;
             Singleton.Instance.WallParameter = wp;
             Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Wall);
+        }
+        public static void SetupView3d(View3D view3d, Rebar rebar)
+        {
+            rebar.SetSolidInView(view3d, true);
+            rebar.SetUnobscuredInView(view3d, true);
         }
     }
 
