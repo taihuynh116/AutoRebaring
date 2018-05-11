@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using AutoRebaring.Single;
 using AutoRebaring.RebarLogistic;
 using Autodesk.Revit.DB.Structure;
+using AutoRebaring.ElementInfo.RebarInfo.StirrupInfo;
 
 namespace AutoRebaring.ElementInfo
 {
@@ -181,16 +182,19 @@ namespace AutoRebaring.ElementInfo
             for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
             {
                 IStandardPlaneInfo standPlaneInfo = null;
+                IStirrupPlaneInfo stirPlaneInfo = null;
                 switch (elemTypeEnum)
                 {
                     case ElementTypeEnum.Column:
                         standPlaneInfo = new ColumnStandardPlaneInfo(i);
+                        stirPlaneInfo = new ColumnStirrupPlaneInfo(i);
                         break;
                     case ElementTypeEnum.Wall:
                         standPlaneInfo = new WallStandardPlaneInfo(i);
                         break;
                 }
                 Singleton.Instance.AddStandardPlaneInfo(standPlaneInfo);
+                Singleton.Instance.AddStirrupPlaneInfo(stirPlaneInfo);
             }
         }
         public static void GetVariable()

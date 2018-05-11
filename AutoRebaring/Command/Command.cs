@@ -70,6 +70,14 @@ namespace AutoRebaring.Command
 
             ElementInfoUtils.GetDetailDistribution();
 
+            for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
+            {
+                for (int j = 0; j < Singleton.Instance.GetStirrupDistribuitionsCount(i); j++)
+                {
+                    IStirrupPlaneInfo spi = Singleton.Instance.GetStirrupPlaneInfo(i);
+                    spi.CreateRebar(j);
+                }
+            }
             var instance = Singleton.Instance;
 
             tx.Commit();

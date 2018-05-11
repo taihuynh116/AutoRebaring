@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Structure;
 using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo;
 using AutoRebaring.RebarLogistic;
@@ -33,6 +34,7 @@ namespace AutoRebaring.Single
         private List<IVerticalInfo> verticalInfos = new List<IVerticalInfo>();
         private List<IDesignInfo> designInfos = new List<IDesignInfo>();
         private List<IStandardPlaneInfo> standPlaneInfos = new List<IStandardPlaneInfo>();
+        private List<IStirrupPlaneInfo> stirPlaneInfos = new List<IStirrupPlaneInfo>();
         private List<IStandardPlaneSingleInfo> standPlaneSingleInfos = new List<IStandardPlaneSingleInfo>();
         private List<List<StandardTurn>> standTurnsList = new List<List<StandardTurn>>();
         private List<int> standTurnsCount = new List<int>();
@@ -60,6 +62,7 @@ namespace AutoRebaring.Single
         public Element Element { get; set; }
         public ARRebarVerticalParameter StandardVeticalParameter { get; set; }
         public ARRebarVerticalParameter StirrupVerticalParameter { get; set; }
+        public List<RebarShape> StirrupShapes { get; set; }
         #endregion
 
         #region Add Data
@@ -70,6 +73,7 @@ namespace AutoRebaring.Single
         public void AddVerticalInfo(IVerticalInfo verticalInfo) { verticalInfos.Add(verticalInfo); }
         public void AddDesignInfo(IDesignInfo designInfo) { designInfos.Add(designInfo); }
         public void AddStandardPlaneInfo(IStandardPlaneInfo standPlaneInfo) { standPlaneInfos.Add(standPlaneInfo); }
+        public void AddStirrupPlaneInfo(IStirrupPlaneInfo stirPlaneInfo) { stirPlaneInfos.Add(stirPlaneInfo); }
         public void AddStandardPlaneSingleInfo(IStandardPlaneSingleInfo standPlaneSingleInfo) { standPlaneSingleInfos.Add(standPlaneSingleInfo); }
         public void AddStandardTurn(StandardTurn st)
         {
@@ -105,12 +109,13 @@ namespace AutoRebaring.Single
         }
         #endregion
 
-        #region Update Date
+        #region Update Data
         public void UpdateRevitInfo(int id, IRevitInfo revitInfo) { revitInfos[id] = revitInfo; }
         public void UpdatePlaneInfo(int id, IPlaneInfo planeInfo) { planeInfos[id] = planeInfo; }
         public void UpdateVerticalInfo(int id, IVerticalInfo verticalInfo) { verticalInfos[id] = verticalInfo; }
         public void UpdateDesignInfo(int id, IDesignInfo designInfo) { designInfos[id] = designInfo; }
         public void UpdateStandardPlaneInfo(int id, IStandardPlaneInfo standPlaneInfo) { standPlaneInfos[id] = standPlaneInfo; }
+        public void UpdateStirrupPlaneInfo(int id, IStirrupPlaneInfo stirPlaneInfo) { stirPlaneInfos[id] = stirPlaneInfo; }
         public void UpdateStandardTurn(StandardTurn st) { standTurnsList[st.LocationIndex][st.ID] = st; }
         public void UpdateVaribleImplant(VariableImplant vi) { variableImplantsList[vi.LocationIndex][vi.ID] = vi; }
         public void UpdateStirrupDistributionList(List<StirrupDistribution> sds) { stirDissList[sds[0].IDElement] = sds; }
@@ -147,6 +152,7 @@ namespace AutoRebaring.Single
             return GetDesignInfo(idAfter);
         }
         public IStandardPlaneInfo GetStandardPlaneInfo(int id) { return standPlaneInfos[id]; }
+        public IStirrupPlaneInfo GetStirrupPlaneInfo(int id) { return stirPlaneInfos[id]; }
         public IStandardPlaneSingleInfo GetStandardPlaneSingleInfo(int id) { return standPlaneSingleInfos[id]; }
         public StandardTurn GetStandardTurn(int id, int locIndex) { return standTurnsList[locIndex][id]; }
         public StandardTurn GetStandardTurnAfter(int id, int locIndex)
@@ -165,6 +171,14 @@ namespace AutoRebaring.Single
         {
             int idAfter = id + 1 < stirDissList[idElem].Count ? id + 1 : stirDissList[idElem].Count - 1;
             return GetStirrupDistribution(idElem, id);
+        }
+        public RebarShape GetRebarShape(int id)
+        {
+            return StirrupShapes[id];
+        }
+        public int GetRebarShapeCount()
+        {
+            return StirrupShapes.Count;
         }
         #endregion
     }

@@ -716,7 +716,8 @@ namespace AutoRebaring.Form
             {
                 IDUserType = UserTypeDao.GetId(ConstantValue.Admin);
             }
-            else {
+            else
+            {
                 IDUserType = UserTypeDao.GetId(ConstantValue.User);
             }
 
@@ -2112,6 +2113,15 @@ namespace AutoRebaring.Form
             long idStandChosen = StandardChosenDao.GetId(IDProject);
             Singleton.Instance.StandardChosen = StandardChosenDao.GetStandardChosen(idStandChosen);
 
+            if (Singleton.Instance.GetElementTypeInfo().Type == ElementTypeEnum.Column)
+            {
+                Singleton.Instance.StirrupShapes = new List<RebarShape> { cbbFamilyDaiBao.SelectedItem as RebarShape, cbbFamilyDaiC.SelectedItem as RebarShape };
+            }
+            else
+            {
+                Singleton.Instance.StirrupShapes = new List<RebarShape> { cbbFamilyDaiBao.SelectedItem as RebarShape,cbbFamilyDaiBien.SelectedItem as RebarShape, cbbFamilyDaiC.SelectedItem as RebarShape };
+            }
+
             List<IDesignInfo> designInfos = new List<IDesignInfo>();
             var res = DesignLevelLimitDao.GetDesignLevelLimit(IDDesignLevelLimit);
             if (res != null)
@@ -2127,7 +2137,7 @@ namespace AutoRebaring.Form
                     List<RebarBarType> stirrTypes;
                     List<double> stirrTBs;
                     List<double> stirrMs;
-                    if (Singleton.Instance.GetElementTypeInfo().Type== ElementTypeEnum.Column)
+                    if (Singleton.Instance.GetElementTypeInfo().Type == ElementTypeEnum.Column)
                     {
                         level = cbbDesLevels[i].SelectedItem as Level;
                         standTypes = new List<RebarBarType> { cbbDesStandType1s[i].SelectedItem as RebarBarType };
