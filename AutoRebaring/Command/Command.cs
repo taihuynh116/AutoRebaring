@@ -67,7 +67,9 @@ namespace AutoRebaring.Command
                     standPlaneInfo.CreateRebar(j, i);
                 }
             }
-            
+
+            ElementInfoUtils.GetDetailDistribution();
+
             var instance = Singleton.Instance;
 
             tx.Commit();

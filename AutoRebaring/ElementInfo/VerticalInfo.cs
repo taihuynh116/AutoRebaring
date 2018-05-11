@@ -208,23 +208,43 @@ namespace AutoRebaring.ElementInfo
 
             d = rvpStirr.OffsetInclude ? rvpStirr.TopOffset * ConstantValue.milimeter2Feet : 0;
             d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.TopOffsetRatio) : d;
-            TopStirrup2 = TopStirrup1 - d;
+            TopStirrup1 = GeomUtil.IsEqual(d, 0) ? BottomStirrup1 : TopStirrup2 - d;
 
             d = rvpStirr.OffsetInclude ? rvpStirr.BottomOffset * ConstantValue.milimeter2Feet : 0;
             d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.BottomOffsetRatio) : d;
-            BottomStirrup2 = BottomStirrup1 + d;
+            BottomStirrup2 = GeomUtil.IsEqual(d,0) ? TopStirrup2 : BottomStirrup1 + d;
 
             //StirrupDistributions = new List<StirrupDistribution> { new StirrupDistribution(0,BottomStirrup1, BottomStirrup2), new StirrupDistribution(1,TopStirrup1, TopStirrup2) };
-            StirrupDistribution sd1 = new StirrupDistribution()
+            if (GeomUtil.IsEqual(BottomStirrup2, TopStirrup2))
             {
-                ID = 0, IDElement = this.ID, Z1 = BottomStirrup1, Z2= BottomStirrup2
-            };
-            StirrupDistribution sd2 = new StirrupDistribution()
+                StirrupDistribution sd = new StirrupDistribution()
+                {
+                    ID = 0,
+                    IDElement = this.ID,
+                    Z1 = BottomStirrup1, 
+                    Z2 = BottomStirrup2,
+                };
+                Singleton.Instance.AddStirrupDistribution(sd);
+            }
+            else
             {
-                ID = 1, IDElement = this.ID, Z1 = TopStirrup1, Z2 = TopStirrup2
-            };
-            Singleton.Instance.AddStirrupDistribution(sd1);
-            Singleton.Instance.AddStirrupDistribution(sd2);
+                StirrupDistribution sd1 = new StirrupDistribution()
+                {
+                    ID = 0,
+                    IDElement = this.ID,
+                    Z1 = BottomStirrup1,
+                    Z2 = BottomStirrup2
+                };
+                StirrupDistribution sd2 = new StirrupDistribution()
+                {
+                    ID = 1,
+                    IDElement = this.ID,
+                    Z1 = TopStirrup1,
+                    Z2 = TopStirrup2
+                };
+                Singleton.Instance.AddStirrupDistribution(sd1);
+                Singleton.Instance.AddStirrupDistribution(sd2);
+            }
         }
         public void GetRebarInformation()
         {

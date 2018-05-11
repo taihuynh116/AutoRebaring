@@ -208,6 +208,16 @@ namespace AutoRebaring.ElementInfo
 
             }
         }
+        public static void GetDetailDistribution()
+        {
+            for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
+            {
+                for (int j = 0; j < Singleton.Instance.GetStirrupDistribuitionsCount(i); j++)
+                {
+                    StirrupDistribution.GetDetailDistribution(j, i);
+                }
+            }
+        }
         public static void AddTestInformationColumn(int first, int second)
         {
             Document doc = Singleton.Instance.Document;
@@ -510,6 +520,11 @@ namespace AutoRebaring.ElementInfo
             Singleton.Instance.StirrupVerticalParameter = stvp;
             Singleton.Instance.WallParameter = wp;
             Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Wall);
+        }
+        public static void SetupView3d(View3D view3d, Rebar rebar)
+        {
+            rebar.SetSolidInView(view3d, true);
+            rebar.SetUnobscuredInView(view3d, true);
         }
     }
 

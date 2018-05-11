@@ -82,16 +82,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Type").Set("Straight");
             rb.LookupParameter("ID").Set(ID);
 
-            View East = Singleton.Instance.Document.GetElement(new ElementId(4803)) as View;
-            //View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
-            View View3d = Singleton.Instance.Document.GetElement(new ElementId(1146504)) as View;
-            //View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
-
-            //rb.SetSolidInView(View3d as View3D, true);
-            rb.SetUnobscuredInView(View3d, true);
-            rb.SetUnobscuredInView(East, true);
-            //rb.SetUnobscuredInView(South, true);
-            //rb.SetUnobscuredInView(Section, true);
+            List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
+            List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
+            view3ds.ForEach(x => ElementInfoUtils.SetupView3d(x, rb));
+            views.ForEach(x => rb.SetUnobscuredInView(x, true));
 
             return rb;
         }
@@ -155,16 +149,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Type").Set("Implant");
             rb.LookupParameter("ID").Set(ID);
 
-            View East = Singleton.Instance.Document.GetElement(new ElementId(4803)) as View;
-            //View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
-            View View3d = Singleton.Instance.Document.GetElement(new ElementId(1146504)) as View;
-            //View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
-
-            //rb.SetSolidInView(View3d as View3D, true);
-            rb.SetUnobscuredInView(View3d, true);
-            rb.SetUnobscuredInView(East, true);
-            //rb.SetUnobscuredInView(South, true);
-            //rb.SetUnobscuredInView(Section, true);
+            List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
+            List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
+            view3ds.ForEach(x => ElementInfoUtils.SetupView3d(x, rb));
+            views.ForEach(x => rb.SetUnobscuredInView(x, true));
 
             return rb;
         }
@@ -239,16 +227,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Type").Set("Lockhead");
             rb.LookupParameter("ID").Set(ID);
 
-            View East = Singleton.Instance.Document.GetElement(new ElementId(4803)) as View;
-            //View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
-            View View3d = Singleton.Instance.Document.GetElement(new ElementId(1146504)) as View;
-            //View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
-
-            //rb.SetSolidInView(View3d as View3D, true);
-            rb.SetUnobscuredInView(View3d, true);
-            rb.SetUnobscuredInView(East, true);
-            //rb.SetUnobscuredInView(South, true);
-            //rb.SetUnobscuredInView(Section, true);
+            List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
+            List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
+            view3ds.ForEach(x => ElementInfoUtils.SetupView3d(x, rb));
+            views.ForEach(x => rb.SetUnobscuredInView(x, true));
 
             return rb;
         }
@@ -329,16 +311,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("Type").Set("Cracking");
             rb.LookupParameter("ID").Set(ID);
 
-            View East = Singleton.Instance.Document.GetElement(new ElementId(4803)) as View;
-            //View South = Singleton.Instance.Document.GetElement(new ElementId(2344)) as View;
-            View View3d = Singleton.Instance.Document.GetElement(new ElementId(1146504)) as View;
-            //View Section = Singleton.Instance.Document.GetElement(new ElementId(310594)) as View;
-
-            //rb.SetSolidInView(View3d as View3D, true);
-            rb.SetUnobscuredInView(View3d, true);
-            rb.SetUnobscuredInView(East, true);
-            //rb.SetUnobscuredInView(South, true);
-            //rb.SetUnobscuredInView(Section, true);
+            List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
+            List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
+            view3ds.ForEach(x => ElementInfoUtils.SetupView3d(x, rb));
+            views.ForEach(x => rb.SetUnobscuredInView(x, true));
 
             return rb;
         }
