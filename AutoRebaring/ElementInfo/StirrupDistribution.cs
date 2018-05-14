@@ -15,13 +15,16 @@ namespace AutoRebaring.ElementInfo
         public int ID { get; set; }
         public int IDElement { get; set; }
         public double BeforeZ1 { get; set; }
-        public double StartZ1 { get; set; }
+        public List<double> StartZ1s { get; set; } = new List<double>();
         public double Z1 { get; set; }
+        public List<double> EndZ1s { get; set; } = new List<double>();
+        public List<int> Number1s { get; set; } = new List<int>();
         public double BeforeZ2 { get; set; }
-        public double StartZ2 { get; set; }
+        public List<double> StartZ2s { get; set; } = new List<double>();
         public double Z2 { get; set; }
-        public double Number1 { get; set; }
-        public double Number2 { get; set; }
+        public List<double> EndZ2s { get; set; } = new List<double>();
+        public List<int> Number2s { get; set; } = new List<int>();
+
         public StirrupLocation StirrupLocation { get; set; }
         public StirrupDistribution(int id, int idElem, double z1, double z2)
         {
@@ -48,8 +51,10 @@ namespace AutoRebaring.ElementInfo
             IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(idElem);
             StirrupDistribution stirDis = Singleton.Instance.GetStirrupDistribution(idElem, id);
             StirrupDistribution stirDisAfter = Singleton.Instance.GetStirrupDistributionAfter(idElem, id);
-            double btSpac = designInfo.BotTopSpacings[0];
-            double mSpac = designInfo.MiddleSpacings[0];
+            double btSpac1 = designInfo.BotTopSpacings[0];
+            double btSpac2 = designInfo.BotTopSpacings[1];
+            double mSpac1 = designInfo.MiddleSpacings[0];
+            double mSpac2 = designInfo.MiddleSpacings[1];
 
             if (id == 0)
             {
@@ -58,22 +63,40 @@ namespace AutoRebaring.ElementInfo
                     stirDis.StirrupLocation = StirrupLocation.Bottom;
 
                     double len = stirDis.Z2 - (stirDis.Z1 + 50*ConstantValue.milimeter2Feet);
-                    int n = (int)Math.Floor(len / btSpac);
-                    n = len / btSpac > n + 0.55 ? n += 2 : n += 1;
-                    stirDis.StartZ2 = (stirDis.Z1 + 50 * ConstantValue.milimeter2Feet) + (n - 1) * btSpac;
-                    stirDis.Number2 = n;
+                    double spa = btSpac1;
+                    int n = (int)Math.Floor(len / spa);
+                    n = len / spa > n + 0.55 ? n += 2 : n += 1;
+                    stirDis.StartZ2s.Add(stirDis.Z1 + 50 * ConstantValue.milimeter2Feet + (n - 1) * spa);
+                    stirDis.Number2s.Add(n);
+                    stirDis.EndZ2s.Add(stirDis.StartZ2s[0] - (n - 1) * spa);
+
+                     spa = btSpac2;
+                     n = (int)Math.Floor(len / spa);
+                    n = len / spa > n + 0.55 ? n += 2 : n += 1;
+                    stirDis.StartZ2s.Add(stirDis.Z1 + 50 * ConstantValue.milimeter2Feet + (n - 1) * spa);
+                    stirDis.Number2s.Add(n);
+                    stirDis.EndZ2s.Add(stirDis.StartZ2s[1] - (n - 1) * spa);
                 }
                 else
                 {
                     stirDis.StirrupLocation = StirrupLocation.Bottom;
 
                     double len = stirDis.Z2 - stirDis.Z1;
-                    int n = (int)Math.Floor(len / btSpac);
-                    n = len/ btSpac > n+0.55 ? n+=2 : n += 1;
-                    stirDis.StartZ2 = stirDis.Z2;
-                    stirDis.Number2 = n;
+                    double spa = btSpac1;
+                    int n = (int)Math.Floor(len / spa);
+                    n = len/ spa > n+0.55 ? n+=2 : n += 1;
+                    stirDis.StartZ2s.Add(stirDis.Z2);
+                    stirDis.Number2s.Add(n);
+                    stirDis.EndZ2s.Add(stirDis.StartZ2s[0] - (n - 1) * spa);
 
-                    stirDisAfter.BeforeZ1 = stirDis.StartZ2 + mSpac;
+                    spa = btSpac2;
+                    n = (int)Math.Floor(len / spa);
+                    n = len / spa > n + 0.55 ? n += 2 : n += 1;
+                    stirDis.StartZ2s.Add(stirDis.Z2);
+                    stirDis.Number2s.Add(n);
+                    stirDis.EndZ2s.Add(stirDis.StartZ2s[1] - (n - 1) * spa);
+
+                    stirDisAfter.BeforeZ1 = stirDis.StartZ2s[0] + spa;
                     Singleton.Instance.UpdateStirrupDistribution(stirDisAfter);
                 }
             }
@@ -82,35 +105,71 @@ namespace AutoRebaring.ElementInfo
                 stirDis.StirrupLocation = StirrupLocation.Top;
 
                 double len = stirDis.Z1 - stirDis.BeforeZ1;
-                int n = (int)Math.Floor(len / mSpac);
-                n = GeomUtil.IsEqual(n, len / mSpac) ? n : n += 1;
-                stirDis.StartZ1 = stirDis.BeforeZ1 + (n - 1) * mSpac;
-                stirDis.Number1 = n;
+                double spa = mSpac1;
+                int n = (int)Math.Floor(len / spa);
+                n = GeomUtil.IsEqual(n, len / spa) ? n : n += 1;
+                stirDis.StartZ1s.Add(stirDis.BeforeZ1 + (n - 1) * spa);
+                stirDis.Number1s.Add(n);
+                stirDis.EndZ1s.Add(stirDis.StartZ1s[0] - (n - 1) * spa);
+
+                spa = mSpac2;
+                n = (int)Math.Floor(len / spa);
+                n = GeomUtil.IsEqual(n, len / spa) ? n : n += 1;
+                stirDis.StartZ1s.Add(stirDis.BeforeZ1 + (n - 1) * spa);
+                stirDis.Number1s.Add(n);
+                stirDis.EndZ1s.Add(stirDis.StartZ1s[1] - (n - 1) * spa);
 
                 len = stirDis.Z2 - stirDis.Z1;
-                n = (int)Math.Floor(len / btSpac);
-                n = len / btSpac > n + 0.55 ? n += 2 : n += 1;
-                stirDis.StartZ2 = stirDis.Z1 + (n - 1) * btSpac;
-                stirDis.Number2 = n;
+                spa = btSpac1;
+                n = (int)Math.Floor(len / spa);
+                n = len / spa > n + 0.55 ? n += 2 : n += 1;
+                stirDis.StartZ2s.Add(stirDis.Z1 + (n - 1) * spa);
+                stirDis.Number2s.Add(n);
+                stirDis.EndZ2s.Add(stirDis.StartZ2s[0] - (n - 1) * spa);
+
+                spa = btSpac2;
+                n = (int)Math.Floor(len / spa);
+                n = len / spa > n + 0.55 ? n += 2 : n += 1;
+                stirDis.StartZ2s.Add(stirDis.Z1 + (n - 1) * spa);
+                stirDis.Number2s.Add(n);
+                stirDis.EndZ2s.Add(stirDis.StartZ2s[1] - (n - 1) * spa);
             }
             else
             {
                 stirDis.StirrupLocation = StirrupLocation.Middle;
 
                 double len = stirDis.Z1 - stirDis.BeforeZ1;
-                int n = (int)Math.Floor(len / mSpac);
-                n = GeomUtil.IsEqual(n, len / mSpac) ? n : n += 1;
-                stirDis.StartZ1 = stirDis.BeforeZ1 + (n - 1) * mSpac;
-                stirDis.Number1 = n;
+                double spa = mSpac1;
+                int n = (int)Math.Floor(len / spa);
+                n = GeomUtil.IsEqual(n, len / spa) ? n : n += 1;
+                stirDis.StartZ1s.Add(stirDis.BeforeZ1 + (n - 1) * spa);
+                stirDis.Number1s.Add(n);
+                stirDis.EndZ1s.Add(stirDis.StartZ1s[0] - (n - 1) * spa);
 
-                stirDis.BeforeZ2 = stirDis.StartZ1 + btSpac;
+                spa = mSpac2;
+                n = (int)Math.Floor(len / spa);
+                n = GeomUtil.IsEqual(n, len / spa) ? n : n += 1;
+                stirDis.StartZ1s.Add(stirDis.BeforeZ1 + (n - 1) * spa);
+                stirDis.Number1s.Add(n);
+                stirDis.EndZ1s.Add(stirDis.StartZ1s[1] - (n - 1) * spa);
+
+                stirDis.BeforeZ2 = stirDis.StartZ1s[0] + btSpac1;
                 len = stirDis.Z2 - stirDis.BeforeZ2;
-                n = (int)Math.Floor(len / btSpac);
-                n = GeomUtil.IsEqual(n, len / btSpac) ? n : n += 1;
-                stirDis.StartZ2 = stirDis.BeforeZ2 + (n - 1) * btSpac;
-                stirDis.Number2 = n;
+                spa = btSpac1;
+                n = (int)Math.Floor(len / spa);
+                n = GeomUtil.IsEqual(n, len / spa) ? n : n += 1;
+                stirDis.StartZ2s.Add(stirDis.BeforeZ2 + (n - 1) * spa);
+                stirDis.Number2s.Add(n);
+                stirDis.EndZ2s.Add(stirDis.StartZ2s[0] - (n - 1) * spa);
 
-                stirDisAfter.BeforeZ1 = stirDis.StartZ2 + mSpac;
+                spa = btSpac2;
+                n = (int)Math.Floor(len / spa);
+                n = GeomUtil.IsEqual(n, len / spa) ? n : n += 1;
+                stirDis.StartZ2s.Add(stirDis.BeforeZ2 + (n - 1) * spa);
+                stirDis.Number2s.Add(n);
+                stirDis.EndZ2s.Add(stirDis.StartZ2s[1] - (n - 1) * spa);
+
+                stirDisAfter.BeforeZ1 = stirDis.StartZ2s[0] + mSpac1;
                 Singleton.Instance.UpdateStirrupDistribution(stirDisAfter);
             }
 

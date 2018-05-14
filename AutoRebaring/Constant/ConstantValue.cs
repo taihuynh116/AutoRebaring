@@ -82,10 +82,7 @@ namespace AutoRebaring.Constant
         public static List<string> CoverStirrupParameters = new List<string> { "B", "D", "C", "E" };
         public static List<string> CStirrupParameters = new List<string> { "B" };
 
-        public static List<Type> CoverStirrupTypes = new List<Type> { typeof(double), typeof(double), typeof(double), typeof(double) };
-        public static List<Type> CStirrupTypes = new List<Type> { typeof(double) };
-
-        public static List<int> View3dIDIntergers = new List<int> { };
-        public static List<int> ViewIDIntergers = new List<int> { };
+        public static List<int> View3dIDIntergers = new List<int> { 297204};
+        public static List<int> ViewIDIntergers = new List<int> {  };
     }
 }
