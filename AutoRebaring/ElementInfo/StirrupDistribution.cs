@@ -146,7 +146,7 @@ namespace AutoRebaring.ElementInfo
                 stirDis.Number1s.Add(n);
                 stirDis.EndZ1s.Add(stirDis.StartZ1s[0] - (n - 1) * spa);
 
-                spa = mSpac1;
+                spa = mSpac2;
                 n = (int)Math.Floor(len / spa);
                 n = GeomUtil.IsEqual(n, len / spa) ? n : n += 1;
                 stirDis.StartZ1s.Add(stirDis.BeforeZ1 + (n - 1) * spa);

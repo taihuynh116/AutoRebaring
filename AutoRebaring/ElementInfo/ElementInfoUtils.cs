@@ -227,6 +227,7 @@ namespace AutoRebaring.ElementInfo
             Document doc = Singleton.Instance.Document;
             List<Level> levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).Cast<Level>().ToList();
             List<RebarBarType> barTypes = new FilteredElementCollector(doc).OfClass(typeof(RebarBarType)).Cast<RebarBarType>().ToList();
+            List<RebarShape> barShapes = new FilteredElementCollector(doc).OfClass(typeof(RebarShape)).Cast<RebarShape>().ToList();
 
             ARCoverParameter cp = new ARCoverParameter()
             {
@@ -366,6 +367,7 @@ namespace AutoRebaring.ElementInfo
             Singleton.Instance.RebarZ2s = rebarZ2s;
             Singleton.Instance.StandardVeticalParameter = svp;
             Singleton.Instance.StirrupVerticalParameter = stvp;
+            Singleton.Instance.StirrupShapes = new List<RebarShape> { barShapes.Where(x => x.Name == "TD_02").First(), barShapes.Where(x => x.Name == "TD_C_90-135a").First() };
         }
         public static void AddTestInformationWall(int ne11B, int ne12B, int ce12B, int ne2B, int de2B, int nmB,
             int ne11T, int ne12T, int ce12T, int ne2T, int de2T, int nmT)

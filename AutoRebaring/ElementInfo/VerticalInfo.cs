@@ -207,11 +207,11 @@ namespace AutoRebaring.ElementInfo
             BottomStirrup1 = Bottom;
 
             d = rvpStirr.OffsetInclude ? rvpStirr.TopOffset * ConstantValue.milimeter2Feet : 0;
-            d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.TopOffsetRatio) : d;
+            d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) / rvpStirr.TopOffsetRatio) : d;
             TopStirrup1 = GeomUtil.IsEqual(d, 0) ? BottomStirrup1 : TopStirrup2 - d;
 
             d = rvpStirr.OffsetInclude ? rvpStirr.BottomOffset * ConstantValue.milimeter2Feet : 0;
-            d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) * rvpStirr.BottomOffsetRatio) : d;
+            d = rvpStirr.OffsetRatioInclude ? Math.Max(d, (TopStirrup2 - BottomStirrup1) / rvpStirr.BottomOffsetRatio) : d;
             BottomStirrup2 = GeomUtil.IsEqual(d,0) ? TopStirrup2 : BottomStirrup1 + d;
 
             //StirrupDistributions = new List<StirrupDistribution> { new StirrupDistribution(0,BottomStirrup1, BottomStirrup2), new StirrupDistribution(1,TopStirrup1, TopStirrup2) };

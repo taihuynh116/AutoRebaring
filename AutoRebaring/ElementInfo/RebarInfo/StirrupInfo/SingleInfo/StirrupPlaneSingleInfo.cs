@@ -77,7 +77,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                 case StirrupLocation.Top:
                     try
                     {
-                        rb = CreateSingleRebar(doc, elem, rs, rbt, sd.StartZ1s[IDStirrupType], sd.EndZ1s[IDStirrupType], sd.Number1s[IDStirrupType], mSpa, stirDia);
+                        rb = CreateSingleRebar(doc, elem, rs, rbt, sd.StartZ1s[IDStirrupType], sd.EndZ1s[IDStirrupType], sd.Number1s[IDStirrupType], mSpa, stirDia, sd.StirrupLocation);
                     }
                     catch
                     {
@@ -85,10 +85,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                     }
                     break;
             }
-            rb = CreateSingleRebar(doc, elem, rs, rbt, sd.StartZ2s[IDStirrupType], sd.EndZ2s[IDStirrupType], sd.Number2s[IDStirrupType], tbSpa, stirDia);
+            rb = CreateSingleRebar(doc, elem, rs, rbt, sd.StartZ2s[IDStirrupType], sd.EndZ2s[IDStirrupType], sd.Number2s[IDStirrupType], tbSpa, stirDia, sd.StirrupLocation);
             return rb;
         }
-        public Rebar CreateSingleRebar(Document doc, Element elem, RebarShape rs, RebarBarType rbt, double start, double end, int num, double spa, double stirDia)
+        public Rebar CreateSingleRebar(Document doc, Element elem, RebarShape rs, RebarBarType rbt, double start, double end, int num, double spa, double stirDia, StirrupLocation stirLoc)
         {
             XYZ startPoint = new XYZ(StartPoint.U, StartPoint.V, start);
             Rebar rb = Rebar.CreateFromRebarShape(doc, rs, rbt, elem, startPoint, VectorX, VectorY);
@@ -120,6 +120,18 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                     ElementTransformUtils.MoveElement(doc, rb.Id, new XYZ(startPoint.X - midPnt.X, startPoint.Y - midPnt.Y, (end + start) / 2 - midPnt.Z));
                     break;
             }
+
+            switch (stirLoc)
+            {
+                case StirrupLocation.Bottom:
+                case StirrupLocation.Top:
+                    rb.LookupParameter("Location").Set("BotTop");
+                    break;
+                case StirrupLocation.Middle:
+                    rb.LookupParameter("Location").Set("Middle");
+                    break;
+            }
+            rb.LookupParameter("Comments").Set("add-in");
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
