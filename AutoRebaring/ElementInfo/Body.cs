@@ -19,6 +19,7 @@ namespace AutoRebaring.ElementInfo
         Element Element { get; set; }
         double Elevation { get; set; }
         Level Level { get; set; }
+        string TitleLevel { get; set; }
     }
     public interface IPlaneInfo
     {
@@ -117,6 +118,8 @@ namespace AutoRebaring.ElementInfo
         UV StartPoint { get; set; }
         RebarLocation RebarLocation { get; set; }
         int LocationIndex { get; set; }
+        StandardCreatingEnum StandardCreating { get; set; }
+        StandardShapeEnum StandardShape { get; set; }
         Rebar CreateRebar(int idTurn, int locIndex);
     }
     public interface IStirrupPlaneSingleInfo
@@ -160,5 +163,12 @@ namespace AutoRebaring.ElementInfo
     {
         Normal = 0,
         Lockhead = 1
+    }
+    public enum StandardShapeEnum
+    {
+        Straight=0,
+        Implant =1,
+        Lockhead = 2,
+        Cracking = 3
     }
 }

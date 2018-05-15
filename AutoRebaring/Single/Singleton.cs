@@ -63,6 +63,8 @@ namespace AutoRebaring.Single
         public ARRebarVerticalParameter StandardVeticalParameter { get; set; }
         public ARRebarVerticalParameter StirrupVerticalParameter { get; set; }
         public List<RebarShape> StirrupShapes { get; set; }
+        public string Partition { get; set; }
+        public AROtherParameter OtherParameter { get; set; }
         #endregion
 
         #region Add Data

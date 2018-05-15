@@ -32,6 +32,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public UV StartPoint { get; set; }
         public RebarLocation RebarLocation { get; set; }
         public int LocationIndex { get; set; }
+        public StandardCreatingEnum StandardCreating { get; set; }
+        public StandardShapeEnum StandardShape { get; set; }
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
@@ -78,9 +80,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
-            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Level").Set(revitInfo.TitleLevel);
             rb.LookupParameter("Type").Set("Straight");
             rb.LookupParameter("ID").Set(ID);
+            rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
+            rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
@@ -105,6 +109,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public UV StartPoint { get; set; }
         public RebarLocation RebarLocation { get; set; }
         public int LocationIndex { get; set; }
+        public StandardCreatingEnum StandardCreating { get; set; }
+        public StandardShapeEnum StandardShape { get; set; }
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
@@ -145,9 +151,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
-            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Level").Set(revitInfo.TitleLevel);
             rb.LookupParameter("Type").Set("Implant");
             rb.LookupParameter("ID").Set(ID);
+            rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
+            rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
@@ -173,6 +181,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public RebarLocation RebarLocation { get; set; }
         public XYZ LockheadDirection { get; set; }
         public int LocationIndex { get; set; }
+        public StandardCreatingEnum StandardCreating { get; set; }
+        public StandardShapeEnum StandardShape { get; set; }
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
@@ -223,9 +233,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
-            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Level").Set(revitInfo.TitleLevel);
             rb.LookupParameter("Type").Set("Lockhead");
             rb.LookupParameter("ID").Set(ID);
+            rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
+            rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
@@ -252,6 +264,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
         public XYZ CrackingDirection { get; set; }
         public double CrackingLength { get; set; }
         public int LocationIndex { get; set; }
+        public StandardCreatingEnum StandardCreating { get; set; }
+        public StandardShapeEnum StandardShape { get; set; }
         public Rebar CreateRebar(int idTurn, int locIndex)
         {
             if (Number <= 0) return null;
@@ -307,9 +321,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
 
             rb.LookupParameter("Comments").Set("add-in");
             rb.LookupParameter("Location").Set(RebarLocation.ToString());
-            rb.LookupParameter("Level").Set(revitInfo.Level.Name);
+            rb.LookupParameter("Level").Set(revitInfo.TitleLevel);
             rb.LookupParameter("Type").Set("Cracking");
             rb.LookupParameter("ID").Set(ID);
+            rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
+            rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();

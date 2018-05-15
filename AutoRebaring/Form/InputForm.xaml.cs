@@ -103,6 +103,7 @@ namespace AutoRebaring.Form
         public long IDCStirrupFamilyType { get; set; } = -1;
         public long IDWallParameter { get; set; } = -1;
         public long IDDesignLevelLimit { get; set; } = -1;
+        public long IDOtherParameter { get; set; } = -1;
         #endregion
 
         #region RevitData
@@ -1298,8 +1299,8 @@ namespace AutoRebaring.Form
         }
         private void InquireOtherParameter()
         {
-            long idOtherParameter = OtherParameterDao.GetId(IDMark);
-            var res = OtherParameterDao.GetOtherParameter(idOtherParameter);
+            IDOtherParameter = OtherParameterDao.GetId(IDMark);
+            var res = OtherParameterDao.GetOtherParameter(IDOtherParameter);
             if (res != null)
             {
                 chkView3d.IsChecked = res.View3dInclude;
@@ -1326,6 +1327,8 @@ namespace AutoRebaring.Form
             long idView3d = View3dDao.GetId(IDProject, view3d);
             int partCount = int.Parse(txtPartCount.Text);
             OtherParameterDao.Update(IDMark, idView3d, view3dInclude, partCount);
+
+            IDOtherParameter = OtherParameterDao.GetId(IDMark);
         }
         private void InquireLevel()
         {
@@ -2163,6 +2166,9 @@ namespace AutoRebaring.Form
                 }
             }
             Singleton.Instance.DesignInfos = designInfos;
+
+            Singleton.Instance.Partition = MarkDao.GetMarkName(IDMark) + "_" + LevelDao.GetLevel(idStartLevel).Title + "-" + LevelDao.GetLevel(idEndLevel).Title;
+            Singleton.Instance.OtherParameter = OtherParameterDao.GetOtherParameter(IDOtherParameter);
         }
         private void chkDevErrorInclude_Checked(object sender, RoutedEventArgs e)
         {

@@ -47,5 +47,11 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             if (res.Count() == 0) return new List<string>();
             return res.OrderByDescending(x => x.LastUpdate).Select(x => x.Mark).ToList();
         }
+        public string GetMarkName(long id)
+        {
+            var res = db.ARMarks.Where(x => x.ID == id);
+            if (res.Count() == 0) return "";
+            return res.First().Mark;
+        }
     }
 }

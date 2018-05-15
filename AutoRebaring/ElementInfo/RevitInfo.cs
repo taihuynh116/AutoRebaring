@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using AutoRebaring.Database.AutoRebaring.Dao;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace AutoRebaring.ElementInfo
         public Element Element { get; set; }
         public double Elevation { get; set; }
         public Level Level { get; set; }
+        public string TitleLevel { get; set; }
 
         public RevitInfo(Document doc, Element e)
         {
@@ -29,6 +31,7 @@ namespace AutoRebaring.ElementInfo
                 Level = doc.GetElement(e.LookupParameter("Base Constraint").AsElementId()) as Level;
             }
             Elevation = Level.Elevation;
+            TitleLevel = new LevelDao().GetTitleLevel(Level.Name);
         }
     }
 }

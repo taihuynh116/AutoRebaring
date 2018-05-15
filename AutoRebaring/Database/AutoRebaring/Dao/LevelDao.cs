@@ -59,5 +59,11 @@ namespace AutoRebaring.Database.AutoRebaring.Dao
             }
             return res.First();
         }
+        public string GetTitleLevel(string level)
+        {
+            var res = db.ARLevels.Where(x => x.Name == level);
+            if (res.Count() == 0) return "";
+            return res.First().Title;
+        }
     }
 }
