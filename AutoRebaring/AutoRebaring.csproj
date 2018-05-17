@@ -218,8 +218,12 @@
     <Compile Include="ElementInfo\ElementInfoUtils.cs" />
     <Compile Include="ElementInfo\ElementTypeInfo.cs" />
     <Compile Include="ElementInfo\PlaneInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardLevelCount.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardUtils.cs" />
     <Compile Include="ElementInfo\RebarInfo\StirrupInfo\SingleInfo\StirrupPlaneSingleInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StirrupInfo\StirrupLevelCount.cs" />
     <Compile Include="ElementInfo\RebarInfo\StirrupInfo\StirrupPlaneInfo.cs" />
+    <Compile Include="ElementInfo\RebarInfo\StirrupInfo\StirrupUtils.cs" />
     <Compile Include="ElementInfo\RevitInfo.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardParameter.cs" />
     <Compile Include="ElementInfo\RebarInfo\StandardInfo\StandardPlaneInfo.cs" />

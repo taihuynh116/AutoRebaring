@@ -332,6 +332,17 @@ namespace AutoRebaring.ElementInfo
             };
             StirrupRebarPointLists.Add(pnts);
 
+            boundPnts = StandardRebarPointLists[1];
+            offStand = di.StandardDiameters[1];
+            pnts = new List<UV>()
+            {
+                boundPnts[0] + (-VectorU -VectorV)* (offStand/2 + offStirr/2 + offCntr),
+                boundPnts[1] + (VectorU -VectorV)* (offStand/2 + offStirr/2 + offCntr),
+                boundPnts[2] + (VectorU +VectorV)* (offStand/2 + offStirr/2 + offCntr),
+                boundPnts[3] + (-VectorU +VectorV)* (offStand/2 + offStirr/2 + offCntr)
+            };
+            StirrupRebarPointLists.Add(pnts);
+
             boundPnts = BoundaryPointLists[2];
             pnts = new List<UV>()
             {

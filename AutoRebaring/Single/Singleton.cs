@@ -2,6 +2,8 @@
 using Autodesk.Revit.DB.Structure;
 using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo;
+using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
+using AutoRebaring.ElementInfo.RebarInfo.StirrupInfo;
 using AutoRebaring.RebarLogistic;
 using System;
 using System.Collections.Generic;
@@ -40,6 +42,8 @@ namespace AutoRebaring.Single
         private List<int> standTurnsCount = new List<int>();
         private List<List<VariableImplant>> variableImplantsList = new List<List<VariableImplant>>();
         private List<List<StirrupDistribution>> stirDissList = new List<List<StirrupDistribution>>();
+        private List<StandardLevelCount> standLevelCounts = new List<StandardLevelCount>();
+        private List<StirrupLevelCount> stirLevelCounts = new List<StirrupLevelCount>();
         private int elemTypeInfoID;
         public VariableStandard VariableStandard { get; set; }
         public ARWallParameter WallParameter { get; set; }
@@ -65,10 +69,13 @@ namespace AutoRebaring.Single
         public List<RebarShape> StirrupShapes { get; set; }
         public string Partition { get; set; }
         public AROtherParameter OtherParameter { get; set; }
+
+        public List<IStandardPlaneInfo> StandardPlaneInfos { get { return standPlaneInfos; } }
+        public List<IStirrupPlaneInfo> StirrupPlaneInfos { get { return stirPlaneInfos; } }
         #endregion
 
         #region Add Data
-        public void SetElementTypeInfoID(ElementTypeEnum elemTypeEnum){elemTypeInfoID = elemTypeInfos.First(x => x.Type == elemTypeEnum).ID;}
+        public void SetElementTypeInfoID(ElementTypeEnum elemTypeEnum) { elemTypeInfoID = elemTypeInfos.First(x => x.Type == elemTypeEnum).ID; }
         public void AddElementTypeInfo(IElementTypeInfo elemTypeInfo) { elemTypeInfos.Add(elemTypeInfo); }
         public void AddRevitInfo(IRevitInfo revitInfo) { revitInfos.Add(revitInfo); }
         public void AddPlaneInfo(IPlaneInfo planeInfo) { planeInfos.Add(planeInfo); }
@@ -108,6 +115,10 @@ namespace AutoRebaring.Single
                 stirDissList.Add(new List<StirrupDistribution>());
             }
             stirDissList[sd.IDElement].Add(sd);
+        }
+        public void AddStandardLevelCount(StandardLevelCount slc)
+        {
+            standLevelCounts.Add(slc);
         }
         #endregion
 
@@ -167,7 +178,7 @@ namespace AutoRebaring.Single
         {
             return standTurnsCount[locIndex];
         }
-        public int GetStirrupDistribuitionsCount (int idElem) { return stirDissList[idElem].Count; }
+        public int GetStirrupDistribuitionsCount(int idElem) { return stirDissList[idElem].Count; }
         public StirrupDistribution GetStirrupDistribution(int idElem, int id) { return stirDissList[idElem][id]; }
         public StirrupDistribution GetStirrupDistributionAfter(int idElem, int id)
         {
@@ -181,6 +192,42 @@ namespace AutoRebaring.Single
         public int GetRebarShapeCount()
         {
             return StirrupShapes.Count;
+        }
+        public StandardLevelCount GetStandardLevelCount(int idElem, IStandardPlaneSingleInfo standPlaneSingInfo)
+        {
+            var res = standLevelCounts.Where(x => x.IDElement == idElem && x.StandardCreating == standPlaneSingInfo.StandardCreating && x.StandardShape == standPlaneSingInfo.StandardShape && 
+                x.RebarLocation == standPlaneSingInfo.RebarLocation && x.LocationIndex == standPlaneSingInfo.LocationIndex);
+            if (res.Count() == 0)
+            {
+                StandardLevelCount standLevelCount = new StandardLevelCount()
+                {
+                    IDElement = idElem,
+                    StandardCreating = standPlaneSingInfo.StandardCreating,
+                    StandardShape = standPlaneSingInfo.StandardShape,
+                    RebarLocation = standPlaneSingInfo.RebarLocation,
+                    LocationIndex = standPlaneSingInfo.LocationIndex
+                };
+                standLevelCounts.Add(standLevelCount);
+                return standLevelCounts[standLevelCounts.Count - 1];
+            }
+            else
+                return res.First();
+        }
+        public StirrupLevelCount GetStirrupLevelCount(int idElem, IStirrupPlaneSingleInfo stirPlaneSingInfo)
+        {
+            var res = stirLevelCounts.Where(x => x.IDElement == idElem && x.StirrupType == stirPlaneSingInfo.StirrupType);
+            if (res.Count() == 0)
+            {
+                StirrupLevelCount stirLevelCount = new StirrupLevelCount()
+                {
+                    IDElement = idElem,
+                    StirrupType = stirPlaneSingInfo.StirrupType
+                };
+                stirLevelCounts.Add(stirLevelCount);
+                return stirLevelCounts[stirLevelCounts.Count - 1];
+            }
+            else
+                return res.First();
         }
         #endregion
     }

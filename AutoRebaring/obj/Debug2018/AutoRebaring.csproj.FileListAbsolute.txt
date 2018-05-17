@@ -43,7 +43,6 @@ D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringG
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.dll
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.xml
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.xml
-D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csprojResolveAssemblyReference.cache
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\Form\InputForm.baml
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.g.resources
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.Properties.Resources.resources
@@ -54,3 +53,4 @@ D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringG
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb
 E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.Properties.Resources.resources
 E:\Lap trinh\Revit\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.GenerateResource.cache
+D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csprojResolveAssemblyReference.cache

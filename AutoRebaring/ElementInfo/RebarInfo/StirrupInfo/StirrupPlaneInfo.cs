@@ -14,8 +14,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
     public class ColumnStirrupPlaneInfo : IStirrupPlaneInfo
     {
         public int ID { get; set; }
-        public List<IStirrupPlaneSingleInfo> CoverStirrupPlaneInfos { get; set; }
-        public List<IStirrupPlaneSingleInfo> CStirrupPlaneInfos { get; set; }
+        public List<IStirrupPlaneSingleInfo> EdgeCoverStirrupPlaneInfo { get; set; } = new List<IStirrupPlaneSingleInfo>();
+        public List<IStirrupPlaneSingleInfo> CoverStirrupPlaneInfos { get; set; } = new List<IStirrupPlaneSingleInfo>();
+        public List<IStirrupPlaneSingleInfo> CStirrupPlaneInfos { get; set; } = new List<IStirrupPlaneSingleInfo>();
         public ColumnStirrupPlaneInfo(int id)
         {
             ID = id;
@@ -24,8 +25,6 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
         }
         private void GetCoverStirrupPlaneInfos()
         {
-            CoverStirrupPlaneInfos = new List<IStirrupPlaneSingleInfo>();
-
             IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
             List<UV> pnts = planeInfo.StirrupRebarPointLists[0];
             ARCoverParameter cp = Singleton.Instance.CoverParameter;
@@ -39,14 +38,13 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
                 StartPoint = new UV((pnts[0].U + pnts[2].U) / 2, (pnts[0].V + pnts[2].V) / 2),
                 VectorX = planeInfo.VectorX,
                 VectorY = planeInfo.VectorY,
-                ParameterValues = new List<double> { xValue,xValue, yValue , yValue}
+                ParameterValues = new List<double> { xValue,xValue, yValue , yValue},
+                StirrupType= StirrupTypeEnum.CoverStirrup
             };
             CoverStirrupPlaneInfos.Add(stPlSinInfo);
         }
         private void GetCStirrupPlaneInfos()
         {
-            CStirrupPlaneInfos = new List<IStirrupPlaneSingleInfo>();
-
             IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
             IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
             ARCoverParameter cp = Singleton.Instance.CoverParameter;
@@ -83,7 +81,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
                         StartPoint = stanPnt1 + ((i + 1) * spacb1 + dia) * vecU,
                         VectorX = vecY,
                         VectorY = vecY.CrossProduct(XYZ.BasisZ),
-                        ParameterValues = new List<double> { yValue }
+                        ParameterValues = new List<double> { yValue },
+                        StirrupType = StirrupTypeEnum.CUStirrup
                     };
                     CStirrupPlaneInfos.Add(stPlSinInfo);
                 }
@@ -93,7 +92,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
                     StartPoint = stanPnt1 + ((n1 - 3) * spacb1 / 2 + dia) * vecU,
                     VectorX = vecY,
                     VectorY = vecY.CrossProduct(XYZ.BasisZ),
-                    ParameterValues = new List<double> { yValue }
+                    ParameterValues = new List<double> { yValue },
+                    StirrupType = StirrupTypeEnum.CUStirrup
                 };
                 CStirrupPlaneInfos.Add(stPlSinInfo);
             }
@@ -106,9 +106,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
                     {
                         IDStirrupShape = 1,
                         StartPoint = stanPnt3 + ((i + 1) * spacb2 + dia) * vecV,
-                        VectorX = vecX,
-                        VectorY = vecX.CrossProduct(XYZ.BasisZ),
-                        ParameterValues = new List<double> { xValue }
+                        VectorX = -vecX,
+                        VectorY = -vecX.CrossProduct(XYZ.BasisZ),
+                        ParameterValues = new List<double> { xValue },
+                        StirrupType = StirrupTypeEnum.CVStirrup
                     };
                     CStirrupPlaneInfos.Add(stPlSinInfo);
                 }
@@ -116,9 +117,10 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
                 {
                     IDStirrupShape = 1,
                     StartPoint = stanPnt3 + ((n2 - 3) * spacb2 / 2 + dia) * vecV,
-                    VectorX = vecX,
-                    VectorY = vecX.CrossProduct(XYZ.BasisZ),
-                    ParameterValues = new List<double> { xValue }
+                    VectorX = -vecX,
+                    VectorY = -vecX.CrossProduct(XYZ.BasisZ),
+                    ParameterValues = new List<double> { xValue },
+                    StirrupType = StirrupTypeEnum.CVStirrup
                 };
                 CStirrupPlaneInfos.Add(stPlSinInfo);
             }
@@ -127,6 +129,22 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
         {
             CoverStirrupPlaneInfos.ForEach(x => x.CreateRebars(ID, idStirDis));
             CStirrupPlaneInfos.ForEach(x => x.CreateRebars(ID, idStirDis));
+        }
+    }
+
+    public class WallStirrupPlaneInfo : IStirrupPlaneInfo
+    {
+        public int ID { get; set; }
+        public List<IStirrupPlaneSingleInfo> EdgeCoverStirrupPlaneInfo { get; set; } = new List<IStirrupPlaneSingleInfo>();
+        public List<IStirrupPlaneSingleInfo> CoverStirrupPlaneInfos { get; set; } = new List<IStirrupPlaneSingleInfo>();
+        public List<IStirrupPlaneSingleInfo> CStirrupPlaneInfos { get; set; } = new List<IStirrupPlaneSingleInfo>();
+        public WallStirrupPlaneInfo()
+        {
+
+        }
+        public void CreateRebar(int idStirDis)
+        {
+            throw new NotImplementedException();
         }
     }
 }

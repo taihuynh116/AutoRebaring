@@ -50,6 +50,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
         public XYZ VectorX { get; set; }
         public XYZ VectorY { get; set; }
         public List<double> ParameterValues { get; set; }
+        public StirrupTypeEnum StirrupType { get; set; }
+
         public StirrupPlaneSingleInfo()
         {
             ID = StirrupID.ID;
@@ -77,7 +79,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                 case StirrupLocation.Top:
                     try
                     {
-                        rb = CreateSingleRebar(doc, elem, rs, rbt, sd.StartZ1s[IDStirrupType], sd.EndZ1s[IDStirrupType], sd.Number1s[IDStirrupType], mSpa, stirDia, sd.StirrupLocation);
+                        rb = CreateSingleRebar(idElem, doc, elem, rs, rbt, sd.StartZ1s[IDStirrupType], sd.EndZ1s[IDStirrupType], sd.Number1s[IDStirrupType], mSpa, stirDia, sd.StirrupLocation);
                     }
                     catch
                     {
@@ -85,14 +87,15 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                     }
                     break;
             }
-            rb = CreateSingleRebar(doc, elem, rs, rbt, sd.StartZ2s[IDStirrupType], sd.EndZ2s[IDStirrupType], sd.Number2s[IDStirrupType], tbSpa, stirDia, sd.StirrupLocation);
+            rb = CreateSingleRebar(idElem, doc, elem, rs, rbt, sd.StartZ2s[IDStirrupType], sd.EndZ2s[IDStirrupType], sd.Number2s[IDStirrupType], tbSpa, stirDia, sd.StirrupLocation);
             return rb;
         }
-        public Rebar CreateSingleRebar(Document doc, Element elem, RebarShape rs, RebarBarType rbt, double start, double end, int num, double spa, double stirDia, StirrupLocation stirLoc)
+        public Rebar CreateSingleRebar(int idElem, Document doc, Element elem, RebarShape rs, RebarBarType rbt, double start, double end, int num, double spa, double stirDia, StirrupLocation stirLoc)
         {
             XYZ startPoint = new XYZ(StartPoint.U, StartPoint.V, start);
             Rebar rb = Rebar.CreateFromRebarShape(doc, rs, rbt, elem, startPoint, VectorX, VectorY);
             RebarShapeDrivenAccessor rsda = rb.GetShapeDrivenAccessor();
+            IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(idElem);
 
             for (int i = 0; i < ParameterKeys.Count; i++)
             {
@@ -132,6 +135,9 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                     break;
             }
             rb.LookupParameter("Comments").Set("add-in");
+            rb.LookupParameter("Level").Set(revitInfo.TitleLevel);
+            rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
+            rb.LookupParameter("SoLuong").Set(Singleton.Instance.GetStirrupLevelCount(idElem, this).Count);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();

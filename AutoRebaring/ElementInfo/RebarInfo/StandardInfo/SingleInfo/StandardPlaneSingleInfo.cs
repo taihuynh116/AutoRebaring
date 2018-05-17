@@ -85,6 +85,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("ID").Set(ID);
             rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
             rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
+            rb.LookupParameter("SoLuong").Set(Singleton.Instance.GetStandardLevelCount(st.IDElement, this).Count);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
@@ -156,6 +157,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("ID").Set(ID);
             rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
             rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
+            rb.LookupParameter("SoLuong").Set(Singleton.Instance.GetStandardLevelCount(st.IDElement, this).Count);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
@@ -238,6 +240,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("ID").Set(ID);
             rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
             rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
+            rb.LookupParameter("SoLuong").Set(Singleton.Instance.GetStandardLevelCount(st.IDElement, this).Count);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();
@@ -326,6 +329,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo.SingleInfo
             rb.LookupParameter("ID").Set(ID);
             rb.LookupParameter("Partition").Set(Singleton.Instance.Partition);
             rb.LookupParameter("SLCauKien").Set(Singleton.Instance.OtherParameter.PartCount);
+            rb.LookupParameter("SoLuong").Set(Singleton.Instance.GetStandardLevelCount(st.IDElement, this).Count);
 
             List<View3D> view3ds = ConstantValue.View3dIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View3D>().ToList();
             List<View> views = ConstantValue.ViewIDIntergers.Select(x => Singleton.Instance.Document.GetElement(new ElementId(x))).Cast<View>().ToList();

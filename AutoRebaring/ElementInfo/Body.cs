@@ -132,6 +132,7 @@ namespace AutoRebaring.ElementInfo
         XYZ VectorX { get; set; }
         XYZ VectorY { get; set; }
         List<double> ParameterValues { get; set; }
+        StirrupTypeEnum StirrupType { get; set; }
         Rebar CreateRebars(int idElem, int idStirDis);
     }
     public interface IStandardParameter
@@ -149,6 +150,7 @@ namespace AutoRebaring.ElementInfo
     public interface IStirrupPlaneInfo
     {
         int ID { get; set; }
+        List<IStirrupPlaneSingleInfo> EdgeCoverStirrupPlaneInfo { get; set; }
         List<IStirrupPlaneSingleInfo> CoverStirrupPlaneInfos { get; set; }
         List<IStirrupPlaneSingleInfo> CStirrupPlaneInfos { get; set; }
         void CreateRebar(int idStirDis);
@@ -170,5 +172,12 @@ namespace AutoRebaring.ElementInfo
         Implant =1,
         Lockhead = 2,
         Cracking = 3
+    }
+    public enum StirrupTypeEnum
+    {
+        CoverStirrup =0,
+        EdgeCoverStirrup =1,
+        CUStirrup =2,
+        CVStirrup =3
     }
 }

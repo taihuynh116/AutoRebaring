@@ -14,6 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoRebaring.Single;
+using AutoRebaring.ElementInfo.RebarInfo.StandardInfo;
+using AutoRebaring.ElementInfo.RebarInfo.StirrupInfo;
 
 namespace AutoRebaring.Command
 {
@@ -45,6 +47,8 @@ namespace AutoRebaring.Command
 
             ElementInfoUtils.GetRelatedElements();
             ElementInfoUtils.GetAllParameters();
+            StandardUtils.GetStandardLevelCounts();
+            StirrupUtils.GetStirrupLevelCounts();
             ElementInfoUtils.GetVariable();
 
             var res = Singleton.Instance;
