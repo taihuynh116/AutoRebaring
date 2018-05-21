@@ -138,13 +138,81 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
         public List<IStirrupPlaneSingleInfo> EdgeCoverStirrupPlaneInfo { get; set; } = new List<IStirrupPlaneSingleInfo>();
         public List<IStirrupPlaneSingleInfo> CoverStirrupPlaneInfos { get; set; } = new List<IStirrupPlaneSingleInfo>();
         public List<IStirrupPlaneSingleInfo> CStirrupPlaneInfos { get; set; } = new List<IStirrupPlaneSingleInfo>();
-        public WallStirrupPlaneInfo()
+        public WallStirrupPlaneInfo(int id)
+        {
+            ID = id;
+            GetEdgeCoverStirrupPlaneInfos();
+            GetCoverStirrupPlaneInfos();
+            GetCStirrupPlaneInfos();
+        }
+        private void GetEdgeCoverStirrupPlaneInfos()
+        {
+
+        }
+        private void GetCoverStirrupPlaneInfos()
+        {
+            IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(ID);
+            WallPlaneInfo wpI = planeInfo as WallPlaneInfo;
+            IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(ID);
+            List<UV> pnts = planeInfo.StirrupRebarPointLists[0];
+            ARCoverParameter cp = Singleton.Instance.CoverParameter;
+            ARDevelopmentParameter dp = Singleton.Instance.DevelopmentParameter;
+            double concCover = cp.ConcreteCover * ConstantValue.milimeter2Feet;
+            int devMutli = dp.DevelopmentMultiply;
+            UStirrupLapEnum uLapType = Singleton.Instance.UStirrupLapType;
+            double stirDia = designInfo.StirrupDiameters[0];
+
+            UV p1 = pnts[0], p2 = null;
+            double bungDim = 0, canhDim = 0;
+            XYZ vecX = null, vecY = null;
+            switch (uLapType)
+            {
+                case UStirrupLapEnum.Horizontal:
+                    p2 = pnts[3];
+                    bungDim = wpI.B1 - concCover * 2;
+                    canhDim = wpI.B2 / 2 - concCover + stirDia * devMutli / 2;
+                    vecX = wpI.VectorX;
+                    vecY = wpI.VectorY;
+                    break;
+                case UStirrupLapEnum.Vertical:
+                    p2 = pnts[1];
+                    bungDim = wpI.B2 - concCover * 2;
+                    canhDim = wpI.B1 / 2 - concCover + stirDia * devMutli / 2;
+                    vecX = wpI.VectorY;
+                    vecY = wpI.VectorX;
+                    break;
+            }
+            StirrupPlaneSingleInfo stPlSinInfo = new StirrupPlaneSingleInfo()
+            {
+                IDStirrupShape = 2,
+                StartPoint = p1,
+                VectorX = vecX,
+                VectorY = vecY,
+                ParameterValues = new List<double> { canhDim, bungDim, canhDim},
+                StirrupType = StirrupTypeEnum.CoverStirrup
+            };
+            CoverStirrupPlaneInfos.Add(stPlSinInfo);
+
+            stPlSinInfo = new StirrupPlaneSingleInfo()
+            {
+                IDStirrupShape = 2,
+                StartPoint = p2,
+                VectorX = -vecX,
+                VectorY = -vecY,
+                ParameterValues = new List<double> { canhDim, bungDim, canhDim },
+                StirrupType = StirrupTypeEnum.CoverStirrup
+            };
+            CoverStirrupPlaneInfos.Add(stPlSinInfo);
+        }
+        private void GetCStirrupPlaneInfos()
         {
 
         }
         public void CreateRebar(int idStirDis)
         {
-            throw new NotImplementedException();
+            EdgeCoverStirrupPlaneInfo.ForEach(x => x.CreateRebars(ID, idStirDis));
+            CoverStirrupPlaneInfos.ForEach(x => x.CreateRebars(ID, idStirDis));
+            CStirrupPlaneInfos.ForEach(x => x.CreateRebars(ID, idStirDis));
         }
     }
 }

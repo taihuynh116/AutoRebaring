@@ -9,7 +9,7 @@
         <ScrollViewer Margin="0,0,0,0" VerticalScrollBarVisibility="Visible">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <GroupBox Header="ĐĂNG NHẬP" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="327" FontWeight="Normal">
+                    <GroupBox Header="ĐĂNG NHẬP" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" FontWeight="Normal">
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal">
@@ -271,6 +271,8 @@
                                         <StackPanel Orientation="Horizontal">
                                             <Label Content="Đai Bao:"></Label>
                                             <ComboBox x:Name="cbbFamilyDaiBao" HorizontalAlignment="Left" Height="20" Margin="10,0,0,0" VerticalAlignment="Center" Width="130"/>
+                                            <RadioButton x:Name="rbtHorizontalLap" VerticalAlignment="Center" Content="Nối ngang" Margin="30,0,0,0" IsChecked="True"></RadioButton>
+                                            <RadioButton x:Name="rbtVerticalLap" VerticalAlignment="Center" Content="Nối dọc" Margin="20,0,0,0"></RadioButton>
                                         </StackPanel>
                                         <StackPanel x:Name="spDaiBien" Orientation="Horizontal">
                                             <Label x:Name="lblDaiBien" Content="Đai Biên:" Margin="0,0,0,0"></Label>
@@ -279,6 +281,10 @@
                                         <StackPanel Orientation="Horizontal">
                                             <Label Content="Đai C:" Margin="0,0,0,0"></Label>
                                             <ComboBox x:Name="cbbFamilyDaiC" HorizontalAlignment="Left" Height="20" Margin="23,0,0,0" VerticalAlignment="Center" Width="130"/>
+                                            <StackPanel x:Name="spNumMidCStirr" Orientation="Horizontal">
+                                                <Label Content="Số lượng vùng giữa:" VerticalAlignment="Center" Margin="20,0,0,0"></Label>
+                                                <TextBox x:Name="txtNumMidCStirr" VerticalAlignment="Center" TextBlock.TextAlignment="Right" Margin="10,0,0,0" Width="20" Text="2"></TextBox>
+                                            </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>

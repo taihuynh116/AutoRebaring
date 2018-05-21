@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AutoRebaring</RootNamespace>
     <AssemblyName>AutoRebaring</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -74,28 +74,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="2016_RevitAPI" Condition="'$(Configuration)' == 'Debug2016'">
-      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2016_RevitAPI.dll</HintPath>
+    <Reference Include="2019_RevitAPI, Version=19.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\2. Reference\Revit 2019 dll\2019_RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="2016_RevitAPIUI" Condition="'$(Configuration)' == 'Debug2016'">
-      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2016_RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="2017_RevitAPI" Condition="'$(Configuration)' == 'Debug2017'">
-      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2017_RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="2017_RevitAPIUI" Condition="'$(Configuration)' == 'Debug2017'">
-      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2017_RevitAPIUI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="2018_RevitAPI" Condition="'$(Configuration)' == 'Debug2018'">
-      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2018_RevitAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="2018_RevitAPIUI" Condition="'$(Configuration)' == 'Debug2018'">
-      <HintPath>T:\P.BIM\02_LIBRARY\R_C#\Reference\2018_RevitAPIUI.dll</HintPath>
+    <Reference Include="2019_RevitAPIUI, Version=19.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\2. Reference\Revit 2019 dll\2019_RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -256,8 +242,8 @@
     <Content Include="AutoRebaring.addin">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Reference\2018_RevitAPI.dll" />
-    <Content Include="Reference\2018_RevitAPIUI.dll" />
+    <Content Include="Reference\2019_RevitAPI.dll" />
+    <Content Include="Reference\2019_RevitAPIUI.dll" />
     <None Include="packages.config" />
     <None Include="Resources\AutoRebaring_32x32b.png" />
   </ItemGroup>

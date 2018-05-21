@@ -180,4 +180,8 @@ namespace AutoRebaring.ElementInfo
         CUStirrup =2,
         CVStirrup =3
     }
+    public enum UStirrupLapEnum
+    {
+        Horizontal, Vertical
+    }
 }

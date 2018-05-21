@@ -175,7 +175,7 @@ namespace AutoRebaring.Form
         }
         private void FirstAddProject()
         {
-            string projectName = Singleton.Instance.Document.ProjectInformation.Name;
+            string projectName = Singleton.Instance.Document.ProjectInformation.BuildingName;
             lblProject.Content = projectName;
             ProjectDao.Update(projectName);
 
@@ -2169,6 +2169,9 @@ namespace AutoRebaring.Form
 
             Singleton.Instance.Partition = MarkDao.GetMarkName(IDMark) + "_" + LevelDao.GetLevel(idStartLevel).Title + "-" + LevelDao.GetLevel(idEndLevel).Title;
             Singleton.Instance.OtherParameter = OtherParameterDao.GetOtherParameter(IDOtherParameter);
+
+            Singleton.Instance.UStirrupLapType = rbtHorizontalLap.IsChecked.Value ? UStirrupLapEnum.Horizontal : UStirrupLapEnum.Vertical;
+            Singleton.Instance.NumMidCStirrup = int.Parse(txtNumMidCStirr.Text);
         }
         private void chkDevErrorInclude_Checked(object sender, RoutedEventArgs e)
         {
@@ -2309,6 +2312,10 @@ namespace AutoRebaring.Form
                 spEdgeCoverStir.Visibility = System.Windows.Visibility.Collapsed;
 
                 wallParamGrb.Visibility = System.Windows.Visibility.Collapsed;
+
+                rbtHorizontalLap.Visibility = System.Windows.Visibility.Collapsed;
+                rbtVerticalLap.Visibility = System.Windows.Visibility.Collapsed;
+                spNumMidCStirr.Visibility = System.Windows.Visibility.Collapsed;
             }
             else
             {
@@ -2332,6 +2339,10 @@ namespace AutoRebaring.Form
                 spEdgeCoverStir.Visibility = System.Windows.Visibility.Visible;
 
                 wallParamGrb.Visibility = System.Windows.Visibility.Visible;
+
+                rbtHorizontalLap.Visibility = System.Windows.Visibility.Visible;
+                rbtVerticalLap.Visibility = System.Windows.Visibility.Visible;
+                spNumMidCStirr.Visibility = System.Windows.Visibility.Visible;
             }
         }
 

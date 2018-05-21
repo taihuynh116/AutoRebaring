@@ -191,6 +191,7 @@ namespace AutoRebaring.ElementInfo
                         break;
                     case ElementTypeEnum.Wall:
                         standPlaneInfo = new WallStandardPlaneInfo(i);
+                        stirPlaneInfo = new WallStirrupPlaneInfo(i);
                         break;
                 }
                 Singleton.Instance.AddStandardPlaneInfo(standPlaneInfo);

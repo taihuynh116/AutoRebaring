@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRebaring", "AutoRebarin
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoRebaring_2018", "AutoRebaring_2018\AutoRebaring_2018.vdproj", "{19E460EF-6751-4676-80F5-3C418EE8CA91}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoRebaring_2019", "AutoRebaring_2019\AutoRebaring_2019.vdproj", "{169BF416-85B9-4603-A2CE-5091E3957E0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,12 @@ Global
 		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Debug2018|x64.ActiveCfg = Debug
 		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Release|Any CPU.ActiveCfg = Release
 		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Release|x64.ActiveCfg = Release
+		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug|Any CPU.ActiveCfg = Debug
+		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug|x64.ActiveCfg = Debug
+		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug2018|Any CPU.ActiveCfg = Debug
+		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug2018|x64.ActiveCfg = Debug
+		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Release|Any CPU.ActiveCfg = Release
+		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

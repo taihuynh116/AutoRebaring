@@ -72,6 +72,8 @@ namespace AutoRebaring.Single
 
         public List<IStandardPlaneInfo> StandardPlaneInfos { get { return standPlaneInfos; } }
         public List<IStirrupPlaneInfo> StirrupPlaneInfos { get { return stirPlaneInfos; } }
+        public UStirrupLapEnum UStirrupLapType { get; set; }
+        public int NumMidCStirrup { get; set; }
         #endregion
 
         #region Add Data

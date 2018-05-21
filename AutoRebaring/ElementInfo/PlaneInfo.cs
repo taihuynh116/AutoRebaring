@@ -322,7 +322,18 @@ namespace AutoRebaring.ElementInfo
 
 
             #region Stirrup
+            offStirr = di.StirrupDiameters[0];
+            pnts = new List<UV>()
+            {
+                BoundaryPointLists[0][0] + (VectorU + VectorV)* (offConc + offStirr/2),
+                BoundaryPointLists[2][1] + (-VectorU + VectorV)* (offConc + offStirr/2),
+                BoundaryPointLists[2][2] + (-VectorU - VectorV)* (offConc + offStirr/2),
+                BoundaryPointLists[0][3] + (VectorU - VectorV)* (offConc + offStirr/2)
+            };
+            StirrupRebarPointLists.Add(pnts);
+
             boundPnts = BoundaryPointLists[0];
+            offStirr = di.StirrupDiameters[1];
             pnts = new List<UV>()
             {
                 boundPnts[0] + (VectorU+VectorV)*(offConc+ offStirr/2),

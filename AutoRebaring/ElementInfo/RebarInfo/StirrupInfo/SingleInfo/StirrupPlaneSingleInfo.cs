@@ -18,6 +18,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
     {
         public int ID { get; set; }
         public int IDStirrupShape { get; set; }
+        public int IDStirrupBar { get; set; }
         public int IDStirrupType
         {
             get
@@ -42,6 +43,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                         return ConstantValue.CoverStirrupParameters;
                     case 1:
                         return ConstantValue.CStirrupParameters;
+                    case 2:
+                        return ConstantValue.UStirrupParameters;
                 }
                 throw new Exception();
             }
@@ -94,6 +97,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
         {
             XYZ startPoint = new XYZ(StartPoint.U, StartPoint.V, start);
             Rebar rb = Rebar.CreateFromRebarShape(doc, rs, rbt, elem, startPoint, VectorX, VectorY);
+            if (ID == 2) doc.Regenerate();
             RebarShapeDrivenAccessor rsda = rb.GetShapeDrivenAccessor();
             IRevitInfo revitInfo = Singleton.Instance.GetRevitInfo(idElem);
 

@@ -48,10 +48,12 @@ namespace AutoRebaring.Command
             ElementInfoUtils.GetRelatedElements();
             ElementInfoUtils.GetAllParameters();
             StandardUtils.GetStandardLevelCounts();
-            StirrupUtils.GetStirrupLevelCounts();
+            if (Singleton.Instance.GetElementTypeEnum() == ElementTypeEnum.Column)
+            {
+                StirrupUtils.GetStirrupLevelCounts();
+            }
             ElementInfoUtils.GetVariable();
 
-            var res = Singleton.Instance;
             int locCount = Singleton.Instance.GetElementTypeInfo().LocationCount;
             for (int i = 0; i < locCount; i++)
             {

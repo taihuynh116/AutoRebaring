@@ -79,6 +79,7 @@ namespace AutoRebaring.Constant
         public const string KieuThepDoc = "Kiểu thép dọc:";
         public const string Vungbien = "Vùng biên:";
 
+        public static List<string> UStirrupParameters = new List<string> { "B", "D", "C" };
         public static List<string> CoverStirrupParameters = new List<string> { "B", "D", "C", "E" };
         public static List<string> CStirrupParameters = new List<string> { "B" };
 
