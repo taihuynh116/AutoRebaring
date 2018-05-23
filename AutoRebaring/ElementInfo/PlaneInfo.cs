@@ -50,7 +50,14 @@ namespace AutoRebaring.ElementInfo
             if (!(e is Wall))
             {
                 B1 = etype.LookupParameter(ConstantValue.B1Param_Column).AsDouble();
-                B2 = etype.LookupParameter(ConstantValue.B2Param_Column).AsDouble();
+                try
+                {
+                    B2 = etype.LookupParameter(ConstantValue.B2Param_Column).AsDouble();
+                }
+                catch
+                {
+                    B2 = 0;
+                }
                 Transform tf = ((FamilyInstance)e).GetTransform();
                 XYZ vecX = GeomUtil.IsBigger(tf.BasisX, -tf.BasisX) ? tf.BasisX : -tf.BasisX;
                 XYZ vecY = GeomUtil.IsBigger(tf.BasisY, -tf.BasisY) ? tf.BasisY : -tf.BasisY;
