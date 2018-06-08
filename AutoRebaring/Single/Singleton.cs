@@ -185,7 +185,7 @@ namespace AutoRebaring.Single
         public StirrupDistribution GetStirrupDistributionAfter(int idElem, int id)
         {
             int idAfter = id + 1 < stirDissList[idElem].Count ? id + 1 : stirDissList[idElem].Count - 1;
-            return GetStirrupDistribution(idElem, id);
+            return GetStirrupDistribution(idElem, idAfter);
         }
         public RebarShape GetRebarShape(int id)
         {

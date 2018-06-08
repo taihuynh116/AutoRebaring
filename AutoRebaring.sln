@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoRebaring", "AutoRebaring\AutoRebaring.csproj", "{2AA7B4C8-2C54-4012-A688-EAC84E186180}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoRebaring_2018", "AutoRebaring_2018\AutoRebaring_2018.vdproj", "{19E460EF-6751-4676-80F5-3C418EE8CA91}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoRebaring_2018", "AutoRebaring_2018\AutoRebaring_2018.vdproj", "{D0D5958A-5014-47CE-9DF4-35E02824B095}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoRebaring_2019", "AutoRebaring_2019\AutoRebaring_2019.vdproj", "{169BF416-85B9-4603-A2CE-5091E3957E0A}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoRebaring_2019", "AutoRebaring_2019\AutoRebaring_2019.vdproj", "{BCDDB770-C90B-4250-938E-294CE14B1366}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,18 +31,18 @@ Global
 		{2AA7B4C8-2C54-4012-A688-EAC84E186180}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2AA7B4C8-2C54-4012-A688-EAC84E186180}.Release|x64.ActiveCfg = Release|x64
 		{2AA7B4C8-2C54-4012-A688-EAC84E186180}.Release|x64.Build.0 = Release|x64
-		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Debug|Any CPU.ActiveCfg = Debug
-		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Debug|x64.ActiveCfg = Debug
-		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Debug2018|Any CPU.ActiveCfg = Debug
-		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Debug2018|x64.ActiveCfg = Debug
-		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Release|Any CPU.ActiveCfg = Release
-		{19E460EF-6751-4676-80F5-3C418EE8CA91}.Release|x64.ActiveCfg = Release
-		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug|Any CPU.ActiveCfg = Debug
-		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug|x64.ActiveCfg = Debug
-		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug2018|Any CPU.ActiveCfg = Debug
-		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Debug2018|x64.ActiveCfg = Debug
-		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Release|Any CPU.ActiveCfg = Release
-		{169BF416-85B9-4603-A2CE-5091E3957E0A}.Release|x64.ActiveCfg = Release
+		{D0D5958A-5014-47CE-9DF4-35E02824B095}.Debug|Any CPU.ActiveCfg = Debug
+		{D0D5958A-5014-47CE-9DF4-35E02824B095}.Debug|x64.ActiveCfg = Debug
+		{D0D5958A-5014-47CE-9DF4-35E02824B095}.Debug2018|Any CPU.ActiveCfg = Debug
+		{D0D5958A-5014-47CE-9DF4-35E02824B095}.Debug2018|x64.ActiveCfg = Debug
+		{D0D5958A-5014-47CE-9DF4-35E02824B095}.Release|Any CPU.ActiveCfg = Release
+		{D0D5958A-5014-47CE-9DF4-35E02824B095}.Release|x64.ActiveCfg = Release
+		{BCDDB770-C90B-4250-938E-294CE14B1366}.Debug|Any CPU.ActiveCfg = Debug
+		{BCDDB770-C90B-4250-938E-294CE14B1366}.Debug|x64.ActiveCfg = Debug
+		{BCDDB770-C90B-4250-938E-294CE14B1366}.Debug2018|Any CPU.ActiveCfg = Debug
+		{BCDDB770-C90B-4250-938E-294CE14B1366}.Debug2018|x64.ActiveCfg = Debug
+		{BCDDB770-C90B-4250-938E-294CE14B1366}.Release|Any CPU.ActiveCfg = Release
+		{BCDDB770-C90B-4250-938E-294CE14B1366}.Release|x64.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

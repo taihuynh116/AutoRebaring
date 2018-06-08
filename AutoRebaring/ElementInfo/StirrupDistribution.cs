@@ -48,6 +48,8 @@ namespace AutoRebaring.ElementInfo
         //}
         public static void GetDetailDistribution(int id, int idElem)
         {
+            var instance = Singleton.Instance;
+
             IDesignInfo designInfo = Singleton.Instance.GetDesignInfo(idElem);
             StirrupDistribution stirDis = Singleton.Instance.GetStirrupDistribution(idElem, id);
             StirrupDistribution stirDisAfter = Singleton.Instance.GetStirrupDistributionAfter(idElem, id);

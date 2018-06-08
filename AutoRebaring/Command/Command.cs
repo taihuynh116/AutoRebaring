@@ -37,13 +37,13 @@ namespace AutoRebaring.Command
             ElementInfoUtils.AddElementTypeInfo();
             ElementInfoUtils.PickElement(doc, sel);
 
-            //ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6, 7, 5, 1, 5, 1, 6);
+            ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6, 7, 5, 1, 5, 1, 6);
             //ElementInfoUtils.AddTestInformationColumn(10, 8);
 
-            Window = new WindowForm();
-            Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
-            Window.Form = new InputForm();
-            Window.ShowDialog();
+            //Window = new WindowForm();
+            //Window.SetDimension(1000, 1200, 20, 250, "THÔNG TIN ĐẦU VÀO");
+            //Window.Form = new InputForm();
+            //Window.ShowDialog();
 
             ElementInfoUtils.GetRelatedElements();
             ElementInfoUtils.GetAllParameters();
@@ -61,21 +61,7 @@ namespace AutoRebaring.Command
                 stanLog.RunLogistic();
             }
 
-            for (int i = 0; i < locCount; i++)
-            {
-                for (int j = 0; j < Singleton.Instance.GetStandardTurnCount(0); j++)
-                {
-                    StandardTurn st = Singleton.Instance.GetStandardTurn(j, 0);
-                    IStandardPlaneInfo standPlaneInfo = Singleton.Instance.GetStandardPlaneInfo(st.IDElement);
-                    IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(st.IDElement);
-                    IShortenType shortenType = null;
-                    shortenType = planeInfo.ShortenTypes[0];
-                    standPlaneInfo.CreateRebar(j, i);
-                }
-            }
-
             ElementInfoUtils.GetDetailDistribution();
-
             for (int i = 0; i < Singleton.Instance.GetElementCount(); i++)
             {
                 for (int j = 0; j < Singleton.Instance.GetStirrupDistribuitionsCount(i); j++)
@@ -84,7 +70,21 @@ namespace AutoRebaring.Command
                     spi.CreateRebar(j);
                 }
             }
-            var instance = Singleton.Instance;
+            
+            //for (int i = 0; i < locCount; i++)
+            //{
+            //    for (int j = 0; j < Singleton.Instance.GetStandardTurnCount(0); j++)
+            //    {
+            //        StandardTurn st = Singleton.Instance.GetStandardTurn(j, 0);
+            //        IStandardPlaneInfo standPlaneInfo = Singleton.Instance.GetStandardPlaneInfo(st.IDElement);
+            //        IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(st.IDElement);
+            //        IShortenType shortenType = null;
+            //        shortenType = planeInfo.ShortenTypes[0];
+            //        standPlaneInfo.CreateRebar(j, i);
+            //    }
+            //}
+
+            
 
             tx.Commit();
             return Result.Succeeded;

@@ -7,6 +7,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using AutoRebaring.Constant;
 using AutoRebaring.Single;
+using Geometry;
 
 namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
 {
@@ -17,34 +18,76 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
     public class StirrupPlaneSingleInfo : IStirrupPlaneSingleInfo
     {
         public int ID { get; set; }
-        public int IDStirrupShape { get; set; }
-        public int IDStirrupBar { get; set; }
-        public int IDStirrupType
+        public int IDStirrupDimension
         {
             get
             {
-                switch (Singleton.Instance.GetElementTypeEnum())
+                switch (StirrupType)
                 {
-                    case ElementTypeEnum.Column:
-                        return IDStirrupShape;
-                    case ElementTypeEnum.Wall:
-                        return IDStirrupType == 2 ? 1 : 0;
+                    case StirrupTypeEnum.UStirrup_UDir:
+                    case StirrupTypeEnum.UStirrup_VDir:
+                    case StirrupTypeEnum.PStirrup:
+                        return 0;
+                    case StirrupTypeEnum.CStirrup_UDir:
+                    case StirrupTypeEnum.CStirrup_VDir:
+                        return 1;
                 }
                 throw new Exception();
             }
         }
+        public int IDStirrupShape
+        {
+            get
+            {
+                switch (StirrupType)
+                {
+                    case StirrupTypeEnum.UStirrup_UDir:
+                    case StirrupTypeEnum.UStirrup_VDir:
+                        return 0;
+
+                    case StirrupTypeEnum.PStirrup:
+                        switch (Singleton.Instance.GetElementTypeEnum())
+                        {
+                            case ElementTypeEnum.Column:
+                                return 0;
+                            case ElementTypeEnum.Wall:
+                                return 1;
+                            default:
+                                throw new Exception();
+                        }
+
+                    case StirrupTypeEnum.CStirrup_UDir:
+                    case StirrupTypeEnum.CStirrup_VDir:
+                        switch (Singleton.Instance.GetElementTypeEnum())
+                        {
+                            case ElementTypeEnum.Column:
+                                return 1;
+                            case ElementTypeEnum.Wall:
+                                return 2;
+                            default:
+                                throw new Exception();
+                        }
+                }
+                throw new Exception();
+            }
+        }
+        public UV CenterPoint { get; set; }
         public List<string> ParameterKeys
         {
             get
             {
-                switch (IDStirrupType)
+                switch (StirrupType)
                 {
-                    case 0:
-                        return ConstantValue.CoverStirrupParameters;
-                    case 1:
-                        return ConstantValue.CStirrupParameters;
-                    case 2:
+                    case StirrupTypeEnum.UStirrup_UDir:
+                    case StirrupTypeEnum.UStirrup_VDir:
                         return ConstantValue.UStirrupParameters;
+
+                    case StirrupTypeEnum.PStirrup:
+                        return ConstantValue.CoverStirrupParameters;
+
+                    case StirrupTypeEnum.CStirrup_UDir:
+                    case StirrupTypeEnum.CStirrup_VDir:
+                        return ConstantValue.CStirrupParameters;
                 }
                 throw new Exception();
             }
@@ -70,8 +113,8 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
             Document doc = Singleton.Instance.Document;
             Element elem = revitInfo.Element;
             RebarBarType rbt = designInfo.StirrupTypes[IDStirrupShape];
-            double tbSpa = designInfo.BotTopSpacings[IDStirrupType];
-            double mSpa = designInfo.MiddleSpacings[IDStirrupType];
+            double tbSpa = designInfo.BotTopSpacings[IDStirrupDimension];
+            double mSpa = designInfo.MiddleSpacings[IDStirrupDimension];
             double stirDia = designInfo.StirrupDiameters[IDStirrupShape];
 
             Rebar rb = null;
@@ -82,7 +125,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                 case StirrupLocation.Top:
                     try
                     {
-                        rb = CreateSingleRebar(idElem, doc, elem, rs, rbt, sd.StartZ1s[IDStirrupType], sd.EndZ1s[IDStirrupType], sd.Number1s[IDStirrupType], mSpa, stirDia, sd.StirrupLocation);
+                        rb = CreateSingleRebar(idElem, doc, elem, rs, rbt, sd.StartZ1s[IDStirrupDimension], sd.EndZ1s[IDStirrupDimension], sd.Number1s[IDStirrupDimension], mSpa, stirDia, sd.StirrupLocation);
                     }
                     catch
                     {
@@ -90,7 +133,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
                     }
                     break;
             }
-            rb = CreateSingleRebar(idElem, doc, elem, rs, rbt, sd.StartZ2s[IDStirrupType], sd.EndZ2s[IDStirrupType], sd.Number2s[IDStirrupType], tbSpa, stirDia, sd.StirrupLocation);
+            rb = CreateSingleRebar(idElem, doc, elem, rs, rbt, sd.StartZ2s[IDStirrupDimension], sd.EndZ2s[IDStirrupDimension], sd.Number2s[IDStirrupDimension], tbSpa, stirDia, sd.StirrupLocation);
             return rb;
         }
         public Rebar CreateSingleRebar(int idElem, Document doc, Element elem, RebarShape rs, RebarBarType rbt, double start, double end, int num, double spa, double stirDia, StirrupLocation stirLoc)
@@ -116,13 +159,19 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
             doc.Regenerate();
             BoundingBoxXYZ bb = rb.get_BoundingBox(null);
             XYZ midPnt = new XYZ((bb.Min.X + bb.Max.X) / 2, (bb.Min.Y + bb.Max.Y) / 2, (bb.Min.Z + bb.Max.Z) / 2);
-            switch (IDStirrupType)
+            switch (StirrupType)
             {
-                case 0:
+                case StirrupTypeEnum.UStirrup_UDir:
+                case StirrupTypeEnum.UStirrup_VDir:
+                    ElementTransformUtils.MoveElement(Singleton.Instance.Document, rb.Id, 
+                        new XYZ(CenterPoint.U- midPnt.X, CenterPoint.V-midPnt.Y,0));
+                    break;
+                case StirrupTypeEnum.PStirrup:
                     //ElementTransformUtils.MoveElement(doc, rb.Id, new XYZ(ri.TopUVStirrup1.U - midPnt.X - ri.StirrupDiameter1 / 4, ri.TopUVStirrup1.V - midPnt.Y - ri.StirrupDiameter1 / 4, (endZ + startZ) / 2 - midPnt.Z + ri.StirrupDiameter1 / 2));
                     ElementTransformUtils.MoveElement(doc, rb.Id, new XYZ(startPoint.X - midPnt.X - stirDia / 4, startPoint.Y - midPnt.Y - stirDia / 4, (end + start) / 2 - midPnt.Z + stirDia / 2));
                     break;
-                case 1:
+                case StirrupTypeEnum.CStirrup_UDir:
+                case StirrupTypeEnum.CStirrup_VDir:
                     //ElementTransformUtils.MoveElement(doc, rb.Id, new XYZ(topUVstir.U - midPnt.X, topUVstir.V - midPnt.Y, (endZ + startZ) / 2 - midPnt.Z));
                     ElementTransformUtils.MoveElement(doc, rb.Id, new XYZ(startPoint.X - midPnt.X, startPoint.Y - midPnt.Y, (end + start) / 2 - midPnt.Z));
                     break;

@@ -125,12 +125,13 @@ namespace AutoRebaring.ElementInfo
     public interface IStirrupPlaneSingleInfo
     {
         int ID { get; set; }
-        int IDStirrupShape { get; set; }
-        int IDStirrupType { get; }
+        int IDStirrupShape { get; }
+        int IDStirrupDimension { get; }
         List<string> ParameterKeys { get; }
         UV StartPoint { get; set; }
         XYZ VectorX { get; set; }
         XYZ VectorY { get; set; }
+        UV CenterPoint { get; set; }
         List<double> ParameterValues { get; set; }
         StirrupTypeEnum StirrupType { get; set; }
         Rebar CreateRebars(int idElem, int idStirDis);
@@ -175,10 +176,11 @@ namespace AutoRebaring.ElementInfo
     }
     public enum StirrupTypeEnum
     {
-        CoverStirrup =0,
-        EdgeCoverStirrup =1,
-        CUStirrup =2,
-        CVStirrup =3
+        UStirrup_UDir =0,
+        UStirrup_VDir = 1,
+        PStirrup =2,
+        CStirrup_UDir =3,
+        CStirrup_VDir =4
     }
     public enum UStirrupLapEnum
     {

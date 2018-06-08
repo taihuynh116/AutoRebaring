@@ -3,6 +3,7 @@ using AutoRebaring.Constant;
 using AutoRebaring.Database.AutoRebaring.EF;
 using AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo;
 using AutoRebaring.Single;
+using Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +35,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
 
             StirrupPlaneSingleInfo stPlSinInfo = new StirrupPlaneSingleInfo()
             {
-                IDStirrupShape = 0,
                 StartPoint = new UV((pnts[0].U + pnts[2].U) / 2, (pnts[0].V + pnts[2].V) / 2),
                 VectorX = planeInfo.VectorX,
                 VectorY = planeInfo.VectorY,
-                ParameterValues = new List<double> { xValue,xValue, yValue , yValue},
-                StirrupType= StirrupTypeEnum.CoverStirrup
+                ParameterValues = new List<double> { xValue, xValue, yValue, yValue },
+                StirrupType = StirrupTypeEnum.PStirrup
             };
             CoverStirrupPlaneInfos.Add(stPlSinInfo);
         }
@@ -77,23 +77,21 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
                 {
                     stPlSinInfo = new StirrupPlaneSingleInfo()
                     {
-                        IDStirrupShape = 1,
                         StartPoint = stanPnt1 + ((i + 1) * spacb1 + dia) * vecU,
                         VectorX = vecY,
                         VectorY = vecY.CrossProduct(XYZ.BasisZ),
                         ParameterValues = new List<double> { yValue },
-                        StirrupType = StirrupTypeEnum.CUStirrup
+                        StirrupType = StirrupTypeEnum.CStirrup_UDir
                     };
                     CStirrupPlaneInfos.Add(stPlSinInfo);
                 }
                 stPlSinInfo = new StirrupPlaneSingleInfo()
                 {
-                    IDStirrupShape = 1,
                     StartPoint = stanPnt1 + ((n1 - 3) * spacb1 / 2 + dia) * vecU,
                     VectorX = vecY,
                     VectorY = vecY.CrossProduct(XYZ.BasisZ),
                     ParameterValues = new List<double> { yValue },
-                    StirrupType = StirrupTypeEnum.CUStirrup
+                    StirrupType = StirrupTypeEnum.CStirrup_UDir
                 };
                 CStirrupPlaneInfos.Add(stPlSinInfo);
             }
@@ -104,23 +102,21 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
                 {
                     stPlSinInfo = new StirrupPlaneSingleInfo()
                     {
-                        IDStirrupShape = 1,
                         StartPoint = stanPnt3 + ((i + 1) * spacb2 + dia) * vecV,
                         VectorX = -vecX,
                         VectorY = -vecX.CrossProduct(XYZ.BasisZ),
                         ParameterValues = new List<double> { xValue },
-                        StirrupType = StirrupTypeEnum.CVStirrup
+                        StirrupType = StirrupTypeEnum.CStirrup_VDir
                     };
                     CStirrupPlaneInfos.Add(stPlSinInfo);
                 }
                 stPlSinInfo = new StirrupPlaneSingleInfo()
                 {
-                    IDStirrupShape = 1,
                     StartPoint = stanPnt3 + ((n2 - 3) * spacb2 / 2 + dia) * vecV,
                     VectorX = -vecX,
                     VectorY = -vecX.CrossProduct(XYZ.BasisZ),
                     ParameterValues = new List<double> { xValue },
-                    StirrupType = StirrupTypeEnum.CVStirrup
+                    StirrupType = StirrupTypeEnum.CStirrup_VDir
                 };
                 CStirrupPlaneInfos.Add(stPlSinInfo);
             }
@@ -162,6 +158,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
             UStirrupLapEnum uLapType = Singleton.Instance.UStirrupLapType;
             double stirDia = designInfo.StirrupDiameters[0];
 
+            UV vecU = planeInfo.VectorU, vecV = planeInfo.VectorV;
             UV p1 = pnts[0], p2 = null;
             double bungDim = 0, canhDim = 0;
             XYZ vecX = null, vecY = null;
@@ -184,23 +181,27 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
             }
             StirrupPlaneSingleInfo stPlSinInfo = new StirrupPlaneSingleInfo()
             {
-                IDStirrupShape = 2,
-                StartPoint = p1,
+                StartPoint = pnts[0],
                 VectorX = vecX,
                 VectorY = vecY,
-                ParameterValues = new List<double> { canhDim, bungDim, canhDim},
-                StirrupType = StirrupTypeEnum.CoverStirrup
+                ParameterValues = new List<double> { canhDim, bungDim, canhDim },
+                StirrupType = StirrupTypeEnum.UStirrup_UDir,
+                CenterPoint = (pnts[0] + pnts[1]) / 2 + vecV * (canhDim / 2-stirDia/4)
             };
             CoverStirrupPlaneInfos.Add(stPlSinInfo);
 
+            XYZ pnt2 = new XYZ(pnts[2].U, pnts[2].V, 0);
+            Singleton.Instance.Document.Create.NewDetailCurve(
+                Singleton.Instance.Document.ActiveView, Line.CreateBound(pnt2, pnt2 + XYZ.BasisX * 3));
+
             stPlSinInfo = new StirrupPlaneSingleInfo()
             {
-                IDStirrupShape = 2,
-                StartPoint = p2,
+                StartPoint = pnts[2],
                 VectorX = -vecX,
                 VectorY = -vecY,
                 ParameterValues = new List<double> { canhDim, bungDim, canhDim },
-                StirrupType = StirrupTypeEnum.CoverStirrup
+                StirrupType = StirrupTypeEnum.UStirrup_UDir,
+                CenterPoint = (pnts[2] + pnts[3]) / 2 - vecV * (canhDim / 2 - stirDia / 4)
             };
             CoverStirrupPlaneInfos.Add(stPlSinInfo);
         }

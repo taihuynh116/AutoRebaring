@@ -100,14 +100,9 @@ namespace AutoRebaring.RebarLogistic
                         st.IDVariable = 0;
                         Singleton.Instance.UpdateStandardTurn(st);
                         i--;
-                        try
-                        {
+                        if (i>=0)
                             st = Singleton.Instance.GetStandardTurn(i, LocationIndex);
-                        }
-                        catch
-                        {
-                            throw;
-                        }
+                        
                         if (i < TrackingBottomIndex)
                         {
                             i = TrackingTopIndex;
