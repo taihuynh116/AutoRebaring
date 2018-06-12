@@ -327,7 +327,6 @@ namespace AutoRebaring.ElementInfo
             StandardRebarPointLists.Add(pnts);
             #endregion
 
-
             #region Stirrup
             offStirr = di.StirrupDiameters[0];
             pnts = new List<UV>()

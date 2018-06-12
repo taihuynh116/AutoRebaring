@@ -132,7 +132,7 @@ namespace AutoRebaring.ElementInfo
             double cover = cp.ConcreteCover * ConstantValue.milimeter2Feet;
             StandardSpacings = new List<double>
             {
-                (pi.B1s[0] -cover - stirrDia*1.5 - contrDia*2 - edgeStandDia)/(StandardNumbers[0]-1)*2,
+                (pi.B1s[0] -cover - stirrDia*ConstantValue.RebarStandardOffsetControl - contrDia*2 - edgeStandDia)/(StandardNumbers[0]-1)*2,
                 StandardNumbers[1] == 0 ? 0 : (pi.B1s[0] - cover- stirrDia*1.5-contrDia*2-edgeStandDia)/(StandardNumbers[1]-1)*2,
                 (pi.B2s[0] - cover*2- stirrDia* ConstantValue.RebarStandardOffsetControl * 2 -edgeStandDia)/(StandardNumbers[3]-1)*2,
                 (pi.B1s[1] + stirrDia + contrDia*2 + middleStandDia)/(StandardNumbers[5]+1)*2

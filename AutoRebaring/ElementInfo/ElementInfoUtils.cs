@@ -187,15 +187,19 @@ namespace AutoRebaring.ElementInfo
                 {
                     case ElementTypeEnum.Column:
                         standPlaneInfo = new ColumnStandardPlaneInfo(i);
+                        Singleton.Instance.AddStandardPlaneInfo(standPlaneInfo);
+
                         stirPlaneInfo = new ColumnStirrupPlaneInfo(i);
+                        Singleton.Instance.AddStirrupPlaneInfo(stirPlaneInfo);
                         break;
                     case ElementTypeEnum.Wall:
                         standPlaneInfo = new WallStandardPlaneInfo(i);
+                        Singleton.Instance.AddStandardPlaneInfo(standPlaneInfo);
+
                         stirPlaneInfo = new WallStirrupPlaneInfo(i);
+                        Singleton.Instance.AddStirrupPlaneInfo(stirPlaneInfo);
                         break;
                 }
-                Singleton.Instance.AddStandardPlaneInfo(standPlaneInfo);
-                Singleton.Instance.AddStirrupPlaneInfo(stirPlaneInfo);
             }
         }
         public static void GetVariable()
@@ -533,12 +537,13 @@ namespace AutoRebaring.ElementInfo
             Singleton.Instance.StandardChosen = sc;
             Singleton.Instance.RebarZ1s = rebarZ1s;
             Singleton.Instance.RebarZ2s = rebarZ2s;
-            Singleton.Instance.StandardVeticalParameter = svp;
+            Singleton.Instance.StandardVeticalParameter = svp;  
             Singleton.Instance.StirrupVerticalParameter = stvp;
             Singleton.Instance.WallParameter = wp;
             Singleton.Instance.SetElementTypeInfoID(ElementTypeEnum.Wall);
             Singleton.Instance.StirrupShapes = new List<RebarShape> { barShapes.Where(x => x.Name == "TD_U_02").First(), barShapes.Where(x => x.Name == "TD_02").First(), barShapes.Where(x => x.Name == "TD_C_90-135a").First() };
             Singleton.Instance.OtherParameter = op;
+            Singleton.Instance.UStirrupLapType = UStirrupLapEnum.Vertical;
         }
         public static void SetupView3d(View3D view3d, Rebar rebar)
         {

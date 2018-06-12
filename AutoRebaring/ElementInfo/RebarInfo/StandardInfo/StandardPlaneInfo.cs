@@ -1614,6 +1614,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
     public class WallStandardPlaneInfo : IStandardPlaneInfo
     {
         public int ID { get; set; }
+        public List<int> NE12Indexs { get; set; } = new List<int>();
         public List<IStandardPlaneSingleInfo> NormalStandardPlaneInfos { get; set; }
         public List<IStandardPlaneSingleInfo> LockheadStandardPlaneInfos { get; set; }
         public WallStandardPlaneInfo(int id)
@@ -1641,6 +1642,7 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StandardInfo
             {
                 ie12.Add((int)Math.Round(jumpe12 * (i + 1)));
             }
+            NE12Indexs = ie12;
 
             Shorten.ShortenType stE1 = planeInfo.ShortenTypes[0];
             Shorten.ShortenType stM = planeInfo.ShortenTypes[1];

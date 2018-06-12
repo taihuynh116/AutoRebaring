@@ -70,21 +70,19 @@ namespace AutoRebaring.Command
                     spi.CreateRebar(j);
                 }
             }
-            
-            //for (int i = 0; i < locCount; i++)
-            //{
-            //    for (int j = 0; j < Singleton.Instance.GetStandardTurnCount(0); j++)
-            //    {
-            //        StandardTurn st = Singleton.Instance.GetStandardTurn(j, 0);
-            //        IStandardPlaneInfo standPlaneInfo = Singleton.Instance.GetStandardPlaneInfo(st.IDElement);
-            //        IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(st.IDElement);
-            //        IShortenType shortenType = null;
-            //        shortenType = planeInfo.ShortenTypes[0];
-            //        standPlaneInfo.CreateRebar(j, i);
-            //    }
-            //}
 
-            
+            for (int i = 0; i < locCount; i++)
+            {
+                for (int j = 0; j < Singleton.Instance.GetStandardTurnCount(0); j++)
+                {
+                    StandardTurn st = Singleton.Instance.GetStandardTurn(j, 0);
+                    IStandardPlaneInfo standPlaneInfo = Singleton.Instance.GetStandardPlaneInfo(st.IDElement);
+                    IPlaneInfo planeInfo = Singleton.Instance.GetPlaneInfo(st.IDElement);
+                    IShortenType shortenType = null;
+                    shortenType = planeInfo.ShortenTypes[0];
+                    standPlaneInfo.CreateRebar(j, i);
+                }
+            }
 
             tx.Commit();
             return Result.Succeeded;

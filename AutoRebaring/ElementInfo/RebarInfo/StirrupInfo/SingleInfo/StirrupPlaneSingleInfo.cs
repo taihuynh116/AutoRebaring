@@ -163,12 +163,11 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo.SingleInfo
             {
                 case StirrupTypeEnum.UStirrup_UDir:
                 case StirrupTypeEnum.UStirrup_VDir:
-                    ElementTransformUtils.MoveElement(Singleton.Instance.Document, rb.Id, 
-                        new XYZ(CenterPoint.U- midPnt.X, CenterPoint.V-midPnt.Y,0));
+                    ElementTransformUtils.MoveElement(Singleton.Instance.Document, rb.Id, new XYZ(CenterPoint.U- midPnt.X, CenterPoint.V-midPnt.Y,0));
                     break;
                 case StirrupTypeEnum.PStirrup:
                     //ElementTransformUtils.MoveElement(doc, rb.Id, new XYZ(ri.TopUVStirrup1.U - midPnt.X - ri.StirrupDiameter1 / 4, ri.TopUVStirrup1.V - midPnt.Y - ri.StirrupDiameter1 / 4, (endZ + startZ) / 2 - midPnt.Z + ri.StirrupDiameter1 / 2));
-                    ElementTransformUtils.MoveElement(doc, rb.Id, new XYZ(startPoint.X - midPnt.X - stirDia / 4, startPoint.Y - midPnt.Y - stirDia / 4, (end + start) / 2 - midPnt.Z + stirDia / 2));
+                    ElementTransformUtils.MoveElement(Singleton.Instance.Document, rb.Id, new XYZ(CenterPoint.U - midPnt.X, CenterPoint.V - midPnt.Y, 0));
                     break;
                 case StirrupTypeEnum.CStirrup_UDir:
                 case StirrupTypeEnum.CStirrup_VDir:
