@@ -203,7 +203,7 @@ namespace AutoRebaring.Command
             ElementInfoUtils.AddElementTypeInfo();
             ElementInfoUtils.PickElement(doc, sel);
 
-            ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6, 7, 5, 1, 5, 1, 6);
+            ElementInfoUtils.AddTestInformationWall(7, 5, 1, 5, 1, 6,3, 7, 5, 1, 5, 1, 6,3);
             //ElementInfoUtils.AddTestInformationColumn(10, 8);
 
             //Window = new WindowForm();

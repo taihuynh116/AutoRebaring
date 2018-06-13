@@ -281,10 +281,6 @@
                                         <StackPanel Orientation="Horizontal">
                                             <Label Content="Đai C:" Margin="0,0,0,0"></Label>
                                             <ComboBox x:Name="cbbFamilyDaiC" HorizontalAlignment="Left" Height="20" Margin="23,0,0,0" VerticalAlignment="Center" Width="130"/>
-                                            <StackPanel x:Name="spNumMidCStirr" Orientation="Horizontal">
-                                                <Label Content="Số lượng vùng giữa:" VerticalAlignment="Center" Margin="20,0,0,0"></Label>
-                                                <TextBox x:Name="txtNumMidCStirr" VerticalAlignment="Center" TextBlock.TextAlignment="Right" Margin="10,0,0,0" Width="20" Text="2"></TextBox>
-                                            </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
                                 </StackPanel>
@@ -565,16 +561,16 @@
                                 <ComboBox x:Name="cbbDesStirType36" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
                                 <ComboBox x:Name="cbbDesStirType37" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center" Width="75"/>
                             </StackPanel>
-                            <StackPanel x:Name="cstirMidNum">
+                            <StackPanel x:Name="spNumMidCStirr" Orientation="Horizontal">
                                 <Label Content="Số đai C vùng giữa:"></Label>
-                                <TextBox x:Name="txtDesStirTB20" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesStirTB21" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesStirTB22" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesStirTB23" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesStirTB24" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesStirTB25" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesStirTB26" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
-                                <TextBox x:Name="txtDesStirTB27" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir0" HorizontalAlignment="Left" Height="23" Margin="11,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir1" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir2" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir3" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir4" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir5" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir6" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
+                                <TextBox x:Name="txtNumMidCStir7" HorizontalAlignment="Left" Height="23" Margin="30,0,0,0" TextWrapping="Wrap" Text="" TextAlignment="Right" VerticalAlignment="Center" Width="50"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Bước trên/dưới:" FontWeight="Normal"></Label>

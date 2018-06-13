@@ -138,6 +138,7 @@ namespace AutoRebaring.Form
         private List<Label> txtDesSums;
         private List<Label> txtEdgeDesSums;
         private List<Label> txtMidDesSums;
+        private List<TextBox> txtNumMidCStirs;
         #endregion
 
         private bool isFirstSetUserName = false;
@@ -503,6 +504,7 @@ namespace AutoRebaring.Form
             txtDesStirTB2s = new List<TextBox> { txtDesStirTB20, txtDesStirTB21, txtDesStirTB22, txtDesStirTB23, txtDesStirTB24, txtDesStirTB25, txtDesStirTB26, txtDesStirTB27 };
             txtDesStirM1s = new List<TextBox> { txtDesStirM10, txtDesStirM11, txtDesStirM12, txtDesStirM13, txtDesStirM14, txtDesStirM15, txtDesStirM16, txtDesStirM17 };
             txtDesStirM2s = new List<TextBox> { txtDesStirM20, txtDesStirM21, txtDesStirM22, txtDesStirM23, txtDesStirM24, txtDesStirM25, txtDesStirM26, txtDesStirM27 };
+            txtNumMidCStirs = new List<TextBox> { txtNumMidCStir0, txtNumMidCStir1, txtNumMidCStir2, txtNumMidCStir3, txtNumMidCStir4, txtNumMidCStir5, txtNumMidCStir6, txtNumMidCStir7 };
 
             txtEdgeDesSums = new List<Label> { txtEdgeDesSum0, txtEdgeDesSum1, txtEdgeDesSum2, txtEdgeDesSum3, txtEdgeDesSum4, txtEdgeDesSum5, txtEdgeDesSum6, txtEdgeDesSum7 };
             txtMidDesSums = new List<Label> { txtMidDesSum0, txtMidDesSum1, txtMidDesSum2, txtMidDesSum3, txtMidDesSum4, txtMidDesSum5, txtMidDesSum6, txtMidDesSum7 };
@@ -526,6 +528,7 @@ namespace AutoRebaring.Form
                 txtDesStirTB2s[i].TextChanged += DesignChange;
                 txtDesStirM1s[i].TextChanged += DesignChange;
                 txtDesStirM2s[i].TextChanged += DesignChange;
+                txtNumMidCStirs[i].TextChanged += DesignChange;
             }
         }
 
@@ -611,11 +614,13 @@ namespace AutoRebaring.Form
                     txtDesStirTB2s[i].Visibility = visibility;
                     txtDesStirM1s[i].Visibility = visibility;
                     txtDesStirM2s[i].Visibility = visibility;
+                    txtNumMidCStirs[i].Visibility = visibility;
                     if (!isSet)
                     {
                         int desLev = cbbDesLevels[i].SelectedIndex, desStandType1 = cbbDesStandType1s[i].SelectedIndex, desStandType2 = cbbDesStandType2s[i].SelectedIndex;
                         int desStirType1 = cbbDesStirType1s[i].SelectedIndex, desStirType2 = cbbDesStirType2s[i].SelectedIndex, desStirType3 = cbbDesStirType3s[i].SelectedIndex;
                         int ne11 = 0, ne12 = -1, ce12 = -1, ne2 = 0, de2 = -1, nm = 0; double tb1 = 0, tb2 = 0, m1 = 0, m2 = 0;
+                        int nmCStir = 0;
                         try
                         {
                             ne11 = int.Parse(txtDesN1s[i].Text);
@@ -666,7 +671,12 @@ namespace AutoRebaring.Form
                             m2 = double.Parse(txtDesStirM2s[i].Text);
                         }
                         catch { }
-                        if (ne11 == 0 || ne12 == -1 || ce12 == -1 || ne2 == 0 || de2 == -1 || tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0 ||
+                        try
+                        {
+                            nmCStir = int.Parse(txtNumMidCStirs[i].Text);
+                        }
+                        catch { }
+                        if (ne11 == 0 || ne12 == -1 || ce12 == -1 || ne2 == 0 || de2 == -1 || tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0 || nmCStir==0||
                             desLev == -1 || desStandType1 == -1 || desStandType2 == -1 || desStirType1 == -1 || desStirType2 == -1 || desStirType3 == -1)
                         {
                             visibility = System.Windows.Visibility.Collapsed;
@@ -1736,6 +1746,14 @@ namespace AutoRebaring.Form
                                 txtDesN6s[i].Text = standDesParamValueRes.Value.ToString();
                             }
 
+                            idStandDesParamType = StandardDesignParameterTypeDao.GetId(IDElementType, ConstantValue.NMCStir);
+                            idStandDesParamValue = StandardDesignParameterValueDao.GetId(idDesLevel, idStandDesParamType);
+                            standDesParamValueRes = StandardDesignParameterValueDao.GetStandardDesignParameterValue(idStandDesParamValue);
+                            if (standDesParamValueRes != null)
+                            {
+                                txtNumMidCStirs[i].Text = standDesParamValueRes.Value.ToString();
+                            }
+
                             long idStirDesParamType = StirrupDesignParameterTypeDao.GetId(IDElementType, ConstantValue.TB1);
                             long idStirDesParamValue = StirrupDesignParameterValueDao.GetId(idDesLevel, idStirDesParamType);
                             var stirDesParamValueRes = StirrupDesignParameterValueDao.GetStirrupDesignParameterValue(idStirDesParamValue);
@@ -1850,7 +1868,7 @@ namespace AutoRebaring.Form
                 {
                     if (cbbDesStandType2s[i].SelectedIndex == -1 || cbbDesStirType2s[i].SelectedIndex == -1)
                         break;
-                    int ne11 = 0, ne12 = -1, ce12 = -1, ne2 = 0, de2 = -1, nm = 0; double tb1 = 0, tb2 = 0, m1 = 0, m2 = 0;
+                    int ne11 = 0, ne12 = -1, ce12 = -1, ne2 = 0, de2 = -1, nm = 0, nmCStir =0; double tb1 = 0, tb2 = 0, m1 = 0, m2 = 0;
                     try
                     {
                         ne11 = int.Parse(txtDesN1s[i].Text);
@@ -1881,6 +1899,10 @@ namespace AutoRebaring.Form
                         nm = int.Parse(txtDesN6s[i].Text);
                     }
                     catch { }
+                    try {
+                        nmCStir = int.Parse(txtNumMidCStirs[i].Text);
+                    }
+                    catch { }
                     try
                     {
                         tb1 = double.Parse(txtDesStirTB1s[i].Text);
@@ -1901,7 +1923,7 @@ namespace AutoRebaring.Form
                         m2 = double.Parse(txtDesStirM2s[i].Text);
                     }
                     catch { }
-                    if (ne11 == 0 || ne12 == -1 || ce12 == -1 || ne2 == 0 || de2 == -1 || tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0) { break; }
+                    if (ne11 == 0 || ne12 == -1 || ce12 == -1 || ne2 == 0 || de2 == -1 || nmCStir==0|| tb1 == 0 || tb2 == 0 || m1 == 0 || m2 == 0) { break; }
 
                     long idLevel = LevelDao.GetId(IDProject, cbbDesLevels[i].Text);
                     DesignLevelDao.Update(IDMark, idLevel, i);
@@ -1942,6 +1964,9 @@ namespace AutoRebaring.Form
 
                     idStandDesParamType = StandardDesignParameterTypeDao.GetId(IDElementType, ConstantValue.NM);
                     StandardDesignParameterValueDao.Update(idDesLevel, idStandDesParamType, int.Parse(txtDesN6s[i].Text));
+
+                    idStandDesParamType = StandardDesignParameterTypeDao.GetId(IDElementType, ConstantValue.NMCStir);
+                    StandardDesignParameterValueDao.Update(idDesLevel, idStandDesParamType, int.Parse(txtNumMidCStirs[i].Text));
 
                     long idStirDesParamType = StirrupDesignParameterTypeDao.GetId(IDElementType, ConstantValue.TB1);
                     StirrupDesignParameterValueDao.Update(idDesLevel, idStirDesParamType, double.Parse(txtDesStirTB1s[i].Text));
@@ -2156,7 +2181,7 @@ namespace AutoRebaring.Form
                         level = cbbDesLevels[i].SelectedItem as Level;
                         standTypes = new List<RebarBarType> { cbbDesStandType1s[i].SelectedItem as RebarBarType, cbbDesStandType2s[i].SelectedItem as RebarBarType };
                         hookTypes = new List<RebarHookType> { hookType, hookType };
-                        standNumbers = new List<int> { int.Parse(txtDesN1s[i].Text), int.Parse(txtDesN2s[i].Text), int.Parse(txtDesN3s[i].Text), int.Parse(txtDesN4s[i].Text), int.Parse(txtDesN5s[i].Text), int.Parse(txtDesN6s[i].Text) };
+                        standNumbers = new List<int> { int.Parse(txtDesN1s[i].Text), int.Parse(txtDesN2s[i].Text), int.Parse(txtDesN3s[i].Text), int.Parse(txtDesN4s[i].Text), int.Parse(txtDesN5s[i].Text), int.Parse(txtDesN6s[i].Text), int.Parse(txtNumMidCStirs[i].Text) };
                         stirrTypes = new List<RebarBarType> { cbbDesStirType1s[i].SelectedItem as RebarBarType, cbbDesStirType2s[i].SelectedItem as RebarBarType, cbbDesStirType3s[i].SelectedItem as RebarBarType };
                         stirrTBs = new List<double> { double.Parse(txtDesStirTB1s[i].Text) * ConstantValue.milimeter2Feet, double.Parse(txtDesStirTB2s[i].Text) * ConstantValue.milimeter2Feet };
                         stirrMs = new List<double> { double.Parse(txtDesStirM1s[i].Text) * ConstantValue.milimeter2Feet, double.Parse(txtDesStirM2s[i].Text) * ConstantValue.milimeter2Feet };
@@ -2171,7 +2196,6 @@ namespace AutoRebaring.Form
             Singleton.Instance.OtherParameter = OtherParameterDao.GetOtherParameter(IDOtherParameter);
 
             Singleton.Instance.UStirrupLapType = rbtHorizontalLap.IsChecked.Value ? UStirrupLapEnum.Horizontal : UStirrupLapEnum.Vertical;
-            Singleton.Instance.NumMidCStirrup = int.Parse(txtNumMidCStirr.Text);
         }
         private void chkDevErrorInclude_Checked(object sender, RoutedEventArgs e)
         {

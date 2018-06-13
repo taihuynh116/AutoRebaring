@@ -70,6 +70,7 @@ namespace AutoRebaring.Constant
         public const string NE2 = "NE2";
         public const string DE2 = "DE2";
         public const string NM = "NM";
+        public const string NMCStir = "NMCStir";
 
         public const string TB1 = "TB1";
         public const string TB2 = "TB2";

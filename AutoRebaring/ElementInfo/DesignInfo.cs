@@ -89,13 +89,13 @@ namespace AutoRebaring.ElementInfo
         public List<double> StandardSpacings { get; set; }
         #endregion
         public WallDesignInfo() { }
-        public WallDesignInfo(Level level, RebarBarType edgeStandType, RebarHookType edgeHookType, RebarBarType midStandType, RebarHookType middleHookType, int ne11, int ne12, int ce12, int ne2, int de2, int nm, RebarBarType stirType1, RebarBarType stirType2, RebarBarType stirType3,
+        public WallDesignInfo(Level level, RebarBarType edgeStandType, RebarHookType edgeHookType, RebarBarType midStandType, RebarHookType middleHookType, int ne11, int ne12, int ce12, int ne2, int de2, int nm,int nmCStir,RebarBarType stirType1, RebarBarType stirType2, RebarBarType stirType3,
             double bt1, double bt2, double m1, double m2)
         {
             Level = level;
             StandardTypes = new List<RebarBarType> { edgeStandType, midStandType };
             StandardHookTypes = new List<RebarHookType> { edgeHookType, middleHookType };
-            StandardNumbers = new List<int> { ne11, ne12, ce12, ne2, de2, nm };
+            StandardNumbers = new List<int> { ne11, ne12, ce12, ne2, de2, nm, nmCStir };
             StirrupTypes = new List<RebarBarType> { stirType1, stirType2, stirType3 };
             BotTopSpacings = new List<double> { bt1, bt2 };
             MiddleSpacings = new List<double> { m1, m2 };

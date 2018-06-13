@@ -379,8 +379,8 @@ namespace AutoRebaring.ElementInfo
             Singleton.Instance.StirrupShapes = new List<RebarShape> { barShapes.Where(x => x.Name == "TD_02").First(), barShapes.Where(x => x.Name == "TD_C_90-135a").First() };
             Singleton.Instance.OtherParameter = op;
         }
-        public static void AddTestInformationWall(int ne11B, int ne12B, int ce12B, int ne2B, int de2B, int nmB,
-            int ne11T, int ne12T, int ce12T, int ne2T, int de2T, int nmT)
+        public static void AddTestInformationWall(int ne11B, int ne12B, int ce12B, int ne2B, int de2B, int nmB, int nmCStirB,
+            int ne11T, int ne12T, int ce12T, int ne2T, int de2T, int nmT, int nmCStirT)
         {
             Document doc = Singleton.Instance.Document;
             List<Level> levels = new FilteredElementCollector(doc).OfClass(typeof(Level)).Cast<Level>().ToList();
@@ -427,7 +427,7 @@ namespace AutoRebaring.ElementInfo
                     Level = levels.Where(x=> x.Name=="Tầng 3").First(),
                     StandardTypes = new List<RebarBarType>{barType18, barType20 },
                     StandardHookTypes = new List<RebarHookType>{null, null},
-                    StandardNumbers = new List<int>{ne11B, ne12B, ce12B, ne2B, de2B, nmB},
+                    StandardNumbers = new List<int>{ne11B, ne12B, ce12B, ne2B, de2B, nmB, nmCStirB},
                     StirrupTypes = new List<RebarBarType>{stirType,stirType, stirType},
                     BotTopSpacings = new List<double>{tbSpac, tbSpac},
                     MiddleSpacings = new List<double>{mSpac, mSpac}
@@ -437,7 +437,7 @@ namespace AutoRebaring.ElementInfo
                     Level = levels.Where(x=> x.Name=="Tầng 4").First(),
                     StandardTypes = new List<RebarBarType>{barType18, barType20 },
                     StandardHookTypes = new List<RebarHookType>{null, null},
-                    StandardNumbers = new List<int>{ne11T, ne12T, ce12T, ne2T, de2T, nmT},
+                    StandardNumbers = new List<int>{ne11T, ne12T, ce12T, ne2T, de2T, nmT, nmCStirT},
                     StirrupTypes = new List<RebarBarType>{stirType, stirType, stirType},
                     BotTopSpacings = new List<double>{tbSpac, tbSpac},
                     MiddleSpacings = new List<double>{mSpac, mSpac}

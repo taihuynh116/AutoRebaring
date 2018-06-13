@@ -14,6 +14,12 @@ namespace AutoRebaring.ElementInfo.RebarInfo.StirrupInfo
             for (int i = 0; i < Singleton.Instance.StirrupPlaneInfos.Count; i++)
             {
                 IStirrupPlaneInfo stirPlaneInfo = Singleton.Instance.StirrupPlaneInfos[i];
+                for (int j = 0; j < stirPlaneInfo.EdgeCoverStirrupPlaneInfo.Count; j++)
+                {
+                    IStirrupPlaneSingleInfo stirPlaneSingInfo = stirPlaneInfo.EdgeCoverStirrupPlaneInfo[j];
+                    Singleton.Instance.GetStirrupLevelCount(i, stirPlaneSingInfo)
+                        .AddNumber(1);
+                }
                 for (int j = 0; j < stirPlaneInfo.CoverStirrupPlaneInfos.Count; j++)
                 {
                     IStirrupPlaneSingleInfo stirPlaneSingInfo = stirPlaneInfo.CoverStirrupPlaneInfos[j];
