@@ -52,3 +52,22 @@ D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringG
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.CopyComplete
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.dll
 D:\1. Work\Code Project\1. Revit Addin\AutoRebaring(Column + Wall)\AutoRebaringGithub\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb
+D:\IT\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.dll.config
+D:\IT\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.dll
+D:\IT\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\AutoRebaring.pdb
+D:\IT\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.dll
+D:\IT\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.dll
+D:\IT\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.xml
+D:\IT\Addin\AutoRebaring\AutoRebaring\bin\Debug2018\EntityFramework.SqlServer.xml
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csprojAssemblyReference.cache
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\Form\InputForm.g.cs
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring_MarkupCompile.cache
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring_MarkupCompile.lref
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\Form\InputForm.baml
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.g.resources
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.Properties.Resources.resources
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.GenerateResource.cache
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.CoreCompileInputs.cache
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.csproj.CopyComplete
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.dll
+D:\IT\Addin\AutoRebaring\AutoRebaring\obj\Debug2018\AutoRebaring.pdb

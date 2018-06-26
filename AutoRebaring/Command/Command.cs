@@ -33,7 +33,7 @@ namespace AutoRebaring.Command
             Selection sel = uidoc.Selection;
             Transaction tx = new Transaction(doc, "AutoRebaring");
             tx.Start();
-
+            
             ElementInfoUtils.AddElementTypeInfo();
             ElementInfoUtils.PickElement(doc, sel);
 
